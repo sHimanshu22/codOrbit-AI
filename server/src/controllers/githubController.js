@@ -15,9 +15,19 @@ const syncGitHubProfile = async (req, res) => {
       github: githubData,
     });
   } catch (error) {
-    res.status(500).json({
+    let profile = await PlatformProfile.findOne({
+      userId: user._id,
+    });
+
+    if (profile) {
+      profile.github = null;
+
+      await profile.save();
+    }
+
+    return res.status(404).json({
       success: false,
-      message: error.message,
+      message: "GitHub profile not found",
     });
   }
 };
@@ -49,13 +59,11 @@ const getGitHubAnalytics = async (req, res) => {
 const syncGitHubData = async (userId) => {
   const user = await User.findById(userId);
 
+  console.log("GitHub Username From User Collection:", user.githubUsername);
+
   if (!user.githubUsername) {
     throw new Error("GitHub username not found");
   }
-
-  const githubData = await fetchGitHubProfile(user.githubUsername);
-
-  const repositories = await fetchGitHubRepos(user.githubUsername);
 
   let profile = await PlatformProfile.findOne({
     userId,
@@ -67,57 +75,53 @@ const syncGitHubData = async (userId) => {
     });
   }
 
-  let totalStars = 0;
-  let totalForks = 0;
+  try {
+    const githubData = await fetchGitHubProfile(user.githubUsername);
 
-  repositories.forEach((repo) => {
-    totalStars += repo.stargazers_count;
-    totalForks += repo.forks_count;
-  });
+    const repositories = await fetchGitHubRepos(user.githubUsername);
 
-  const languageMap = {};
+    let totalStars = 0;
+    let totalForks = 0;
 
-  repositories.forEach((repo) => {
-    if (repo.language) {
-      languageMap[repo.language] = (languageMap[repo.language] || 0) + 1;
-    }
-  });
+    repositories.forEach((repo) => {
+      totalStars += repo.stargazers_count;
+      totalForks += repo.forks_count;
+    });
 
-  const languagesUsed = Object.entries(languageMap).map(
-    ([language, count]) => ({
-      language,
-      count,
-    }),
-  );
+    // language logic
 
-  const topRepositories = repositories
-    .sort((a, b) => b.stargazers_count - a.stargazers_count)
-    .slice(0, 5)
-    .map((repo) => ({
-      name: repo.name,
-      stars: repo.stargazers_count,
-      forks: repo.forks_count,
-      language: repo.language,
-      repoUrl: repo.html_url,
-    }));
+    // topRepositories logic
 
-  profile.github = {
-    username: githubData.login,
-    followers: githubData.followers,
-    following: githubData.following,
-    publicRepos: githubData.public_repos,
-    totalStars,
-    totalForks,
-    profileUrl: githubData.html_url,
-    avatarUrl: githubData.avatar_url,
-    languagesUsed,
-    topRepositories,
-    syncedAt: new Date(),
-  };
+    profile.github = {
+      username: githubData.login,
 
-  await profile.save();
+      followers: githubData.followers,
 
-  return profile.github;
+      following: githubData.following,
+
+      publicRepos: githubData.public_repos,
+
+      totalStars,
+
+      totalForks,
+
+      syncStatus: "success",
+
+      syncedAt: new Date(),
+    };
+
+    await profile.save();
+  } catch (error) {
+    profile.github = {
+      syncStatus: "failed",
+      syncedAt: new Date(),
+      lastError: error.message,
+    };
+
+    await profile.save();
+
+    throw error;
+  }
 };
 
 module.exports = {

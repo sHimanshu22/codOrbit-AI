@@ -17,6 +17,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
 app.get("/", (req, res) => {
   res.send("CodOrbit AI Backend Running");
 });
@@ -29,5 +31,12 @@ app.use("/api/leetcode", leetcodeRoutes);
 app.use("/api/codeforces", codeforcesRoutes);
 app.use("/api/platforms", platformRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 module.exports = app;

@@ -34,6 +34,13 @@ const platformProfileSchema = new mongoose.Schema(
         },
       ],
 
+      syncStatus: {
+        type: String,
+        enum: ["success", "failed", "pending"],
+        default: "pending",
+      },
+      lastError: String,
+
       syncedAt: Date,
     },
 
@@ -47,6 +54,14 @@ const platformProfileSchema = new mongoose.Schema(
       mediumSolved: Number,
 
       hardSolved: Number,
+
+      syncStatus: {
+        type: String,
+        enum: ["success", "failed", "pending"],
+        default: "pending",
+      },
+
+      lastError: String,
 
       syncedAt: Date,
     },
@@ -63,6 +78,14 @@ const platformProfileSchema = new mongoose.Schema(
       maxRank: String,
 
       contestCount: Number,
+
+      syncStatus: {
+        type: String,
+        enum: ["success", "failed", "pending"],
+        default: "pending",
+      },
+
+      lastError: String,
 
       syncedAt: Date,
     },

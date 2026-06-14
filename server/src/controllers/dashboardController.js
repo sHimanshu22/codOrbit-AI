@@ -1,64 +1,56 @@
-const PlatformProfile =
-  require("../models/PlatformProfile");
+const PlatformProfile = require("../models/PlatformProfile");
 
-const getOverview =
-  async (req, res) => {
-    try {
+const getOverview = async (req, res) => {
+  try {
+    const profile = await PlatformProfile.findOne({
+      userId: req.user._id,
+    });
 
-      const profile =
-        await PlatformProfile.findOne({
-          userId: req.user._id,
-        });
-
-      if (!profile) {
-        return res.status(404).json({
-          success: false,
-          message:
-            "No platform data found",
-        });
-      }
-
-      const overview = {
-
-        githubRepos:
-          profile.github
-            ?.publicRepos || 0,
-
-        githubStars:
-          profile.github
-            ?.totalStars || 0,
-
-        leetcodeSolved:
-          profile.leetcode
-            ?.totalSolved || 0,
-
-        codeforcesRating:
-          profile.codeforces
-            ?.currentRating || 0,
-
-        platformsConnected:
-          [
-            profile.github,
-            profile.leetcode,
-            profile.codeforces,
-          ].filter(Boolean)
-            .length,
-      };
-
-      res.status(200).json({
-        success: true,
-        overview,
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
+    if (!profile) {
+      return res.status(404).json({
         success: false,
-        message:
-          error.message,
+        message: "No platform data found",
       });
     }
-  };
+
+    const overview = {
+      githubRepos:
+        profile.github?.syncStatus === "success"
+          ? profile.github.publicRepos
+          : 0,
+
+      githubStars:
+        profile.github?.syncStatus === "success"
+          ? profile.github.totalStars
+          : 0,
+
+      leetcodeSolved: profile.leetcode?.totalSolved || 0,
+
+      codeforcesRating:
+        profile.codeforces?.syncStatus === "success"
+          ? profile.codeforces.currentRating
+          : 0,
+
+      platformsConnected: [
+        profile.github?.syncStatus === "success",
+
+        profile.leetcode?.syncStatus === "success",
+
+        profile.codeforces?.syncStatus === "success",
+      ].filter(Boolean).length,
+    };
+
+    res.status(200).json({
+      success: true,
+      overview,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   getOverview,

@@ -4,30 +4,30 @@ const PlatformProfile = require("../models/PlatformProfile");
 const { fetchLeetCodeStats } = require("../services/leetcodeService");
 
 // Sync LeetCode Data
-const syncLeetCodeProfile =
-  async (req, res) => {
-    try {
+const syncLeetCodeProfile = async (req, res) => {
+  try {
+    const leetcodeData = await syncLeetCodeData(req.user._id);
 
-      const leetcodeData =
-        await syncLeetCodeData(
-          req.user._id
-        );
+    res.status(200).json({
+      success: true,
+      leetcode: leetcodeData,
+    });
+  } catch (error) {
+    let profile = await PlatformProfile.findOne({
+      userId: user._id,
+    });
 
-      res.status(200).json({
-        success: true,
-        leetcode:
-          leetcodeData,
-      });
+    if (profile) {
+      profile.leetcode = null;
 
-    } catch (error) {
-
-      res.status(500).json({
-        success: false,
-        message:
-          error.message,
-      });
-
+      await profile.save();
     }
+
+    return res.status(404).json({
+      success: false,
+      message: "LeetCode profile not found",
+    });
+  }
 };
 
 // Get LeetCode Analytics
@@ -56,82 +56,93 @@ const getLeetCodeAnalytics = async (req, res) => {
   }
 };
 
-const syncLeetCodeData = async (
-  userId
-) => {
-
-  const user =
-    await User.findById(userId);
+const syncLeetCodeData = async (userId) => {
+  const user = await User.findById(userId);
 
   if (!user.leetcodeUsername) {
-    throw new Error(
-      "LeetCode username not found"
-    );
+    throw new Error("LeetCode username not found");
   }
 
-  const data =
-    await fetchLeetCodeStats(
-      user.leetcodeUsername
-    );
-
-  const stats =
-    data.matchedUser.submitStats
-      .acSubmissionNum;
-
-  const totalSolved =
-    stats.find(
-      (item) =>
-        item.difficulty === "All"
-    )?.count || 0;
-
-  const easySolved =
-    stats.find(
-      (item) =>
-        item.difficulty === "Easy"
-    )?.count || 0;
-
-  const mediumSolved =
-    stats.find(
-      (item) =>
-        item.difficulty === "Medium"
-    )?.count || 0;
-
-  const hardSolved =
-    stats.find(
-      (item) =>
-        item.difficulty === "Hard"
-    )?.count || 0;
-
-  let profile =
-    await PlatformProfile.findOne({
-      userId,
-    });
+  let profile = await PlatformProfile.findOne({
+    userId,
+  });
 
   if (!profile) {
-    profile =
-      new PlatformProfile({
-        userId,
-      });
+    profile = new PlatformProfile({
+      userId,
+    });
   }
 
-  profile.leetcode = {
-    username:
-      user.leetcodeUsername,
+  try {
+    const data =
+      await fetchLeetCodeStats(
+        user.leetcodeUsername
+      );
 
-    totalSolved,
+    const stats =
+      data.matchedUser.submitStats
+        .acSubmissionNum;
 
-    easySolved,
+    const totalSolved =
+      stats.find(
+        (item) =>
+          item.difficulty === "All"
+      )?.count || 0;
 
-    mediumSolved,
+    const easySolved =
+      stats.find(
+        (item) =>
+          item.difficulty === "Easy"
+      )?.count || 0;
 
-    hardSolved,
+    const mediumSolved =
+      stats.find(
+        (item) =>
+          item.difficulty === "Medium"
+      )?.count || 0;
 
-    syncedAt: new Date(),
-  };
+    const hardSolved =
+      stats.find(
+        (item) =>
+          item.difficulty === "Hard"
+      )?.count || 0;
 
-  await profile.save();
+    profile.leetcode = {
+      username:
+        user.leetcodeUsername,
 
-  return profile.leetcode;
+      totalSolved,
+
+      easySolved,
+
+      mediumSolved,
+
+      hardSolved,
+
+      syncStatus: "success",
+
+      syncedAt: new Date(),
+    };
+
+    await profile.save();
+
+    return profile.leetcode;
+
+  } catch (error) {
+
+    profile.leetcode = {
+      username:
+        user.leetcodeUsername,
+
+      syncStatus: "failed",
+
+      syncedAt: new Date(),
+    };
+
+    await profile.save();
+
+    throw error;
+  }
 };
 
 module.exports = {
