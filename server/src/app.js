@@ -11,6 +11,7 @@ const codeforcesRoutes = require("./routes/codeforcesRoutes");
 const platformRoutes = require("./routes/platformRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const dsaRoutes = require("./routes/dsaRoutes");
 
 dotenv.config();
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/codeforces", codeforcesRoutes);
 app.use("/api/platforms", platformRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/dsa", dsaRoutes);
 
 app.use(
   cors({

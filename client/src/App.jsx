@@ -5,6 +5,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
+import DSATracker from "./pages/DSATracker";
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -38,6 +40,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Analytics />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dsa-tracker"
+          element={
+            <ProtectedRoute>
+              <DSATracker />
             </ProtectedRoute>
           }
         />
