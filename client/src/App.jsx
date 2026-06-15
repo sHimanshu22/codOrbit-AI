@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
 import DSATracker from "./pages/DSATracker";
+import DSAOverview from "./pages/DSAOverview";
+import SheetManagement from "./pages/SheetManagement";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -49,6 +51,24 @@ function App() {
           element={
             <ProtectedRoute>
               <DSATracker />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/sheet-management"
+          element={
+            <ProtectedRoute>
+              <SheetManagement />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dsa-overview"
+          element={
+            <ProtectedRoute>
+              <DSAOverview />
             </ProtectedRoute>
           }
         />

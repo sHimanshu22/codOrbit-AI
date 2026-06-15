@@ -1,19 +1,8 @@
 const SheetSelector = ({
   selectedSheet,
   setSelectedSheet,
+  sheets,
 }) => {
-
-  const sheets = [
-
-    "Striver A2Z",
-
-    "Blind 75",
-
-    "NeetCode 150",
-
-    "Love Babbar 450",
-  ];
-
   return (
     <select
       value={selectedSheet}
@@ -28,6 +17,7 @@ const SheetSelector = ({
         (sheet) => (
           <option
             key={sheet}
+            value={sheet}
           >
             {sheet}
           </option>

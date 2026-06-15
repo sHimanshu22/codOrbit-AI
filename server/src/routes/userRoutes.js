@@ -7,6 +7,7 @@ const {
 const {
   getUserProfile,
   updateUserProfile,
+  updateActiveSheets
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -21,6 +22,12 @@ router.put(
   "/profile",
   protect,
   updateUserProfile
+);
+
+router.put(
+  "/active-sheets",
+  protect,
+  updateActiveSheets
 );
 
 module.exports = router;

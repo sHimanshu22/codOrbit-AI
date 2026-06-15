@@ -1,40 +1,26 @@
-const express =
-  require("express");
+const express = require("express");
 
-const {
-  protect,
-} = require(
-  "../middleware/authMiddleware"
-);
+const { protect } = require("../middleware/authMiddleware");
 
 const {
   getQuestions,
   toggleQuestion,
   getProgress,
-} = require(
-  "../controllers/dsaController"
-);
+  getOverallProgress,
+  getActiveSheetsOverview,
+} = require("../controllers/dsaController");
 
-const router =
-  express.Router();
+const router = express.Router();
 
-router.get(
-  "/questions",
-  protect,
-  getQuestions
-);
+router.get("/questions", protect, getQuestions);
 
-router.post(
-  "/toggle",
-  protect,
-  toggleQuestion
-);
+router.post("/toggle", protect, toggleQuestion);
 
-router.get(
-  "/progress",
-  protect,
-  getProgress
-);
+router.get("/progress", protect, getProgress);
 
-module.exports =
-  router;
+// router.get("/overview", protect, getOverallProgress);
+
+router.get("/overview", protect, getActiveSheetsOverview);
+
+
+module.exports = router;

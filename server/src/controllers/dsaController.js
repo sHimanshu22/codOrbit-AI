@@ -1,5 +1,6 @@
 const DSAProgress = require("../models/DSAProgress");
 const dsaSheets = require("../data/dsaSheets");
+const User = require("../models/User");
 
 const getQuestions = async (req, res) => {
   try {
@@ -211,8 +212,142 @@ const getProgress = async (req, res) => {
   }
 };
 
+const getOverallProgress = async (req, res) => {
+  try {
+    const progress = await DSAProgress.findOne({
+      userId: req.user._id,
+    });
+
+    const solvedQuestions = progress?.questions.filter((q) => q.solved) || [];
+
+    const sheetStats = [];
+
+    let totalQuestions = 0;
+    let totalSolved = 0;
+
+    Object.entries(dsaSheets).forEach(([sheetName, questions]) => {
+      const sheetTotal = questions.length;
+
+      const sheetSolved = solvedQuestions.filter(
+        (q) => q.sheet === sheetName,
+      ).length;
+
+      const percentage =
+        sheetTotal > 0 ? Math.round((sheetSolved / sheetTotal) * 100) : 0;
+
+      sheetStats.push({
+        sheet: sheetName,
+
+        total: sheetTotal,
+
+        solved: sheetSolved,
+
+        percentage,
+      });
+
+      totalQuestions += sheetTotal;
+
+      totalSolved += sheetSolved;
+    });
+
+    const overallPercentage =
+      totalQuestions > 0 ? Math.round((totalSolved / totalQuestions) * 100) : 0;
+
+    res.status(200).json({
+      success: true,
+
+      overview: {
+        totalQuestions,
+
+        totalSolved,
+
+        overallPercentage,
+
+        sheetStats,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
+};
+
+const getActiveSheetsOverview = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const progress = await DSAProgress.findOne({
+      userId: req.user._id,
+    });
+
+    const solvedQuestions = progress?.questions.filter((q) => q.solved) || [];
+
+    const sheetStats = [];
+
+    let totalQuestions = 0;
+    let totalSolved = 0;
+
+    for (const sheetName of user.activeSheets) {
+      const questions = dsaSheets[sheetName] || [];
+
+      const sheetTotal = questions.length;
+
+      const sheetSolved = solvedQuestions.filter(
+        (q) => q.sheet === sheetName,
+      ).length;
+
+      const percentage =
+        sheetTotal > 0 ? Math.round((sheetSolved / sheetTotal) * 100) : 0;
+
+      sheetStats.push({
+        sheet: sheetName,
+
+        total: sheetTotal,
+
+        solved: sheetSolved,
+
+        percentage,
+      });
+
+      totalQuestions += sheetTotal;
+
+      totalSolved += sheetSolved;
+    }
+
+    const overallPercentage =
+      totalQuestions > 0 ? Math.round((totalSolved / totalQuestions) * 100) : 0;
+
+    res.status(200).json({
+      success: true,
+
+      overview: {
+        activeSheets: user.activeSheets,
+
+        totalQuestions,
+
+        totalSolved,
+
+        overallPercentage,
+
+        sheetStats,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getQuestions,
   toggleQuestion,
   getProgress,
+  getOverallProgress,
+  getActiveSheetsOverview,
 };

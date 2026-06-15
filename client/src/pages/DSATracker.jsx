@@ -24,9 +24,11 @@ import InsightCard from "../components/InsightCard";
 
 import SheetSelector from "../components/SheetSelector";
 
+import { getProfile } from "../services/userService";
+
 const DSATracker = () => {
   const [questions, setQuestions] = useState([]);
-
+  const [activeSheets, setActiveSheets] = useState([]);
   const [progress, setProgress] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -57,6 +59,26 @@ const DSATracker = () => {
       sheet: selectedSheet,
     });
   }, [selectedSheet]);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await getProfile();
+
+        const sheets = data.user.activeSheets || [];
+
+        setActiveSheets(sheets);
+
+        if (sheets.length > 0 && !sheets.includes(selectedSheet)) {
+          setSelectedSheet(sheets[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadProfile();
+  }, []);
 
   const handleToggle = async (question) => {
     try {
@@ -100,10 +122,14 @@ const DSATracker = () => {
 
       {progress && <ProgressBar percentage={progress.percentage} />}
 
-      <SheetSelector
-        selectedSheet={selectedSheet}
-        setSelectedSheet={setSelectedSheet}
-      />
+      {activeSheets.length > 0 && (
+        <SheetSelector
+          selectedSheet={selectedSheet}
+          setSelectedSheet={setSelectedSheet}
+          sheets={activeSheets}
+        />
+      )}
+
       {progress && (
         <>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">

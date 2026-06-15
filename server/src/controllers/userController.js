@@ -80,6 +80,7 @@ const updateUserProfile = async (
     res.status(200).json({
       success: true,
       user: updatedUser,
+      
     });
   } catch (error) {
     res.status(500).json({
@@ -89,7 +90,46 @@ const updateUserProfile = async (
   }
 };
 
+const updateActiveSheets =
+  async (req, res) => {
+
+    try {
+
+      const {
+        activeSheets,
+      } = req.body;
+
+      const user =
+        await User.findById(
+          req.user._id
+        );
+
+      user.activeSheets =
+        activeSheets;
+
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+
+        activeSheets:
+          user.activeSheets,
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        success: false,
+
+        message:
+          error.message,
+      });
+
+    }
+  };
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
+  updateActiveSheets,
 };
