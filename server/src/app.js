@@ -10,14 +10,13 @@ const leetcodeRoutes = require("./routes/leetcodeRoutes");
 const codeforcesRoutes = require("./routes/codeforcesRoutes");
 const platformRoutes = require("./routes/platformRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
 
 dotenv.config();
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-
 
 app.get("/", (req, res) => {
   res.send("CodOrbit AI Backend Running");
@@ -31,6 +30,7 @@ app.use("/api/leetcode", leetcodeRoutes);
 app.use("/api/codeforces", codeforcesRoutes);
 app.use("/api/platforms", platformRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 app.use(
   cors({

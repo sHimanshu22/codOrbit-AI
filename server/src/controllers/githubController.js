@@ -16,7 +16,7 @@ const syncGitHubProfile = async (req, res) => {
     });
   } catch (error) {
     let profile = await PlatformProfile.findOne({
-      userId: user._id,
+      userId: req.user._id,
     });
 
     if (profile) {
@@ -88,9 +88,34 @@ const syncGitHubData = async (userId) => {
       totalForks += repo.forks_count;
     });
 
-    // language logic
-
+    // language logic and
     // topRepositories logic
+
+    const languageMap = {};
+
+    repositories.forEach((repo) => {
+      if (repo.language) {
+        languageMap[repo.language] = (languageMap[repo.language] || 0) + 1;
+      }
+    });
+
+    const languagesUsed = Object.entries(languageMap).map(
+      ([language, count]) => ({
+        language,
+        count,
+      }),
+    );
+
+    const topRepositories = repositories
+      .sort((a, b) => b.stargazers_count - a.stargazers_count)
+      .slice(0, 5)
+      .map((repo) => ({
+        name: repo.name,
+        stars: repo.stargazers_count,
+        forks: repo.forks_count,
+        language: repo.language,
+        repoUrl: repo.html_url,
+      }));
 
     profile.github = {
       username: githubData.login,
@@ -105,12 +130,19 @@ const syncGitHubData = async (userId) => {
 
       totalForks,
 
+      languagesUsed,
+
+      topRepositories,
+
       syncStatus: "success",
+
+      lastError: null,
 
       syncedAt: new Date(),
     };
 
     await profile.save();
+    return profile.github;
   } catch (error) {
     profile.github = {
       syncStatus: "failed",
