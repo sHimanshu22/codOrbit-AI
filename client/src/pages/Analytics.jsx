@@ -10,6 +10,8 @@ import LeetCodeDifficultyChart from "../components/LeetCodeDifficultyChart";
 
 import PlatformComparisonChart from "../components/PlatformComparisonChart";
 
+import ScoreCard from "../components/ScoreCard";
+
 const Analytics = () => {
   const [analytics, setAnalytics] = useState(null);
 
@@ -75,6 +77,19 @@ const Analytics = () => {
         <GitHubLanguageChart data={analytics.github.languages} />
 
         <LeetCodeDifficultyChart data={leetcodeData} />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 mt-6">
+        <ScoreCard title="GitHub Score" score={analytics.scores.githubScore} />
+
+        <ScoreCard title="DSA Score" score={analytics.scores.dsaScore} />
+
+        <ScoreCard title="CP Score" score={analytics.scores.competitiveScore} />
+
+        <ScoreCard
+          title="Overall Score"
+          score={analytics.scores.overallScore}
+        />
       </div>
 
       <div className="mt-6">
