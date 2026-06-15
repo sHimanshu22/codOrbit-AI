@@ -8,6 +8,8 @@ import GitHubLanguageChart from "../components/GitHubLanguageChart";
 
 import LeetCodeDifficultyChart from "../components/LeetCodeDifficultyChart";
 
+import PlatformComparisonChart from "../components/PlatformComparisonChart";
+
 const Analytics = () => {
   const [analytics, setAnalytics] = useState(null);
 
@@ -49,6 +51,23 @@ const Analytics = () => {
     },
   ];
 
+  const comparisonData = [
+    {
+      platform: "GitHub Repos",
+      value: analytics.github.totalRepos,
+    },
+
+    {
+      platform: "LeetCode",
+      value: analytics.leetcode.total,
+    },
+
+    {
+      platform: "Codeforces",
+      value: analytics.codeforces.rating,
+    },
+  ];
+
   return (
     <DashboardLayout>
       <h1 className="text-3xl font-bold mb-6">Analytics Dashboard</h1>
@@ -56,6 +75,10 @@ const Analytics = () => {
         <GitHubLanguageChart data={analytics.github.languages} />
 
         <LeetCodeDifficultyChart data={leetcodeData} />
+      </div>
+
+      <div className="mt-6">
+        <PlatformComparisonChart data={comparisonData} />
       </div>
     </DashboardLayout>
   );
