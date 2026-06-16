@@ -8,6 +8,18 @@ import { getDashboardOverview } from "../services/dashboardServices.js";
 
 import SyncButton from "../components/SyncButton";
 
+import {
+  getStreaks,
+  getHeatmap,
+  getInsights,
+} from "../services/activityService";
+
+import StreakCard from "../components/StreakCard";
+
+import ActivityHeatmap from "../components/ActivityHeatmap";
+
+import ActivityInsights from "../components/ActivityInsights";
+
 const Dashboard = () => {
   const [overview, setOverview] = useState(null);
 
@@ -15,10 +27,25 @@ const Dashboard = () => {
 
   const [error, setError] = useState("");
 
+  const [streaks, setStreaks] = useState(null);
+
+  const [heatmap, setHeatmap] = useState(null);
+
+  const [insights, setInsights] = useState(null);
+
   const fetchDashboard = async () => {
     try {
       const data = await getDashboardOverview();
+      const streakData = await getStreaks();
 
+      setStreaks(streakData.streaks);
+
+      const heatmapData = await getHeatmap();
+      const insightsData = await getInsights();
+
+      setInsights(insightsData.insights);
+
+      setHeatmap(heatmapData);
       setOverview(data.overview);
     } catch (error) {
       console.error(error);
@@ -35,6 +62,8 @@ const Dashboard = () => {
   if (loading) {
     return <DashboardLayout>Loading...</DashboardLayout>;
   }
+
+  console.log("Insights:", insights);
 
   return (
     <DashboardLayout>
@@ -62,6 +91,39 @@ const Dashboard = () => {
 
         <OverviewCard title="Connected" value={overview?.platformsConnected} />
       </div>
+
+      {streaks && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <StreakCard
+            title="🔥 Coding Streak"
+            current={streaks.coding.current}
+            longest={streaks.coding.longest}
+          />
+
+          <StreakCard
+            title="💻 Development Streak"
+            current={streaks.github.current}
+            longest={streaks.github.longest}
+          />
+        </div>
+      )}
+
+      {heatmap && (
+        <div className="mt-10 space-y-8">
+          <ActivityHeatmap title="🔥 Coding Activity" data={heatmap.coding} />
+
+          <ActivityHeatmap
+            title="💻 Development Activity"
+            data={heatmap.github}
+          />
+        </div>
+      )}
+
+      {insights && (
+        <div className="mt-10">
+          <ActivityInsights insights={insights} />
+        </div>
+      )}
     </DashboardLayout>
   );
 };

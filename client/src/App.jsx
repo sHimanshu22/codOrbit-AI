@@ -8,6 +8,7 @@ import Analytics from "./pages/Analytics";
 import DSATracker from "./pages/DSATracker";
 import DSAOverview from "./pages/DSAOverview";
 import SheetManagement from "./pages/SheetManagement";
+import Contests from "./pages/Contests";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -69,6 +70,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DSAOverview />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/contests"
+          element={
+            <ProtectedRoute>
+              <Contests />
             </ProtectedRoute>
           }
         />

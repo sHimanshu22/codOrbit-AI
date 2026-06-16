@@ -12,6 +12,8 @@ const platformRoutes = require("./routes/platformRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const dsaRoutes = require("./routes/dsaRoutes");
+const activityRoutes = require("./routes/activityRoutes");
+const contestRoutes = require("./routes/contestRoutes");
 
 dotenv.config();
 const app = express();
@@ -33,7 +35,8 @@ app.use("/api/platforms", platformRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/dsa", dsaRoutes);
-
+app.use("/api/activity", activityRoutes);
+app.use("/api/contests", contestRoutes);
 app.use(
   cors({
     origin: "http://localhost:5173",

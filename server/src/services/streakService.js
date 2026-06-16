@@ -1,0 +1,95 @@
+const CodingActivity = require("../models/CodingActivity");
+
+const GitHubActivity = require("../models/GitHubActivity");
+
+const calculateStreak = (dates) => {
+  if (!dates.length) {
+    return {
+      current: 0,
+      longest: 0,
+    };
+  }
+
+  const sortedDates = dates.map((date) => new Date(date)).sort((a, b) => a - b);
+
+  let longest = 1;
+  let currentRun = 1;
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const diff = (sortedDates[i] - sortedDates[i - 1]) / (1000 * 60 * 60 * 24);
+
+    if (diff === 1) {
+      currentRun++;
+
+      longest = Math.max(longest, currentRun);
+    } else {
+      currentRun = 1;
+    }
+  }
+
+  // Current Streak
+
+  let current = 0;
+
+  const today = new Date();
+
+  const dateSet = new Set(dates);
+
+  const tempDate = new Date(today);
+
+  const todayFormatted = tempDate.toISOString().split("T")[0];
+
+  if (!dateSet.has(todayFormatted)) {
+    tempDate.setDate(tempDate.getDate() - 1);
+  }
+
+  while (true) {
+    const formatted = tempDate.toISOString().split("T")[0];
+
+    if (dateSet.has(formatted)) {
+      current++;
+
+      tempDate.setDate(tempDate.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  console.log(sortedDates);
+
+  return {
+    current,
+    longest,
+  };
+};
+
+const getUserStreaks = async (userId) => {
+  const codingDocs = await CodingActivity.find({
+    userId,
+
+    totalActivities: {
+      $gt: 0,
+    },
+  });
+
+  const githubDocs = await GitHubActivity.find({
+    userId,
+
+    totalActivities: {
+      $gt: 0,
+    },
+  });
+
+  const codingDates = codingDocs.map((doc) => doc.date);
+
+  const githubDates = githubDocs.map((doc) => doc.date);
+
+  return {
+    coding: calculateStreak(codingDates),
+
+    github: calculateStreak(githubDates),
+  };
+};
+
+module.exports = {
+  getUserStreaks,
+};

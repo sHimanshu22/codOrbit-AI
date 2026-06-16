@@ -4,6 +4,7 @@ const PlatformProfile = require("../models/PlatformProfile");
 const {
   fetchCodeforcesProfile,
   fetchContestHistory,
+  fetchUpcomingContests,
 } = require("../services/codeforcesService");
 
 /**
@@ -189,6 +190,9 @@ const syncCodeforcesData =
       );
     }
   };
+
+  
+
 
 module.exports = {
   syncCodeforcesProfile,
