@@ -12,6 +12,8 @@ import {
   getQuestions,
   getProgress,
   toggleQuestion,
+  getAICoach,
+  getSkillAnalysis,
 } from "../services/dsaService";
 
 import TopicAnalytics from "../components/TopicAnalytics";
@@ -26,6 +28,10 @@ import SheetSelector from "../components/SheetSelector";
 
 import { getProfile } from "../services/userService";
 
+import AICoachCard from "../components/AICoachCard";
+
+import SkillAnalysisCard from "../components/SkillAnalysisCard";
+
 const DSATracker = () => {
   const [questions, setQuestions] = useState([]);
   const [activeSheets, setActiveSheets] = useState([]);
@@ -36,6 +42,11 @@ const DSATracker = () => {
   const [selectedSheet, setSelectedSheet] = useState(
     () => searchParams.get("sheet") || "Striver A2Z",
   );
+
+  const [coach, setCoach] = useState(null);
+
+  const [skillAnalysis, setSkillAnalysis] = useState(null);
+
   const fetchData = async () => {
     try {
       const questionsData = await getQuestions(selectedSheet);
@@ -45,6 +56,14 @@ const DSATracker = () => {
       setQuestions(questionsData.questions);
 
       setProgress(progressData.progress);
+
+      const coachData = await getAICoach(selectedSheet);
+
+      setCoach(coachData.coach);
+
+      const skillAnalysisData = await getSkillAnalysis(selectedSheet);
+
+      setSkillAnalysis(skillAnalysisData.analysis);
     } catch (error) {
       console.error(error);
     }
@@ -122,39 +141,51 @@ const DSATracker = () => {
 
       {progress && <ProgressBar percentage={progress.percentage} />}
 
-      {activeSheets.length > 0 && (
-        <SheetSelector
-          selectedSheet={selectedSheet}
-          setSelectedSheet={setSelectedSheet}
-          sheets={activeSheets}
-        />
+      <SheetSelector
+        sheets={activeSheets}
+        selectedSheet={selectedSheet}
+        setSelectedSheet={setSelectedSheet}
+      />
+
+      {/* AI Coach */}
+
+      {coach && (
+        <div className="mt-6">
+          <AICoachCard coach={coach} />
+        </div>
       )}
 
+      {/* Skill Analysis */}
+
+      {skillAnalysis && (
+        <div className="mt-6">
+          <SkillAnalysisCard analysis={skillAnalysis} />
+        </div>
+      )}
+
+      {/* Analytics */}
+
       {progress && (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-            <TopicAnalytics topicStats={progress.topicStats} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <TopicAnalytics topicStats={progress.topicStats} />
 
-            <DifficultyAnalytics difficultyStats={progress.difficultyStats} />
-          </div>
+          <DifficultyAnalytics difficultyStats={progress.difficultyStats} />
+        </div>
+      )}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <InsightCard
-              title="Strongest Topic"
-              value={progress.strongestTopic || "N/A"}
-            />
+      {/* Insight Cards */}
 
-            <InsightCard
-              title="Weakest Topic"
-              value={progress.weakestTopic || "N/A"}
-            />
+      {progress && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <InsightCard
+            title="Strongest Topic"
+            value={progress.strongestTopic}
+          />
 
-            <InsightCard
-              title="Readiness"
-              value={progress.readiness || "Beginner"}
-            />
-          </div>
-        </>
+          <InsightCard title="Weakest Topic" value={progress.weakestTopic} />
+
+          <InsightCard title="Readiness" value={progress.readiness} />
+        </div>
       )}
 
       <div className="mt-6 space-y-4">

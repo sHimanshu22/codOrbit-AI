@@ -12,6 +12,7 @@ import {
   getStreaks,
   getHeatmap,
   getInsights,
+  getActivityCoach,
 } from "../services/activityService";
 
 import StreakCard from "../components/StreakCard";
@@ -19,6 +20,12 @@ import StreakCard from "../components/StreakCard";
 import ActivityHeatmap from "../components/ActivityHeatmap";
 
 import ActivityInsights from "../components/ActivityInsights";
+
+import ActivityCoachCard from "../components/ActivityCoachCard";
+
+import { getDeveloperScore } from "../services/aiServices.js";
+
+import DeveloperScoreCard from "../components/DeveloperScoreCard";
 
 const Dashboard = () => {
   const [overview, setOverview] = useState(null);
@@ -33,6 +40,10 @@ const Dashboard = () => {
 
   const [insights, setInsights] = useState(null);
 
+  const [activityCoach, setActivityCoach] = useState(null);
+
+  const [developerScore, setDeveloperScore] = useState(null);
+
   const fetchDashboard = async () => {
     try {
       const data = await getDashboardOverview();
@@ -42,11 +53,22 @@ const Dashboard = () => {
 
       const heatmapData = await getHeatmap();
       const insightsData = await getInsights();
+      const coachData = await getActivityCoach();
 
       setInsights(insightsData.insights);
 
+      setActivityCoach(coachData.coach);
+
       setHeatmap(heatmapData);
       setOverview(data.overview);
+
+      const scoreData = await getDeveloperScore();
+
+      setDeveloperScore({
+        score: scoreData.developerScore,
+
+        level: scoreData.level,
+      });
     } catch (error) {
       console.error(error);
       setError("Unable to load dashboard data");
@@ -68,6 +90,15 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
+
+      {developerScore && (
+        <div className="mb-6">
+          <DeveloperScoreCard
+            score={developerScore.score}
+            level={developerScore.level}
+          />
+        </div>
+      )}
 
       <div className="flex justify-between items-center mb-6">
         <SyncButton onSuccess={fetchDashboard} />
@@ -119,11 +150,11 @@ const Dashboard = () => {
         </div>
       )}
 
-      {insights && (
-        <div className="mt-10">
-          <ActivityInsights insights={insights} />
-        </div>
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+        {insights && <ActivityInsights insights={insights} />}
+
+        {activityCoach && <ActivityCoachCard coach={activityCoach} />}
+      </div>
     </DashboardLayout>
   );
 };

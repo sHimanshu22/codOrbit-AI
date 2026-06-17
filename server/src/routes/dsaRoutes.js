@@ -8,6 +8,8 @@ const {
   getProgress,
   getOverallProgress,
   getActiveSheetsOverview,
+  getAICoach,
+  getSkillAnalysis,
 } = require("../controllers/dsaController");
 
 const router = express.Router();
@@ -22,5 +24,8 @@ router.get("/progress", protect, getProgress);
 
 router.get("/overview", protect, getActiveSheetsOverview);
 
+router.get("/ai-coach", protect, getAICoach);
+
+router.get("/skill-analysis", protect, getSkillAnalysis);
 
 module.exports = router;

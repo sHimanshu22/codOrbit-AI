@@ -32,3 +32,14 @@ export const getInsights =
 
     return response.data;
 };
+
+export const getActivityCoach =
+  async () => {
+
+    const response =
+      await api.get(
+        "/activity/ai-coach"
+      );
+
+    return response.data;
+};

@@ -4,8 +4,6 @@ const CodingActivity = require("../models/CodingActivity");
 
 const GitHubActivity = require("../models/GitHubActivity");
 
-
-
 const getStreaks = async (req, res) => {
   try {
     const streaks = await getUserStreaks(req.user._id);
@@ -172,8 +170,108 @@ const getInsights = async (req, res) => {
   }
 };
 
+const getActivityCoach =
+  async (req, res) => {
+
+    try {
+
+      const coding =
+        await CodingActivity.find({
+          userId:
+            req.user._id,
+        });
+
+      const github =
+        await GitHubActivity.find({
+          userId:
+            req.user._id,
+        });
+
+      const codingTotal =
+        coding.reduce(
+          (sum, day) =>
+            sum +
+            day.totalActivities,
+          0
+        );
+
+      const githubTotal =
+        github.reduce(
+          (sum, day) =>
+            sum +
+            day.totalActivities,
+          0
+        );
+
+      let trend =
+        "Balanced";
+
+      let recommendation =
+        "";
+
+      if (
+        codingTotal >
+        githubTotal * 2
+      ) {
+
+        trend =
+          "Coding Focused";
+
+        recommendation =
+          "Your DSA practice is strong. Increase GitHub commits and project work.";
+      }
+
+      else if (
+        githubTotal >
+        codingTotal * 2
+      ) {
+
+        trend =
+          "Development Focused";
+
+        recommendation =
+          "Maintain coding practice alongside project development.";
+      }
+
+      else {
+
+        trend =
+          "Balanced";
+
+        recommendation =
+          "Great balance between coding and development. Maintain consistency.";
+      }
+
+      res.status(200).json({
+        success: true,
+
+        coach: {
+
+          codingTotal,
+
+          githubTotal,
+
+          trend,
+
+          recommendation,
+        },
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        success: false,
+
+        message:
+          error.message,
+      });
+
+    }
+  };
+
 module.exports = {
   getStreaks,
   getHeatmap,
   getInsights,
+  getActivityCoach,
 };

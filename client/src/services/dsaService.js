@@ -27,3 +27,15 @@ export const getOverview = async () => {
 
   return response.data;
 };
+
+export const getAICoach = async (sheet) => {
+  const response = await api.get(`/dsa/ai-coach?sheet=${sheet}`);
+
+  return response.data;
+};
+
+export const getSkillAnalysis = async (sheet) => {
+  const response = await api.get(`/dsa/skill-analysis?sheet=${sheet}`);
+
+  return response.data;
+};
