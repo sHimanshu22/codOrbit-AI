@@ -1,39 +1,29 @@
-const { request, gql } =
-  require("graphql-request");
+const { request, gql } = require("graphql-request");
 
-const fetchLeetCodeStats =
-  async (username) => {
-    const endpoint =
-      "https://leetcode.com/graphql";
+const fetchLeetCodeStats = async (username) => {
+  const endpoint = "https://leetcode.com/graphql";
 
-    const query = gql`
-      query userProblemsSolved(
-        $username: String!
-      ) {
-        matchedUser(
-          username: $username
-        ) {
-          submitStats {
-            acSubmissionNum {
-              difficulty
-              count
-            }
+  const query = gql`
+    query getUserProfile($username: String!) {
+      matchedUser(username: $username) {
+        submitStats {
+          acSubmissionNum {
+            difficulty
+            count
           }
         }
+
+        submissionCalendar
       }
-    `;
+    }
+  `;
 
-    const data =
-      await request(
-        endpoint,
-        query,
-        {
-          username,
-        }
-      );
+  const data = await request(endpoint, query, {
+    username,
+  });
 
-    return data;
-  };
+  return data;
+};
 
 module.exports = {
   fetchLeetCodeStats,
