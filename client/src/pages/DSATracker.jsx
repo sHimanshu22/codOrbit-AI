@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
 
+import PageLoader from "../components/ui/PageLoader";
+
 import DashboardLayout from "../layouts/DashboardLayout";
 
 import ProgressBar from "../components/ProgressBar";
@@ -36,8 +38,11 @@ import SkillAnalysisCard from "../components/SkillAnalysisCard";
 import SavedQuestions from "../components/SavedQuestions";
 
 import { getBookmarks } from "../services/dsaService";
+import SectionHeader from "../components/ui/SectionHeader";
 
 const DSATracker = () => {
+  const [loading, setLoading] = useState(true);
+
   const [questions, setQuestions] = useState([]);
   const [activeSheets, setActiveSheets] = useState([]);
   const [progress, setProgress] = useState(null);
@@ -105,6 +110,9 @@ const DSATracker = () => {
       } catch (error) {
         console.error(error);
       }
+      finally{
+        setLoading(false);
+      }
     };
 
     loadProfile();
@@ -142,82 +150,146 @@ const DSATracker = () => {
     }
   };
 
+  if (loading) {
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6">{selectedSheet} Tracker</h1>
+      <PageLoader />
+    </DashboardLayout>
+  );
+}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <DSAStatCard
-          title="Total Questions"
-          value={progress?.totalQuestions || 0}
-        />
+  return (
+    <DashboardLayout>
+      <div className="mb-10">
+        <p className="text-slate-500 text-sm">DSA Preparation</p>
 
-        <DSAStatCard title="Solved" value={progress?.solvedCount || 0} />
+        <h1 className="text-4xl font-bold text-slate-900">{selectedSheet}</h1>
 
-        <DSAStatCard title="Pending" value={progress?.pendingQuestions || 0} />
-
-        <DSAStatCard
-          title="Completion"
-          value={`${progress?.percentage || 0}%`}
-        />
+        <p className="text-slate-500 mt-2">
+          Track your progress and prepare for placements
+        </p>
       </div>
 
-      {progress && <ProgressBar percentage={progress.percentage} />}
-
-      <SheetSelector
-        sheets={activeSheets}
-        selectedSheet={selectedSheet}
-        setSelectedSheet={setSelectedSheet}
-      />
-
-      {/* AI Coach */}
-
-      {coach && (
-        <div className="mt-6">
-          <AICoachCard coach={coach} />
-        </div>
-      )}
-
-      {/* Skill Analysis */}
-
-      {skillAnalysis && (
-        <div className="mt-6">
-          <SkillAnalysisCard analysis={skillAnalysis} />
-        </div>
-      )}
-
-      {/* Analytics */}
-
-      {progress && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <TopicAnalytics topicStats={progress.topicStats} />
-
-          <DifficultyAnalytics difficultyStats={progress.difficultyStats} />
-        </div>
-      )}
-
-      {/* Insight Cards */}
-
-      {progress && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <InsightCard
-            title="Strongest Topic"
-            value={progress.strongestTopic}
+      <div className="mt-12">
+        <SectionHeader
+          title="Performance Overview"
+          subtitle="Your progress across this sheet"
+        />
+        <div className=" mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <DSAStatCard
+            title="Total Questions"
+            value={progress?.totalQuestions || 0}
           />
 
-          <InsightCard title="Weakest Topic" value={progress.weakestTopic} />
+          <DSAStatCard title="Solved" value={progress?.solvedCount || 0} />
 
-          <InsightCard title="Readiness" value={progress.readiness} />
+          <DSAStatCard
+            title="Pending"
+            value={progress?.pendingQuestions || 0}
+          />
+
+          <DSAStatCard
+            title="Completion"
+            value={`${progress?.percentage || 0}%`}
+          />
+        </div>
+      </div>
+
+      {progress && (
+        <div className="mt-12">
+          <SectionHeader
+            title="Progress"
+            subtitle="Track completion of the current sheet"
+          />
+
+          <div className="mt-6">
+            <ProgressBar percentage={progress.percentage} />
+          </div>
         </div>
       )}
 
-      {bookmarks.length > 0 && (
+      <div className="mt-12">
+        <SectionHeader
+          title="Active Sheet"
+          subtitle="Switch between your learning tracks"
+        />
+
         <div className="mt-6">
-          <SavedQuestions questions={bookmarks} />
+          <SheetSelector
+            sheets={activeSheets}
+            selectedSheet={selectedSheet}
+            setSelectedSheet={setSelectedSheet}
+          />
         </div>
-      )}
-      
-      <div className="mt-6 space-y-4">
+      </div>
+
+      {/* AI Coach */}
+      <div className="mt-12">
+        <SectionHeader
+          title="AI Learning Center"
+          subtitle="Personalized guidance for improvement"
+        />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          {coach && <AICoachCard coach={coach} />}
+
+          {skillAnalysis && <SkillAnalysisCard analysis={skillAnalysis} />}
+        </div>
+      </div>
+
+      {/* Analytics */}
+      <div className="mt-12">
+        <SectionHeader
+          title="Analytics"
+          subtitle="Understand your strengths and weaknesses"
+        />
+        {progress && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <TopicAnalytics topicStats={progress.topicStats} />
+
+            <DifficultyAnalytics difficultyStats={progress.difficultyStats} />
+          </div>
+        )}
+      </div>
+
+      {/* Insight Cards */}
+      <div className="mt-12">
+        <SectionHeader
+          title="Performance Insights"
+          subtitle="Key takeaways from your preparation"
+        />
+        {progress && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <InsightCard
+              title="Strongest Topic"
+              value={progress.strongestTopic}
+            />
+
+            <InsightCard title="Weakest Topic" value={progress.weakestTopic} />
+
+            <InsightCard title="Readiness" value={progress.readiness} />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-12">
+        <SectionHeader
+          title="Saved Questions"
+          subtitle="Questions marked for revision"
+        />
+
+        {bookmarks.length > 0 && (
+          <div className="mt-6">
+            <SavedQuestions questions={bookmarks} />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-12 space-y-5">
+        <SectionHeader
+          title="Question Bank"
+          subtitle={`${questions.length} questions available`}
+        />
         {questions.map((question) => (
           <QuestionCard
             key={question.id}

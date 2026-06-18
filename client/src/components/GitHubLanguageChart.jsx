@@ -3,32 +3,73 @@ import {
   Pie,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
-const GitHubLanguageChart = ({ data }) => {
-  console.log("Chart Data:", data);
+const GitHubLanguageChart = ({
+  data,
+}) => {
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow">
-      <h2 className="text-xl font-semibold mb-4">
-        GitHub Language Distribution
-      </h2>
 
-      <PieChart width={600} height={400}>
-        <Pie
-          data={data}
-          dataKey="count"
-          nameKey="language"
-          cx="50%"
-          cy="50%"
-          outerRadius={120}
-          label
-        />
+    <div
+      className="
+      bg-white
+      border
+      border-slate-200
+      rounded-3xl
+      p-6
+      shadow-sm
+      "
+    >
 
-        <Tooltip />
-        <Legend />
-      </PieChart>
+      <div className="mb-6">
+
+        <h2 className="text-xl font-bold">
+
+          GitHub Language Distribution
+
+        </h2>
+
+        <p className="text-slate-500">
+
+          Technologies used across repositories
+
+        </p>
+
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          height:400 ,
+        }}
+      >
+
+        <ResponsiveContainer>
+
+          <PieChart>
+
+            <Pie
+              data={data}
+              dataKey="count"
+              nameKey="language"
+              outerRadius={110}
+              label
+            />
+
+            <Tooltip />
+
+            <Legend />
+
+          </PieChart>
+
+        </ResponsiveContainer>
+
+      </div>
+
     </div>
+
   );
 };
 

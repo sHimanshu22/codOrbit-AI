@@ -1,19 +1,43 @@
+import {
+  BookmarkCheck,
+} from "lucide-react";
+
 const SavedQuestions = ({
   questions,
 }) => {
 
-  if (!questions.length) {
+  if (!questions.length)
     return null;
-  }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow">
 
-      <h2 className="text-xl font-bold mb-4">
-        ⭐ Saved Questions
-      </h2>
+    <div
+      className="
+      bg-white
+      border
+      border-slate-200
+      rounded-3xl
+      p-6
+      shadow-sm
+      "
+    >
 
-      <div className="space-y-3">
+      <div className="flex items-center gap-3 mb-6">
+
+        <BookmarkCheck
+          size={22}
+          className="text-yellow-500"
+        />
+
+        <h2 className="text-xl font-bold">
+
+          Saved Questions
+
+        </h2>
+
+      </div>
+
+      <div className="space-y-4">
 
         {questions.map(
           (question) => (
@@ -22,19 +46,54 @@ const SavedQuestions = ({
               key={
                 question.questionId
               }
-              className="border-b pb-2"
+              className="
+              border
+              border-slate-200
+              rounded-2xl
+              p-4
+              "
             >
-              <h3 className="font-medium">
+
+              <h3 className="font-semibold text-slate-900">
+
                 {question.title}
+
               </h3>
 
-              <p className="text-sm text-gray-500">
-                {question.topic}
-              </p>
+              <div className="flex gap-2 mt-2">
 
-              <p className="text-xs text-gray-400">
-                {question.sheet}
-              </p>
+                <span
+                  className="
+                  px-3
+                  py-1
+                  rounded-full
+                  bg-blue-50
+                  text-blue-700
+                  text-xs
+                  "
+                >
+
+                  {question.topic}
+
+                </span>
+
+                <span
+                  className="
+                  px-3
+                  py-1
+                  rounded-full
+                  bg-slate-100
+                  text-slate-600
+                  text-xs
+                  "
+                >
+
+                  {question.sheet}
+
+                </span>
+
+              </div>
+
             </div>
 
           )
@@ -43,6 +102,7 @@ const SavedQuestions = ({
       </div>
 
     </div>
+
   );
 };
 

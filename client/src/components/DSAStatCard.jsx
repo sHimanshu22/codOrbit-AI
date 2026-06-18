@@ -2,22 +2,36 @@ const DSAStatCard = ({
   title,
   value,
 }) => {
-  return (
-    <div className="bg-white p-6 rounded-xl shadow">
 
-      <h3 className="text-gray-500">
+  return (
+
+    <div
+      className="
+      bg-white
+      border
+      border-slate-200
+      rounded-2xl
+      p-6
+      shadow-sm
+      hover:shadow-md
+      transition-all
+      "
+    >
+
+      <p className="text-sm text-slate-500">
 
         {title}
 
-      </h3>
+      </p>
 
-      <p className="text-3xl font-bold mt-2">
+      <h2 className="text-4xl font-bold text-slate-900 mt-3">
 
         {value}
 
-      </p>
+      </h2>
 
     </div>
+
   );
 };
 

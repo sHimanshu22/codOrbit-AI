@@ -1,1 +1,78 @@
 @import "tailwindcss";
+
+:root {
+
+  --background:
+    #f8fafc;
+
+  --card:
+    #ffffff;
+
+  --primary:
+    #2563eb;
+
+  --text:
+    #0f172a;
+
+  --text-muted:
+    #64748b;
+
+  --border:
+    #e2e8f0;
+
+  --success:
+    #10b981;
+
+  --warning:
+    #f59e0b;
+
+  --danger:
+    #ef4444;
+
+  --radius:
+    16px;
+}
+
+* {
+  box-sizing:
+    border-box;
+}
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Inter,
+    sans-serif;
+
+  background:
+    var(--background);
+
+  color:
+    var(--text);
+}
+
+#root {
+
+  min-height:
+    100vh;
+}
+
+.contest-day {
+
+  background:
+    var(--primary)
+    !important;
+
+  color:
+    white
+    !important;
+
+  border-radius:
+    10px
+    !important;
+
+  font-weight:
+    600;
+}

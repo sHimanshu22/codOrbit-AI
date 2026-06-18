@@ -5,68 +5,95 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 
 const RatingGraph = ({
   data,
 }) => {
 
-  if (!data.length) {
+  return (
 
-    return (
-      <div className="bg-white p-6 rounded-xl shadow">
+    <div
+      className="
+      bg-white
+      border
+      border-slate-200
+      rounded-3xl
+      p-6
+      shadow-sm
+      "
+    >
 
-        <h2 className="text-xl font-semibold mb-4">
+      <div className="mb-6">
+
+        <h2 className="text-xl font-bold">
+
           Rating Progress
+
         </h2>
 
-        <p>
-          No contest data available yet.
+        <p className="text-slate-500">
+
+          Rating trend across contests
+
         </p>
 
       </div>
-    );
-  }
 
-  return (
+      {!data.length ? (
 
-    <div className="bg-white p-6 rounded-xl shadow">
+        <div className="py-12 text-center text-slate-500">
 
-      <h2 className="text-xl font-semibold mb-4">
-        Rating Progress
-      </h2>
+          No contest data available yet.
 
-      <div
-        style={{
-          width: "100%",
-          height: 350,
-        }}
-      >
+        </div>
 
-        <ResponsiveContainer>
+      ) : (
 
-          <LineChart data={data}>
+        <div
+          style={{
+            width: "100%",
+            height: 350,
+          }}
+        >
 
-            <XAxis
-              dataKey="date"
-            />
+          <ResponsiveContainer>
 
-            <YAxis />
+            <LineChart
+              data={data}
+            >
 
-            <Tooltip />
+              <CartesianGrid
+                strokeDasharray="3 3"
+              />
 
-            <Line
-              type="monotone"
-              dataKey="rating"
-            />
+              <XAxis
+                dataKey="date"
+              />
 
-          </LineChart>
+              <YAxis />
 
-        </ResponsiveContainer>
+              <Tooltip />
 
-      </div>
+              <Line
+                type="monotone"
+                dataKey="rating"
+                stroke="#2563eb"
+                strokeWidth={3}
+                dot={false}
+              />
+
+            </LineChart>
+
+          </ResponsiveContainer>
+
+        </div>
+
+      )}
 
     </div>
+
   );
 };
 

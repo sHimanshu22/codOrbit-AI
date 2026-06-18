@@ -7,15 +7,23 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const LeetCodeDifficultyChart = ({
-  data,
-}) => {
+const LeetCodeDifficultyChart = ({ data }) => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow">
+    <div
+      className="
+  bg-white
+  border
+  border-slate-200
+  rounded-3xl
+  p-6
+  shadow-sm
+  "
+    >
+      <div className="mb-6">
+        <h2 className="text-xl font-bold">LeetCode Difficulty Breakdown</h2>
 
-      <h2 className="text-xl font-semibold mb-4">
-        LeetCode Difficulty Breakdown
-      </h2>
+        <p className="text-slate-500">Easy, Medium and Hard distribution</p>
+      </div>
 
       <div
         style={{
@@ -31,11 +39,10 @@ const LeetCodeDifficultyChart = ({
 
             <Tooltip />
 
-            <Bar dataKey="value" />
+            <Bar dataKey="value" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
-
     </div>
   );
 };

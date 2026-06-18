@@ -15,41 +15,30 @@ import {
 } from "../context/AuthContext";
 
 const Login = () => {
-
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
   const { loadUser } =
-    useContext(
-      AuthContext
-    );
+    useContext(AuthContext);
 
-  const [formData,
-    setFormData] =
+  const [formData, setFormData] =
     useState({
       email: "",
       password: "",
     });
 
-  const handleChange = (
-    e
-  ) => {
-
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]:
         e.target.value,
     });
-
   };
 
   const handleSubmit =
     async (e) => {
-
       e.preventDefault();
 
       try {
-
         const res =
           await api.post(
             "/auth/login",
@@ -66,69 +55,160 @@ const Login = () => {
         navigate(
           "/dashboard"
         );
-
       } catch (error) {
-
         alert(
           error.response?.data
             ?.message ||
             "Login Failed"
         );
-
       }
     };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-
-      <form
-        onSubmit={handleSubmit}
-        className="w-96 bg-white p-6 shadow rounded"
+    <div
+      className="
+      min-h-screen
+      bg-slate-50
+      flex
+      items-center
+      justify-center
+      px-4
+      "
+    >
+      <div
+        className="
+        w-full
+        max-w-md
+        bg-white
+        border
+        border-slate-200
+        rounded-3xl
+        shadow-lg
+        p-8
+        "
       >
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold">
+            CodOrbit AI
+          </h1>
 
-        <h2 className="text-2xl font-bold mb-4">
+          <p className="text-slate-500 mt-2">
+            AI-Powered Developer Growth Platform
+          </p>
+        </div>
 
-          Login
-
-        </h2>
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
-
-        <button
-          className="bg-blue-600 text-white w-full py-2"
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
         >
-          Login
-        </button>
+          <div>
+            <label
+              className="
+              block
+              text-sm
+              font-medium
+              text-slate-600
+              mb-2
+              "
+            >
+              Email
+            </label>
 
-        <p className="mt-3">
+            <input
+              type="email"
+              name="email"
+              value={
+                formData.email
+              }
+              onChange={
+                handleChange
+              }
+              placeholder="Enter your email"
+              className="
+              w-full
+              border
+              border-slate-200
+              rounded-xl
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+              "
+            />
+          </div>
 
-          Don't have account?
+          <div>
+            <label
+              className="
+              block
+              text-sm
+              font-medium
+              text-slate-600
+              mb-2
+              "
+            >
+              Password
+            </label>
 
-          <Link
-            to="/register"
-            className="text-blue-500 ml-1"
+            <input
+              type="password"
+              name="password"
+              value={
+                formData.password
+              }
+              onChange={
+                handleChange
+              }
+              placeholder="Enter your password"
+              className="
+              w-full
+              border
+              border-slate-200
+              rounded-xl
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+              "
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="
+            w-full
+            bg-blue-600
+            hover:bg-blue-700
+            text-white
+            py-3
+            rounded-xl
+            font-medium
+            transition-all
+            "
           >
-            Register
-          </Link>
+            Sign In
+          </button>
+        </form>
 
-        </p>
+        <div className="mt-6 text-center">
+          <p className="text-slate-500">
+            Don't have an account?
 
-      </form>
-
+            <Link
+              to="/register"
+              className="
+              text-blue-600
+              font-medium
+              ml-1
+              "
+            >
+              Register
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

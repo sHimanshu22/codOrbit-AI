@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import DashboardLayout from "../layouts/DashboardLayout";
 
+import PageLoader from "../components/ui/PageLoader";
+
 import ContestCard from "../components/ContestCard";
 
 import {
@@ -17,6 +19,7 @@ import RatingGraph from "../components/RatingGraph";
 import ContestPerformance from "../components/ContestPerformance";
 
 import ContestCalendar from "../components/ContestCalendar";
+import SectionHeader from "../components/ui/SectionHeader";
 
 const Contests = () => {
   const [upcoming, setUpcoming] = useState([]);
@@ -31,6 +34,9 @@ const Contests = () => {
 
   const [performance, setPerformance] = useState(null);
 
+  const statCardClass =
+    "bg-white border border-slate-200 rounded-2xl p-6 shadow-sm";
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,6 +49,10 @@ const Contests = () => {
         const ratingHistoryData = await getRatingHistory();
 
         const performanceData = await getPerformance();
+
+        setRatingHistory(
+          ratingHistoryData.history || ratingHistoryData.ratingHistory || [],
+        );
 
         setPerformance(performanceData.performance);
 
@@ -62,56 +72,88 @@ const Contests = () => {
   }, []);
 
   if (loading) {
-    return <DashboardLayout>Loading...</DashboardLayout>;
+    return (
+      <DashboardLayout>
+        <PageLoader />
+      </DashboardLayout>
+    );
   }
 
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6">Contest Center</h1>
+      <div className="mb-10">
+        <p className="text-slate-500 text-sm">Competitive Programming</p>
 
-      {performance && (
-        <div className="mb-8">
-          <ContestPerformance performance={performance} />
-        </div>
-      )}
+        <h1 className="text-4xl font-bold text-slate-900">Contest Center</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <ContestCalendar contests={upcoming} />
+        <p className="text-slate-500 mt-2">
+          Track contests, ratings and performance
+        </p>
+      </div>
+      <div className="mt-12">
+        <SectionHeader
+          title="Performance Overview"
+          subtitle="Your competitive programming profile"
+        />
+        {performance && (
+          <div className="mb-8">
+            <ContestPerformance performance={performance} />
+          </div>
+        )}
+      </div>
 
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-semibold mb-4">Upcoming Contests</h2>
+      <div className="mt-12">
+        <SectionHeader
+          title="Upcoming Contests"
+          subtitle="Never miss an upcoming contest"
+        />
 
-          <div className="space-y-4">
-            {upcoming.map((contest) => (
-              <ContestCard key={contest.name} contest={contest} />
-            ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <ContestCalendar contests={upcoming} />
+
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+            <h2 className="text-xl font-bold mb-4">Upcoming Contests</h2>
+
+            {upcoming.length === 0 ? (
+              <p className="text-slate-500">No upcoming contests found.</p>
+            ) : (
+              <div className="space-y-4">
+                {upcoming.map((contest) => (
+                  <ContestCard key={contest.name} contest={contest} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Analytics */}
-
-      <h2 className="text-2xl font-semibold mb-4">Contest Analytics</h2>
+      <div className="mt-12">
+        <SectionHeader
+          title="Contest Analytics"
+          subtitle="Historical contest performance"
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-5 rounded-xl shadow">
+        <div className={statCardClass}>
           <h3>Total Contests</h3>
           <p className="text-2xl font-bold">{analytics?.totalContests ?? 0}</p>
         </div>
 
-        <div className="bg-white p-5 rounded-xl shadow">
+        <div className={statCardClass}>
           <h3>Best Rank</h3>
           <p className="text-2xl font-bold">{analytics?.bestRank ?? "N/A"}</p>
         </div>
 
-        <div className="bg-white p-5 rounded-xl shadow">
+        <div className={statCardClass}>
           <h3>Average Rank</h3>
           <p className="text-2xl font-bold">
             {analytics?.averageRank ?? "N/A"}
           </p>
         </div>
 
-        <div className="bg-white p-5 rounded-xl shadow">
+        <div className={statCardClass}>
           <h3>Highest Gain</h3>
           <p className="text-2xl font-bold">
             {analytics?.highestRatingGain ?? "N/A"}
@@ -119,21 +161,47 @@ const Contests = () => {
         </div>
       </div>
 
-      <RatingGraph data={ratingHistory} />
+      <div className="mt-12">
+        <SectionHeader
+          title="Rating Journey"
+          subtitle="Track your rating growth over time"
+        />
+        <RatingGraph data={ratingHistory} />
+      </div>
 
       {/* History */}
-
-      <h2 className="text-2xl font-semibold mb-4 mt-4">Contest History</h2>
+      <div className="mt-12">
+        <SectionHeader
+          title="Contest History"
+          subtitle="All contests you've participated in"
+        />
+      </div>
 
       {history.length === 0 ? (
-        <div className="bg-white p-5 rounded-xl shadow">
+        <div
+          className="bg-white
+border
+border-slate-200
+rounded-2xl
+p-6
+shadow-sm"
+        >
           No contests participated yet.
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow overflow-hidden">
+        <div
+          className="
+  bg-white
+  border
+  border-slate-200
+  rounded-3xl
+  shadow-sm
+  overflow-hidden
+  "
+        >
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-slate-50">
                 <th className="p-3 text-left">Contest</th>
 
                 <th className="p-3 text-left">Rank</th>
@@ -146,7 +214,10 @@ const Contests = () => {
 
             <tbody>
               {history.map((contest) => (
-                <tr key={contest.contestName}>
+                <tr
+                  className="border-t border-slate-100"
+                  key={contest.contestName}
+                >
                   <td className="p-3">{contest.contestName}</td>
 
                   <td className="p-3">{contest.rank}</td>

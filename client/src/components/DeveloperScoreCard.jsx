@@ -3,31 +3,123 @@ const DeveloperScoreCard = ({
   level,
 }) => {
 
+  const getColor = () => {
+
+    if (score >= 80)
+      return "text-green-600";
+
+    if (score >= 60)
+      return "text-blue-600";
+
+    return "text-orange-600";
+  };
+
   return (
 
-    <div className="bg-white p-6 rounded-xl shadow">
+    <div
+      className="
+      bg-white
+      rounded-3xl
+      border
+      border-slate-200
+      p-8
+      shadow-sm
+      "
+    >
 
-      <h2 className="text-xl font-semibold mb-4">
+      <div className="flex justify-between items-center">
 
-        🏆 Developer Score
+        <div>
 
-      </h2>
+          <p className="text-slate-500 text-sm">
 
-      <div className="text-5xl font-bold">
+            Developer Score
 
-        {score}
+          </p>
 
-        <span className="text-lg">
-          /100
-        </span>
+          <h2
+            className={`
+            text-7xl
+            font-bold
+            mt-2
+            ${getColor()}
+          `}
+          >
+            {score}
+
+          </h2>
+
+          <p className="text-slate-600 mt-3 text-lg">
+
+            {level}
+
+          </p>
+
+        </div>
+
+        <div
+          className="
+          h-24
+          w-24
+          rounded-full
+          bg-blue-50
+          flex
+          items-center
+          justify-center
+        "
+        >
+
+          <span className="text-4xl">
+
+            🏆
+
+          </span>
+
+        </div>
 
       </div>
 
-      <p className="mt-3">
+      <div className="mt-8">
 
-        {level}
+        <div className="flex justify-between text-sm mb-2">
 
-      </p>
+          <span className="text-slate-500">
+
+            Placement Readiness
+
+          </span>
+
+          <span className="font-medium">
+
+            {score}%
+
+          </span>
+
+        </div>
+
+        <div
+          className="
+          h-3
+          bg-slate-100
+          rounded-full
+          overflow-hidden
+        "
+        >
+
+          <div
+            className="
+            h-full
+            bg-blue-600
+            rounded-full
+          "
+            style={{
+              width: `${score}%`,
+            }}
+          />
+
+        </div>
+
+      </div>
 
     </div>
   );

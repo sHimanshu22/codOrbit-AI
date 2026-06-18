@@ -1,58 +1,170 @@
+import {
+  BarChart3,
+  Calendar,
+  TrendingUp,
+} from "lucide-react";
+
 const ActivityInsights = ({
   insights,
 }) => {
 
   return (
 
-    <div className="bg-white p-6 rounded-xl shadow">
+    <div
+      className="
+      bg-white
+      border
+      border-slate-200
+      rounded-3xl
+      p-6
+      shadow-sm
+      "
+    >
 
-      <h2 className="text-xl font-semibold mb-4">
+      <div className="flex items-center gap-3 mb-6">
 
-        📊 Activity Insights
+        <div
+          className="
+          h-12
+          w-12
+          rounded-xl
+          bg-blue-50
+          flex
+          items-center
+          justify-center
+          "
+        >
 
-      </h2>
+          <BarChart3
+            size={22}
+            className="text-blue-600"
+          />
 
-      <div className="space-y-2">
+        </div>
 
-        <p>
-          Coding Activity This Week:
-          {" "}
-          {insights.codingWeek}
-        </p>
+        <div>
 
-        <p>
-          Development Activity This Week:
-          {" "}
-          {insights.githubWeek}
-        </p>
+          <h2 className="text-xl font-bold">
 
-        <p>
-          Most Active Coding Day:
-          {" "}
-          {
-            insights.mostActiveCodingDay
-          }
-        </p>
+            Activity Insights
 
-        <p>
-          Most Active Development Day:
-          {" "}
-          {
-            insights.mostActiveGithubDay
-          }
-        </p>
+          </h2>
 
-        <p>
-          Consistency:
-          {" "}
-          {
-            insights.consistency
-          }
-        </p>
+          <p className="text-sm text-slate-500">
+
+            Weekly productivity overview
+
+          </p>
+
+        </div>
+
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+
+        <div className="bg-slate-50 rounded-2xl p-4">
+
+          <p className="text-sm text-slate-500">
+
+            Coding Activity
+
+          </p>
+
+          <p className="text-3xl font-bold mt-2">
+
+            {insights.codingWeek}
+
+          </p>
+
+        </div>
+
+        <div className="bg-slate-50 rounded-2xl p-4">
+
+          <p className="text-sm text-slate-500">
+
+            Development Activity
+
+          </p>
+
+          <p className="text-3xl font-bold mt-2">
+
+            {insights.githubWeek}
+
+          </p>
+
+        </div>
+
+      </div>
+
+      <div className="mt-6 space-y-4">
+
+        <div className="flex items-center gap-3">
+
+          <Calendar
+            size={18}
+            className="text-green-600"
+          />
+
+          <span>
+
+            Most Active Coding Day:
+            {" "}
+            <strong>
+              {
+                insights.mostActiveCodingDay
+              }
+            </strong>
+
+          </span>
+
+        </div>
+
+        <div className="flex items-center gap-3">
+
+          <Calendar
+            size={18}
+            className="text-blue-600"
+          />
+
+          <span>
+
+            Most Active Development Day:
+            {" "}
+            <strong>
+              {
+                insights.mostActiveGithubDay
+              }
+            </strong>
+
+          </span>
+
+        </div>
+
+        <div className="flex items-center gap-3">
+
+          <TrendingUp
+            size={18}
+            className="text-orange-500"
+          />
+
+          <span>
+
+            Consistency:
+            {" "}
+            <strong>
+              {
+                insights.consistency
+              }
+            </strong>
+
+          </span>
+
+        </div>
 
       </div>
 
     </div>
+
   );
 };
 

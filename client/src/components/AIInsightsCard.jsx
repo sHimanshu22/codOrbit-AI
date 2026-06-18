@@ -1,25 +1,96 @@
+import {
+  Brain,
+  TrendingUp,
+} from "lucide-react";
+
 const AIInsightsCard = ({
   insights,
 }) => {
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
 
-      <div className="flex items-center gap-3 mb-4">
+    <div
+      className="
+      bg-white
+      border
+      border-slate-200
+      rounded-3xl
+      p-6
+      shadow-sm
+      "
+    >
 
-        <span className="text-2xl">
-          🤖
-        </span>
+      <div className="flex items-center gap-3 mb-6">
 
-        <h2 className="text-xl font-bold">
-          CodOrbit AI Insights
-        </h2>
+        <div
+          className="
+          h-12
+          w-12
+          rounded-xl
+          bg-blue-50
+          flex
+          items-center
+          justify-center
+          "
+        >
+
+          <Brain
+            size={24}
+            className="text-blue-600"
+          />
+
+        </div>
+
+        <div>
+
+          <h2 className="text-xl font-bold">
+
+            AI Career Coach
+
+          </h2>
+
+          <p className="text-sm text-slate-500">
+
+            Personalized insights for your growth
+
+          </p>
+
+        </div>
 
       </div>
 
-      <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-
+      <div
+        className="
+        whitespace-pre-wrap
+        text-slate-700
+        leading-8
+        "
+      >
         {insights}
+      </div>
+
+      <div
+        className="
+        mt-6
+        pt-4
+        border-t
+        border-slate-100
+        flex
+        items-center
+        gap-2
+        "
+      >
+
+        <TrendingUp
+          size={18}
+          className="text-green-600"
+        />
+
+        <span className="text-sm text-slate-500">
+
+          Updated from your latest coding activity
+
+        </span>
 
       </div>
 

@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 
+import { GitBranch, Star, Code2, Trophy, Link2 } from "lucide-react";
+
+import PageLoader from "../components/ui/PageLoader";
+
 import DashboardLayout from "../layouts/DashboardLayout";
 
 import OverviewCard from "../components/OverviewCard";
@@ -31,6 +35,8 @@ import { getAIInsights } from "../services/aiServices.js";
 
 import AIInsightsCard from "../components/AIInsightsCard";
 
+import SectionHeader from "../components/ui/SectionHeader";
+
 const Dashboard = () => {
   const [overview, setOverview] = useState(null);
 
@@ -48,7 +54,7 @@ const Dashboard = () => {
 
   const [developerScore, setDeveloperScore] = useState(null);
 
-const [aiInsights, setAIInsights] = useState("");
+  const [aiInsights, setAIInsights] = useState("");
 
   const fetchDashboard = async () => {
     try {
@@ -70,9 +76,13 @@ const [aiInsights, setAIInsights] = useState("");
 
       const scoreData = await getDeveloperScore();
 
-      const aiData = await getAIInsights();
+      try {
+        const aiData = await getAIInsights();
 
-      setAIInsights(aiData.insights);
+        setAIInsights(aiData.insights);
+      } catch {
+        setAIInsights("AI insights are currently unavailable.");
+      }
 
       setDeveloperScore({
         score: scoreData.developerScore,
@@ -91,18 +101,30 @@ const [aiInsights, setAIInsights] = useState("");
     fetchDashboard();
   }, []);
 
-  if (loading) {
-    return <DashboardLayout>Loading...</DashboardLayout>;
-  }
+if (loading) {
+  return (
+    <DashboardLayout>
+      <PageLoader />
+    </DashboardLayout>
+  );
+}
 
   console.log("Insights:", insights);
 
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
+      <div className="flex justify-between items-center mb-10">
+        <div>
+          <p className="text-slate-500">Welcome back</p>
+
+          <h1 className="text-4xl font-bold">Developer Dashboard</h1>
+        </div>
+
+        <SyncButton onSuccess={fetchDashboard} />
+      </div>
 
       {developerScore && (
-        <div className="mb-6">
+        <div className="mb-10">
           <DeveloperScoreCard
             score={developerScore.score}
             level={developerScore.level}
@@ -110,66 +132,118 @@ const [aiInsights, setAIInsights] = useState("");
         </div>
       )}
 
-      {aiInsights && (
-        <div className="mt-6 mb-6">
-          <AIInsightsCard insights={aiInsights} />
-        </div>
-      )}
-
-      <div className="flex justify-between items-center mb-6">
-        <SyncButton onSuccess={fetchDashboard} />
-      </div>
-
       {error && (
         <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <OverviewCard title="GitHub Repos" value={overview?.githubRepos} />
-
-        <OverviewCard title="GitHub Stars" value={overview?.githubStars} />
-
-        <OverviewCard
-          title="LeetCode Solved"
-          value={overview?.leetcodeSolved}
+      <div className="mt-14">
+        <SectionHeader
+          title="Performance Overview"
+          subtitle="Your coding and development metrics"
         />
+        <div className=" mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
+          <OverviewCard
+            title="GitHub Repos"
+            value={overview?.githubRepos}
+            icon={<GitBranch size={20} />}
+            description="Public repositories"
+          />
 
-        <OverviewCard title="CF Rating" value={overview?.codeforcesRating} />
+          <OverviewCard
+            title="GitHub Stars"
+            value={overview?.githubStars}
+            icon={<Star size={20} />}
+            description="Total stars earned"
+          />
 
-        <OverviewCard title="Connected" value={overview?.platformsConnected} />
+          <OverviewCard
+            title="LeetCode Solved"
+            value={overview?.leetcodeSolved}
+            icon={<Code2 size={20} />}
+            description="Problems solved"
+          />
+
+          <OverviewCard
+            title="CF Rating"
+            value={overview?.codeforcesRating}
+            icon={<Trophy size={20} />}
+            description="Current rating"
+          />
+
+          <OverviewCard
+            title="Connected"
+            value={overview?.platformsConnected}
+            icon={<Link2 size={20} />}
+            description="Linked platforms"
+          />
+        </div>
       </div>
 
-      {streaks && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <StreakCard
-            title="🔥 Coding Streak"
-            current={streaks.coding.current}
-            longest={streaks.coding.longest}
-          />
+      <div className="mt-14">
+        <SectionHeader
+          title="Consistency"
+          subtitle="Track your learning habits"
+        />
 
-          <StreakCard
-            title="💻 Development Streak"
-            current={streaks.github.current}
-            longest={streaks.github.longest}
-          />
+        {streaks && (
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <StreakCard
+              title="Coding Streak"
+              current={streaks.coding.current}
+              longest={streaks.coding.longest}
+            />
+
+            <StreakCard
+              title="Development Streak"
+              current={streaks.github.current}
+              longest={streaks.github.longest}
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-14">
+        <SectionHeader
+          title="Activity"
+          subtitle="Your contributions over the last year"
+        />
+        {heatmap && (
+          <div className="mt-6 space-y-8">
+            <ActivityHeatmap
+              title="Coding Activity"
+              data={heatmap.coding}
+              type="coding"
+            />
+
+            <ActivityHeatmap
+              title="Development Activity"
+              data={heatmap.github}
+              type="github"
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-14">
+        <SectionHeader
+          title="Insights"
+          subtitle="Understand your growth patterns"
+        />
+        <div className=" mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+          {insights && <ActivityInsights insights={insights} />}
+
+          {activityCoach && <ActivityCoachCard coach={activityCoach} />}
         </div>
-      )}
+      </div>
 
-      {heatmap && (
-        <div className="mt-10 space-y-8">
-          <ActivityHeatmap title="🔥 Coding Activity" data={heatmap.coding} />
-
-          <ActivityHeatmap
-            title="💻 Development Activity"
-            data={heatmap.github}
-          />
+      <div className="mt-14">
+        <SectionHeader
+          title="Insights"
+          subtitle="Understand your growth patterns"
+        />
+        <div className="mt-6">
+          <AIInsightsCard insights={aiInsights} />
         </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-        {insights && <ActivityInsights insights={insights} />}
-
-        {activityCoach && <ActivityCoachCard coach={activityCoach} />}
       </div>
     </DashboardLayout>
   );

@@ -1,220 +1,236 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import DashboardLayout
-from "../layouts/DashboardLayout";
+import PageLoader from "../components/ui/PageLoader";
 
-import {
-  getProfile,
-  updateProfile,
-} from "../services/profileService";
+import DashboardLayout from "../layouts/DashboardLayout";
+
+import { getProfile, updateProfile } from "../services/profileService";
+
+import SectionHeader from "../components/ui/SectionHeader";
+
+const inputClass = `
+  w-full
+  border
+  border-slate-200
+  rounded-xl
+  px-4
+  py-3
+  focus:outline-none
+  focus:ring-2
+  focus:ring-blue-500
+`;
 
 const Settings = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    college: "",
+    branch: "",
+    graduationYear: "",
 
-  const [formData,
-    setFormData] =
-    useState({
-      name: "",
-      college: "",
-      branch: "",
-      graduationYear: "",
+    githubUsername: "",
+    leetcodeUsername: "",
+    codeforcesUsername: "",
+    gfgUsername: "",
+    hackerrankUsername: "",
+  });
 
-      githubUsername: "",
-      leetcodeUsername: "",
-      codeforcesUsername: "",
-      gfgUsername: "",
-      hackerrankUsername: "",
-    });
+  const [loading, setLoading] = useState(true);
 
-  const [loading,
-    setLoading] =
-    useState(true);
+  const fetchProfile = async () => {
+    try {
+      const res = await getProfile();
+
+      setFormData(res.user);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-
     fetchProfile();
-
   }, []);
 
-  const fetchProfile =
-    async () => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
 
-      try {
+      [e.target.name]: e.target.value,
+    });
+  };
 
-        const res =
-          await getProfile();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        setFormData(
-          res.user
-        );
+    try {
+      await updateProfile(formData);
 
-      } catch (error) {
+      alert("Profile Updated Successfully");
+    } catch (error) {
+      console.error(error);
 
-        console.error(error);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-    };
-
-  const handleChange =
-    (e) => {
-
-      setFormData({
-        ...formData,
-
-        [e.target.name]:
-          e.target.value,
-      });
-
-    };
-
-  const handleSubmit =
-    async (e) => {
-
-      e.preventDefault();
-
-      try {
-
-        await updateProfile(
-          formData
-        );
-
-        alert(
-          "Profile Updated Successfully"
-        );
-
-      } catch (error) {
-
-        alert(
-          "Update Failed"
-        );
-
-      }
-    };
+      alert("Update Failed");
+    }
+  };
 
   if (loading) {
     return (
       <DashboardLayout>
-        Loading...
+        <PageLoader />
       </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout>
+      <div className="max-w-6xl">
+        {/* Header */}
 
-      <div className="max-w-4xl bg-white rounded-xl shadow p-6">
+        <div className="mb-10">
+          <p className="text-slate-500 text-sm">Account Management</p>
 
-        <h1 className="text-3xl font-bold mb-6">
+          <h1 className="text-4xl font-bold text-slate-900">Settings</h1>
 
-          Profile Settings
+          <p className="text-slate-500 mt-2">
+            Manage your profile and coding platforms
+          </p>
+        </div>
 
-        </h1>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Personal Information */}
 
-        <form
-          onSubmit={handleSubmit}
-          className="grid md:grid-cols-2 gap-4"
-        >
-
-          <input
-            name="name"
-            value={formData.name || ""}
-            onChange={handleChange}
-            placeholder="Name"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="college"
-            value={formData.college || ""}
-            onChange={handleChange}
-            placeholder="College"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="branch"
-            value={formData.branch || ""}
-            onChange={handleChange}
-            placeholder="Branch"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="graduationYear"
-            value={
-              formData.graduationYear || ""
-            }
-            onChange={handleChange}
-            placeholder="Graduation Year"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="githubUsername"
-            value={
-              formData.githubUsername || ""
-            }
-            onChange={handleChange}
-            placeholder="GitHub Username"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="leetcodeUsername"
-            value={
-              formData.leetcodeUsername || ""
-            }
-            onChange={handleChange}
-            placeholder="LeetCode Username"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="codeforcesUsername"
-            value={
-              formData.codeforcesUsername || ""
-            }
-            onChange={handleChange}
-            placeholder="Codeforces Username"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="gfgUsername"
-            value={
-              formData.gfgUsername || ""
-            }
-            onChange={handleChange}
-            placeholder="GFG Username"
-            className="border p-3 rounded"
-          />
-
-          <input
-            name="hackerrankUsername"
-            value={
-              formData.hackerrankUsername || ""
-            }
-            onChange={handleChange}
-            placeholder="HackerRank Username"
-            className="border p-3 rounded"
-          />
-
-          <button
-            className="bg-blue-600 text-white py-3 rounded md:col-span-2"
+          <div
+            className="
+            bg-white
+            border
+            border-slate-200
+            rounded-3xl
+            p-8
+            shadow-sm
+            "
           >
-            Save Profile
-          </button>
+            <SectionHeader
+              title="Personal Information"
+              subtitle="Basic profile details"
+            />
 
+            <div className="grid md:grid-cols-2 gap-5 mt-6">
+              <input
+                name="name"
+                value={formData.name || ""}
+                onChange={handleChange}
+                placeholder="Name"
+                className={inputClass}
+              />
+
+              <input
+                name="college"
+                value={formData.college || ""}
+                onChange={handleChange}
+                placeholder="College"
+                className={inputClass}
+              />
+
+              <input
+                name="branch"
+                value={formData.branch || ""}
+                onChange={handleChange}
+                placeholder="Branch"
+                className={inputClass}
+              />
+
+              <input
+                name="graduationYear"
+                value={formData.graduationYear || ""}
+                onChange={handleChange}
+                placeholder="Graduation Year"
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          {/* Connected Platforms */}
+
+          <div
+            className="
+            bg-white
+            border
+            border-slate-200
+            rounded-3xl
+            p-8
+            shadow-sm
+            "
+          >
+            <SectionHeader
+              title="Connected Platforms"
+              subtitle="Usernames used for syncing data"
+            />
+
+            <div className="grid gap-5 mt-6">
+              <input
+                name="githubUsername"
+                value={formData.githubUsername || ""}
+                onChange={handleChange}
+                placeholder="GitHub Username"
+                className={inputClass}
+              />
+
+              <input
+                name="leetcodeUsername"
+                value={formData.leetcodeUsername || ""}
+                onChange={handleChange}
+                placeholder="LeetCode Username"
+                className={inputClass}
+              />
+
+              <input
+                name="codeforcesUsername"
+                value={formData.codeforcesUsername || ""}
+                onChange={handleChange}
+                placeholder="Codeforces Username"
+                className={inputClass}
+              />
+
+              <input
+                name="gfgUsername"
+                value={formData.gfgUsername || ""}
+                onChange={handleChange}
+                placeholder="GeeksforGeeks Username"
+                className={inputClass}
+              />
+
+              <input
+                name="hackerrankUsername"
+                value={formData.hackerrankUsername || ""}
+                onChange={handleChange}
+                placeholder="HackerRank Username"
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          {/* Save Button */}
+
+          <div>
+            <button
+              type="submit"
+              className="
+              bg-blue-600
+              hover:bg-blue-700
+              text-white
+              px-8
+              py-3
+              rounded-xl
+              font-medium
+              transition-all
+              "
+            >
+              Save Changes
+            </button>
+          </div>
         </form>
-
       </div>
-
     </DashboardLayout>
   );
 };

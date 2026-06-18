@@ -2,69 +2,64 @@ const ContestPerformance = ({
   performance,
 }) => {
 
+  const cards = [
+    {
+      title: "Current Rating",
+      value: performance.currentRating,
+    },
+    {
+      title: "Highest Rating",
+      value: performance.highestRating,
+    },
+    {
+      title: "Current Rank",
+      value: performance.currentRank,
+    },
+    {
+      title: "Highest Rank",
+      value: performance.highestRank,
+    },
+    {
+      title: "Total Contests",
+      value: performance.totalContests,
+    },
+  ];
+
   return (
 
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
 
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h3>
-          Current Rating
-        </h3>
+      {cards.map((card) => (
 
-        <p className="text-2xl font-bold">
-          {
-            performance.currentRating
-          }
-        </p>
-      </div>
+        <div
+          key={card.title}
+          className="
+          bg-white
+          border
+          border-slate-200
+          rounded-2xl
+          p-6
+          shadow-sm
+          hover:shadow-md
+          transition-all
+          "
+        >
 
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h3>
-          Highest Rating
-        </h3>
+          <p className="text-sm text-slate-500">
 
-        <p className="text-2xl font-bold">
-          {
-            performance.highestRating
-          }
-        </p>
-      </div>
+            {card.title}
 
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h3>
-          Current Rank
-        </h3>
+          </p>
 
-        <p className="text-xl font-bold">
-          {
-            performance.currentRank
-          }
-        </p>
-      </div>
+          <h2 className="text-3xl font-bold mt-3">
 
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h3>
-          Highest Rank
-        </h3>
+            {card.value || "N/A"}
 
-        <p className="text-xl font-bold">
-          {
-            performance.highestRank
-          }
-        </p>
-      </div>
+          </h2>
 
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h3>
-          Total Contests
-        </h3>
+        </div>
 
-        <p className="text-2xl font-bold">
-          {
-            performance.totalContests
-          }
-        </p>
-      </div>
+      ))}
 
     </div>
 

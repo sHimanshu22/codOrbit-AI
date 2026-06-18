@@ -1,6 +1,4 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
 import {
   Link,
@@ -10,37 +8,29 @@ import {
 import api from "../services/api";
 
 const Register = () => {
-
   const navigate =
     useNavigate();
 
-  const [formData,
-    setFormData] =
+  const [formData, setFormData] =
     useState({
       name: "",
       email: "",
       password: "",
     });
 
-  const handleChange = (
-    e
-  ) => {
-
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]:
         e.target.value,
     });
-
   };
 
   const handleSubmit =
     async (e) => {
-
       e.preventDefault();
 
       try {
-
         const res =
           await api.post(
             "/auth/register",
@@ -55,77 +45,200 @@ const Register = () => {
         navigate(
           "/dashboard"
         );
-
       } catch (error) {
-
         alert(
           error.response?.data
             ?.message ||
             "Registration Failed"
         );
-
       }
     };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-
-      <form
-        onSubmit={handleSubmit}
-        className="w-96 bg-white p-6 shadow rounded"
+    <div
+      className="
+      min-h-screen
+      bg-slate-50
+      flex
+      items-center
+      justify-center
+      px-4
+      "
+    >
+      <div
+        className="
+        w-full
+        max-w-md
+        bg-white
+        border
+        border-slate-200
+        rounded-3xl
+        shadow-lg
+        p-8
+        "
       >
+        <div className="mb-8 text-center">
 
-        <h2 className="text-2xl font-bold mb-4">
+          <h1 className="text-3xl font-bold">
+            CodOrbit AI
+          </h1>
 
-          Register
+          <p className="text-slate-500 mt-2">
+            Start your developer growth journey
+          </p>
 
-        </h2>
+        </div>
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
-
-        <button
-          className="bg-blue-600 text-white w-full py-2"
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
         >
-          Register
-        </button>
 
-        <p className="mt-3">
+          <div>
 
-          Already have account?
+            <label
+              className="
+              block
+              text-sm
+              font-medium
+              text-slate-600
+              mb-2
+              "
+            >
+              Full Name
+            </label>
 
-          <Link
-            to="/"
-            className="text-blue-500 ml-1"
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Enter your name"
+              className="
+              w-full
+              border
+              border-slate-200
+              rounded-xl
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+              "
+            />
+
+          </div>
+
+          <div>
+
+            <label
+              className="
+              block
+              text-sm
+              font-medium
+              text-slate-600
+              mb-2
+              "
+            >
+              Email
+            </label>
+
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              className="
+              w-full
+              border
+              border-slate-200
+              rounded-xl
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+              "
+            />
+
+          </div>
+
+          <div>
+
+            <label
+              className="
+              block
+              text-sm
+              font-medium
+              text-slate-600
+              mb-2
+              "
+            >
+              Password
+            </label>
+
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Create a password"
+              className="
+              w-full
+              border
+              border-slate-200
+              rounded-xl
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+              "
+            />
+
+          </div>
+
+          <button
+            type="submit"
+            className="
+            w-full
+            bg-blue-600
+            hover:bg-blue-700
+            text-white
+            py-3
+            rounded-xl
+            font-medium
+            transition-all
+            "
           >
-            Login
-          </Link>
+            Create Account
+          </button>
 
-        </p>
+        </form>
 
-      </form>
+        <div className="mt-6 text-center">
 
+          <p className="text-slate-500">
+
+            Already have an account?
+
+            <Link
+              to="/"
+              className="
+              text-blue-600
+              font-medium
+              ml-1
+              "
+            >
+              Login
+            </Link>
+
+          </p>
+
+        </div>
+
+      </div>
     </div>
   );
 };

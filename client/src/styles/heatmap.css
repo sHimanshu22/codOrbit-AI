@@ -1,19 +1,49 @@
 .color-empty {
-  fill: #ebedf0;
+  fill: #f1f5f9;
 }
 
-.color-scale-1 {
-  fill: #9be9a8;
+/* Coding */
+
+.green-scale-1 {
+  fill: #bbf7d0;
 }
 
-.color-scale-2 {
-  fill: #40c463;
+.green-scale-2 {
+  fill: #86efac;
 }
 
-.color-scale-3 {
-  fill: #30a14e;
+.green-scale-3 {
+  fill: #22c55e;
 }
 
-.color-scale-4 {
-  fill: #216e39;
+.green-scale-4 {
+  fill: #15803d;
+}
+
+/* Development */
+
+.blue-scale-1 {
+  fill: #bfdbfe;
+}
+
+.blue-scale-2 {
+  fill: #93c5fd;
+}
+
+.blue-scale-3 {
+  fill: #3b82f6;
+}
+
+.blue-scale-4 {
+  fill: #1d4ed8;
+}
+
+.react-calendar-heatmap text {
+  fill: #64748b;
+  font-size: 10px;
+}
+
+.react-calendar-heatmap rect {
+  rx: 3;
+  ry: 3;
 }

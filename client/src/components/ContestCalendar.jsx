@@ -7,25 +7,36 @@ const ContestCalendar = ({ contests }) => {
   );
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow">
-      <h2 className="text-xl font-semibold mb-4">Contest Calendar</h2>
+    <div
+      className="
+  bg-white
+  border
+  border-slate-200
+  rounded-3xl
+  p-6
+  shadow-sm
+  "
+    >
+      <h2 className="text-xl font-bold mb-6">Contest Calendar</h2>
 
-      <Calendar
-        tileClassName={({ date }) => {
-          const hasContest = contestDates.includes(date.toDateString());
+      <div className="overflow-x-auto">
+        <Calendar
+          tileClassName={({ date }) => {
+            const hasContest = contestDates.includes(date.toDateString());
 
-          return hasContest ? "contest-day" : "";
-        }}
-        tileContent={({ date }) => {
-          const hasContest = contestDates.includes(date.toDateString());
+            return hasContest ? "contest-day" : "";
+          }}
+          tileContent={({ date }) => {
+            const hasContest = contestDates.includes(date.toDateString());
 
-          return hasContest ? (
-            <div className="flex justify-center">
-              <span className="text-xs">🏆</span>
-            </div>
-          ) : null;
-        }}
-      />
+            return hasContest ? (
+              <div className="flex justify-center">
+                <span className="text-xs">🏆</span>
+              </div>
+            ) : null;
+          }}
+        />
+      </div>
     </div>
   );
 };
