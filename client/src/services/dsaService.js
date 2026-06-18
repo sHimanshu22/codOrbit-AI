@@ -39,3 +39,17 @@ export const getSkillAnalysis = async (sheet) => {
 
   return response.data;
 };
+
+export const toggleBookmark = async (questionId) => {
+  const response = await api.patch("/dsa/bookmark", {
+    questionId,
+  });
+
+  return response.data;
+};
+
+export const getBookmarks = async () => {
+  const response = await api.get("/dsa/bookmarks");
+
+  return response.data;
+};

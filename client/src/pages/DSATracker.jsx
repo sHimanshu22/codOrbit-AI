@@ -14,6 +14,7 @@ import {
   toggleQuestion,
   getAICoach,
   getSkillAnalysis,
+  toggleBookmark,
 } from "../services/dsaService";
 
 import TopicAnalytics from "../components/TopicAnalytics";
@@ -32,6 +33,10 @@ import AICoachCard from "../components/AICoachCard";
 
 import SkillAnalysisCard from "../components/SkillAnalysisCard";
 
+import SavedQuestions from "../components/SavedQuestions";
+
+import { getBookmarks } from "../services/dsaService";
+
 const DSATracker = () => {
   const [questions, setQuestions] = useState([]);
   const [activeSheets, setActiveSheets] = useState([]);
@@ -46,6 +51,8 @@ const DSATracker = () => {
   const [coach, setCoach] = useState(null);
 
   const [skillAnalysis, setSkillAnalysis] = useState(null);
+
+  const [bookmarks, setBookmarks] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -64,6 +71,10 @@ const DSATracker = () => {
       const skillAnalysisData = await getSkillAnalysis(selectedSheet);
 
       setSkillAnalysis(skillAnalysisData.analysis);
+
+      const bookmarksData = await getBookmarks();
+
+      setBookmarks(bookmarksData.questions);
     } catch (error) {
       console.error(error);
     }
@@ -108,11 +119,23 @@ const DSATracker = () => {
 
         topic: question.topic,
 
+        pattern: question.pattern,
+
         difficulty: question.difficulty,
 
         sheet: selectedSheet,
       });
 
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleBookmark = async (question) => {
+    try {
+      await toggleBookmark(question.id);
+      console.log(question);
       fetchData();
     } catch (error) {
       console.error(error);
@@ -188,12 +211,19 @@ const DSATracker = () => {
         </div>
       )}
 
+      {bookmarks.length > 0 && (
+        <div className="mt-6">
+          <SavedQuestions questions={bookmarks} />
+        </div>
+      )}
+      
       <div className="mt-6 space-y-4">
         {questions.map((question) => (
           <QuestionCard
             key={question.id}
             question={question}
             onToggle={handleToggle}
+            onBookmark={handleBookmark}
           />
         ))}
       </div>

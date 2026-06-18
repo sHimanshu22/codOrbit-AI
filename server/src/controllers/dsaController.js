@@ -21,6 +21,12 @@ const getQuestions = async (req, res) => {
         ...question,
 
         solved: solvedQuestion?.solved || false,
+
+        bookmarked: solvedQuestion?.bookmarked || false,
+
+        notes: solvedQuestion?.notes || "",
+
+        revisionCount: solvedQuestion?.revisionCount || 0,
       };
     });
 
@@ -64,10 +70,18 @@ const toggleQuestion = async (req, res) => {
         questionId,
         title,
         topic,
+        sheet,
         difficulty,
-        sheet: sheet || "Striver A2Z",
+
         solved: true,
+
         solvedAt: new Date(),
+
+        bookmarked: false,
+
+        notes: "",
+
+        revisionCount: 0,
       });
     }
 
@@ -83,6 +97,83 @@ const toggleQuestion = async (req, res) => {
     });
   }
 };
+
+const toggleBookmark = async (req, res) => {
+  try {
+    const { questionId } = req.body;
+
+    const progress = await DSAProgress.findOne({
+      userId: req.user._id,
+    });
+
+    if (!progress) {
+      return res.status(404).json({
+        success: false,
+        message: "Progress not found",
+      });
+    }
+    console.log(progress.questions);
+
+    const question = progress.questions.find(
+      (q) => q.questionId === questionId,
+    );
+
+    if (!question) {
+      return res.status(404).json({
+        success: false,
+        message: "Question not found",
+      });
+    }
+
+    question.bookmarked = !question.bookmarked;
+
+    await progress.save();
+
+    res.status(200).json({
+      success: true,
+
+      bookmarked: question.bookmarked,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getBookmarkedQuestions =
+  async (req, res) => {
+
+    try {
+
+      const progress =
+        await DSAProgress.findOne({
+          userId:
+            req.user._id,
+        });
+
+      const questions =
+        progress?.questions.filter(
+          (q) =>
+            q.bookmarked
+        ) || [];
+
+      res.status(200).json({
+        success: true,
+        questions,
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        success: false,
+        message:
+          error.message,
+      });
+
+    }
+  };
 
 const getProgress = async (req, res) => {
   const sheet = req.query.sheet || "Striver A2Z";
@@ -346,165 +437,92 @@ const getActiveSheetsOverview = async (req, res) => {
 
 const getAICoach = async (req, res) => {
   try {
+    const sheet = req.query.sheet || "Striver A2Z";
 
-    const sheet =
-      req.query.sheet ||
-      "Striver A2Z";
+    const questionsData = dsaSheets[sheet] || [];
 
-    const questionsData =
-      dsaSheets[sheet] || [];
-
-    const progress =
-      await DSAProgress.findOne({
-        userId: req.user._id,
-      });
+    const progress = await DSAProgress.findOne({
+      userId: req.user._id,
+    });
 
     if (!progress) {
-
       return res.status(200).json({
         success: true,
 
         coach: {
-          title:
-            "Getting Started",
+          title: "Getting Started",
 
           recommendation:
             "Start solving your first DSA problem to unlock AI insights.",
 
           focusTopics: [],
 
-          readiness:
-            "Beginner",
+          readiness: "Beginner",
         },
       });
     }
 
-    const solvedQuestions =
-      progress.questions.filter(
-        (q) =>
-          q.solved &&
-          q.sheet === sheet
-      );
+    const solvedQuestions = progress.questions.filter(
+      (q) => q.solved && q.sheet === sheet,
+    );
 
-    const totalQuestions =
-      questionsData.length;
+    const totalQuestions = questionsData.length;
 
-    const solvedCount =
-      solvedQuestions.length;
+    const solvedCount = solvedQuestions.length;
 
     const percentage =
-      totalQuestions > 0
-        ? Math.round(
-            (solvedCount /
-              totalQuestions) *
-              100
-          )
-        : 0;
+      totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
 
     const topicStats = {};
 
-    questionsData.forEach(
-      (question) => {
-
-        if (
-          !topicStats[
-            question.topic
-          ]
-        ) {
-
-          topicStats[
-            question.topic
-          ] = {
-            total: 0,
-            solved: 0,
-          };
-        }
-
-        topicStats[
-          question.topic
-        ].total++;
+    questionsData.forEach((question) => {
+      if (!topicStats[question.topic]) {
+        topicStats[question.topic] = {
+          total: 0,
+          solved: 0,
+        };
       }
-    );
 
-    solvedQuestions.forEach(
-      (question) => {
+      topicStats[question.topic].total++;
+    });
 
-        if (
-          topicStats[
-            question.topic
-          ]
-        ) {
-
-          topicStats[
-            question.topic
-          ].solved++;
-        }
+    solvedQuestions.forEach((question) => {
+      if (topicStats[question.topic]) {
+        topicStats[question.topic].solved++;
       }
-    );
+    });
 
-    const weakTopics =
-      Object.entries(
-        topicStats
-      )
-        .map(
-          ([topic, stats]) => ({
-            topic,
+    const weakTopics = Object.entries(topicStats)
+      .map(([topic, stats]) => ({
+        topic,
 
-            percentage:
-              stats.total > 0
-                ? Math.round(
-                    (stats.solved /
-                      stats.total) *
-                      100
-                  )
-                : 0,
-          })
-        )
-        .sort(
-          (a, b) =>
-            a.percentage -
-            b.percentage
-        )
-        .slice(0, 3)
-        .map(
-          (item) =>
-            item.topic
-        );
+        percentage:
+          stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0,
+      }))
+      .sort((a, b) => a.percentage - b.percentage)
+      .slice(0, 3)
+      .map((item) => item.topic);
 
-    let title =
-      "Beginner Stage";
+    let title = "Beginner Stage";
 
-    let recommendation =
-      "";
+    let recommendation = "";
 
-    let readiness =
-      "Beginner";
+    let readiness = "Beginner";
 
     if (percentage < 30) {
-
       recommendation =
         "Focus on Arrays, Hashing and Basic Recursion before moving to advanced topics.";
+    } else if (percentage < 70) {
+      title = "Intermediate Stage";
 
-    } else if (
-      percentage < 70
-    ) {
-
-      title =
-        "Intermediate Stage";
-
-      readiness =
-        "Intermediate";
+      readiness = "Intermediate";
 
       recommendation =
         "Focus on Graphs, Trees and Dynamic Programming. Improve problem solving speed.";
-
     } else {
+      title = "Placement Ready";
 
-      title =
-        "Placement Ready";
-
-      readiness =
-        "Placement Ready";
+      readiness = "Placement Ready";
 
       recommendation =
         "Start solving Hard problems, mock interviews and contest questions regularly.";
@@ -514,11 +532,9 @@ const getAICoach = async (req, res) => {
       success: true,
 
       coach: {
-
         title,
 
-        completion:
-          percentage,
+        completion: percentage,
 
         readiness,
 
@@ -527,171 +543,103 @@ const getAICoach = async (req, res) => {
         recommendation,
       },
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
-      message:
-        error.message,
+      message: error.message,
     });
   }
 };
 
-const getSkillAnalysis =
-  async (req, res) => {
+const getSkillAnalysis = async (req, res) => {
+  try {
+    const sheet = req.query.sheet || "Striver A2Z";
 
-    try {
+    const questionsData = dsaSheets[sheet] || [];
 
-      const sheet =
-        req.query.sheet ||
-        "Striver A2Z";
+    const progress = await DSAProgress.findOne({
+      userId: req.user._id,
+    });
 
-      const questionsData =
-        dsaSheets[sheet] || [];
-
-      const progress =
-        await DSAProgress.findOne({
-          userId: req.user._id,
-        });
-
-      if (!progress) {
-
-        return res.status(200).json({
-          success: true,
-
-          analysis: {
-
-            strengths: [],
-
-            weaknesses: [],
-
-            focusTopics: [],
-
-            recommendation:
-              "Start solving problems to unlock analysis.",
-          },
-        });
-      }
-
-      const solvedQuestions =
-        progress.questions.filter(
-          (q) =>
-            q.solved &&
-            q.sheet === sheet
-        );
-
-      const topicStats = {};
-
-      questionsData.forEach(
-        (question) => {
-
-          if (
-            !topicStats[
-              question.topic
-            ]
-          ) {
-
-            topicStats[
-              question.topic
-            ] = {
-              total: 0,
-              solved: 0,
-            };
-          }
-
-          topicStats[
-            question.topic
-          ].total++;
-        }
-      );
-
-      solvedQuestions.forEach(
-        (question) => {
-
-          if (
-            topicStats[
-              question.topic
-            ]
-          ) {
-
-            topicStats[
-              question.topic
-            ].solved++;
-          }
-        }
-      );
-
-      const topicPerformance =
-        Object.entries(topicStats)
-          .map(
-            ([topic, stats]) => ({
-              topic,
-
-              percentage:
-                stats.total > 0
-                  ? Math.round(
-                      (stats.solved /
-                        stats.total) *
-                        100
-                    )
-                  : 0,
-            })
-          )
-          .sort(
-            (a, b) =>
-              b.percentage -
-              a.percentage
-          );
-
-      const strengths =
-        topicPerformance
-          .slice(0, 3);
-
-      const weaknesses =
-        [...topicPerformance]
-          .reverse()
-          .slice(0, 3);
-
-      const focusTopics =
-        weaknesses.map(
-          (item) =>
-            item.topic
-        );
-
-      const recommendation =
-        focusTopics.length
-          ? `Focus on ${focusTopics.join(", ")} over the next week.`
-          : "Keep solving consistently.";
-
-      res.status(200).json({
-
+    if (!progress) {
+      return res.status(200).json({
         success: true,
 
         analysis: {
+          strengths: [],
 
-          strengths,
+          weaknesses: [],
 
-          weaknesses,
+          focusTopics: [],
 
-          focusTopics,
-
-          recommendation,
+          recommendation: "Start solving problems to unlock analysis.",
         },
       });
-
-    } catch (error) {
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          error.message,
-      });
-
     }
-  };
+
+    const solvedQuestions = progress.questions.filter(
+      (q) => q.solved && q.sheet === sheet,
+    );
+
+    const topicStats = {};
+
+    questionsData.forEach((question) => {
+      if (!topicStats[question.topic]) {
+        topicStats[question.topic] = {
+          total: 0,
+          solved: 0,
+        };
+      }
+
+      topicStats[question.topic].total++;
+    });
+
+    solvedQuestions.forEach((question) => {
+      if (topicStats[question.topic]) {
+        topicStats[question.topic].solved++;
+      }
+    });
+
+    const topicPerformance = Object.entries(topicStats)
+      .map(([topic, stats]) => ({
+        topic,
+
+        percentage:
+          stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0,
+      }))
+      .sort((a, b) => b.percentage - a.percentage);
+
+    const strengths = topicPerformance.slice(0, 3);
+
+    const weaknesses = [...topicPerformance].reverse().slice(0, 3);
+
+    const focusTopics = weaknesses.map((item) => item.topic);
+
+    const recommendation = focusTopics.length
+      ? `Focus on ${focusTopics.join(", ")} over the next week.`
+      : "Keep solving consistently.";
+
+    res.status(200).json({
+      success: true,
+
+      analysis: {
+        strengths,
+
+        weaknesses,
+
+        focusTopics,
+
+        recommendation,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   getQuestions,
@@ -700,5 +648,7 @@ module.exports = {
   getOverallProgress,
   getActiveSheetsOverview,
   getAICoach,
-  getSkillAnalysis
+  getSkillAnalysis,
+  toggleBookmark,
+  getBookmarkedQuestions,
 };

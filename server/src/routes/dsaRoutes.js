@@ -10,6 +10,8 @@ const {
   getActiveSheetsOverview,
   getAICoach,
   getSkillAnalysis,
+  toggleBookmark,
+  getBookmarkedQuestions,
 } = require("../controllers/dsaController");
 
 const router = express.Router();
@@ -27,5 +29,9 @@ router.get("/overview", protect, getActiveSheetsOverview);
 router.get("/ai-coach", protect, getAICoach);
 
 router.get("/skill-analysis", protect, getSkillAnalysis);
+
+router.get("/bookmarks", protect, getBookmarkedQuestions);
+
+router.patch("/bookmark", protect, toggleBookmark);
 
 module.exports = router;
