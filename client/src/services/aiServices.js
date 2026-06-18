@@ -10,3 +10,14 @@ export const getDeveloperScore =
 
     return response.data;
 };
+
+export const getAIInsights =
+  async () => {
+
+    const response =
+      await api.get(
+        "/ai/insights"
+      );
+
+    return response.data;
+};

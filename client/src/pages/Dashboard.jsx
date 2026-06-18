@@ -27,6 +27,10 @@ import { getDeveloperScore } from "../services/aiServices.js";
 
 import DeveloperScoreCard from "../components/DeveloperScoreCard";
 
+import { getAIInsights } from "../services/aiServices.js";
+
+import AIInsightsCard from "../components/AIInsightsCard";
+
 const Dashboard = () => {
   const [overview, setOverview] = useState(null);
 
@@ -43,6 +47,8 @@ const Dashboard = () => {
   const [activityCoach, setActivityCoach] = useState(null);
 
   const [developerScore, setDeveloperScore] = useState(null);
+
+const [aiInsights, setAIInsights] = useState("");
 
   const fetchDashboard = async () => {
     try {
@@ -63,6 +69,10 @@ const Dashboard = () => {
       setOverview(data.overview);
 
       const scoreData = await getDeveloperScore();
+
+      const aiData = await getAIInsights();
+
+      setAIInsights(aiData.insights);
 
       setDeveloperScore({
         score: scoreData.developerScore,
@@ -97,6 +107,12 @@ const Dashboard = () => {
             score={developerScore.score}
             level={developerScore.level}
           />
+        </div>
+      )}
+
+      {aiInsights && (
+        <div className="mt-6 mb-6">
+          <AIInsightsCard insights={aiInsights} />
         </div>
       )}
 

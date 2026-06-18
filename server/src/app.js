@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-
 const testRoutes = require("./routes/testRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -15,6 +14,7 @@ const dsaRoutes = require("./routes/dsaRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+
 
 dotenv.config();
 const app = express();
