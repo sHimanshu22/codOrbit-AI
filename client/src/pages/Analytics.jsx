@@ -25,9 +25,15 @@ const Analytics = () => {
     const fetchData = async () => {
       try {
         const data = await getAnalytics();
-        console.log("FULL API RESPONSE:", data);
 
-        setAnalytics(data.analytics);
+        console.log(
+          "FULL API RESPONSE:",
+          data,
+        );
+
+        setAnalytics(
+          data.analytics,
+        );
       } catch (error) {
         console.error(error);
       } finally {
@@ -38,17 +44,66 @@ const Analytics = () => {
     fetchData();
   }, []);
 
-if (loading) {
-  return (
-    <DashboardLayout>
-      <PageLoader />
-    </DashboardLayout>
-  );
-}
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <PageLoader
+          title="Loading Analytics"
+          subtitle="Preparing your developer insights..."
+        />
+      </DashboardLayout>
+    );
+  }
 
   if (!analytics) {
-    return <DashboardLayout>No analytics available.</DashboardLayout>;
+    return (
+      <DashboardLayout>
+        <div
+          className="
+          flex
+          items-center
+          justify-center
+          min-h-[60vh]
+          "
+        >
+          <div
+            className="
+            bg-white
+            dark:bg-slate-900
+            border
+            border-slate-200
+            dark:border-slate-800
+            rounded-3xl
+            p-8
+            shadow-sm
+            "
+          >
+            <h2
+              className="
+              text-xl
+              font-semibold
+              text-slate-900
+              dark:text-white
+              "
+            >
+              No analytics available
+            </h2>
+
+            <p
+              className="
+              mt-2
+              text-slate-500
+              dark:text-slate-400
+              "
+            >
+              Connect your coding platforms to generate analytics.
+            </p>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
   }
+
   const leetcodeData = [
     {
       name: "Easy",
@@ -83,15 +138,42 @@ if (loading) {
 
   return (
     <DashboardLayout>
+      {/* Header */}
+
       <div className="mb-10">
-        <p className="text-slate-500 text-sm">Developer Intelligence</p>
+        <p
+          className="
+          text-slate-500
+          dark:text-slate-400
+          text-sm
+          "
+        >
+          Developer Intelligence
+        </p>
 
-        <h1 className="text-4xl font-bold text-slate-900">Analytics</h1>
+        <h1
+          className="
+          text-4xl
+          font-bold
+          text-slate-900
+          dark:text-white
+          "
+        >
+          Analytics Dashboard
+        </h1>
 
-        <p className="text-slate-500 mt-2">
+        <p
+          className="
+          text-slate-500
+          dark:text-slate-400
+          mt-2
+          "
+        >
           Understand your coding profile through data
         </p>
       </div>
+
+      {/* Scores */}
 
       <div className="mt-12">
         <SectionHeader
@@ -105,7 +187,10 @@ if (loading) {
             score={analytics.scores.githubScore}
           />
 
-          <ScoreCard title="DSA Score" score={analytics.scores.dsaScore} />
+          <ScoreCard
+            title="DSA Score"
+            score={analytics.scores.dsaScore}
+          />
 
           <ScoreCard
             title="CP Score"
@@ -119,47 +204,41 @@ if (loading) {
         </div>
       </div>
 
+      {/* Charts */}
+
       <div className="mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <SectionHeader
+              title="GitHub Analysis"
+              subtitle="Technology distribution across repositories"
+            />
 
-    <div>
+            <div className="mt-6">
+              <GitHubLanguageChart
+                data={analytics.github.languages}
+              />
+            </div>
+          </div>
 
-      <SectionHeader
-        title="GitHub Analysis"
-        subtitle="Technology distribution across repositories"
-      />
+          <div>
+            <SectionHeader
+              title="DSA Analysis"
+              subtitle="Difficulty-wise problem solving"
+            />
 
-      <div className="mt-6">
+            <div className="mt-6">
+              <LeetCodeDifficultyChart
+                data={leetcodeData}
+              />
+            </div>
+          </div>
 
-        <GitHubLanguageChart
-          data={analytics.github.languages}
-        />
-
+        </div>
       </div>
 
-    </div>
-
-    <div>
-
-      <SectionHeader
-        title="DSA Analysis"
-        subtitle="Difficulty-wise problem solving"
-      />
-
-      <div className="mt-6">
-
-        <LeetCodeDifficultyChart
-          data={leetcodeData}
-        />
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
+      {/* Platform Comparison */}
 
       <div className="mt-12">
         <SectionHeader
@@ -168,7 +247,9 @@ if (loading) {
         />
 
         <div className="mt-6">
-          <PlatformComparisonChart data={comparisonData} />
+          <PlatformComparisonChart
+            data={comparisonData}
+          />
         </div>
       </div>
     </DashboardLayout>
