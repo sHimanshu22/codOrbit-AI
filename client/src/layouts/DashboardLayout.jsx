@@ -1,20 +1,16 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-const DashboardLayout = ({
-  children,
-}) => {
-
+const DashboardLayout = ({ children }) => {
   return (
-
     <div
       className="
-      min-h-screen
-      bg-slate-50
-      flex
-      "
+  flex
+  min-h-screen
+  bg-slate-50
+  dark:bg-slate-950
+  "
     >
-
       {/* Sidebar */}
 
       <div
@@ -24,9 +20,7 @@ const DashboardLayout = ({
         h-screen
         "
       >
-
         <Sidebar />
-
       </div>
 
       {/* Content */}
@@ -37,7 +31,6 @@ const DashboardLayout = ({
         min-w-0
         "
       >
-
         <Navbar />
 
         <main
@@ -46,22 +39,16 @@ const DashboardLayout = ({
           py-8
           "
         >
-
           <div
             className="
             max-w-7xl
             mx-auto
             "
           >
-
             {children}
-
           </div>
-
         </main>
-
       </div>
-
     </div>
   );
 };

@@ -8,17 +8,17 @@ const StreakCard = ({
   current,
   longest,
 }) => {
-
   const isStrong =
     current >= 7;
 
   return (
-
     <div
       className="
       bg-white
+      dark:bg-slate-900
       border
       border-slate-200
+      dark:border-slate-800
       rounded-2xl
       p-6
       shadow-sm
@@ -27,15 +27,10 @@ const StreakCard = ({
       duration-200
       "
     >
-
       <div className="flex justify-between items-start">
-
         <div>
-
-          <p className="text-sm text-slate-500">
-
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             {title}
-
           </p>
 
           <h2
@@ -44,17 +39,15 @@ const StreakCard = ({
             font-bold
             mt-3
             text-slate-900
+            dark:text-white
             "
           >
             {current}
           </h2>
 
-          <p className="text-slate-500 mt-1">
-
+          <p className="text-slate-500 dark:text-slate-400 mt-1">
             Day Streak
-
           </p>
-
         </div>
 
         <div
@@ -63,21 +56,19 @@ const StreakCard = ({
           w-12
           rounded-xl
           bg-orange-50
+          dark:bg-orange-900/20
           flex
           items-center
           justify-center
           "
         >
-
           <Flame
             size={22}
             className="
             text-orange-500
             "
           />
-
         </div>
-
       </div>
 
       <div
@@ -86,11 +77,10 @@ const StreakCard = ({
         pt-4
         border-t
         border-slate-100
+        dark:border-slate-800
         "
       >
-
         <div className="flex items-center gap-2">
-
           <Trophy
             size={16}
             className="
@@ -98,30 +88,21 @@ const StreakCard = ({
             "
           />
 
-          <span className="text-sm text-slate-600">
-
+          <span className="text-sm text-slate-600 dark:text-slate-400">
             Longest Streak
-
           </span>
-
         </div>
 
-        <p className="text-xl font-semibold mt-2">
-
+        <p className="text-xl font-semibold mt-2 text-slate-900 dark:text-white">
           {longest} Days
-
         </p>
-
       </div>
 
-      <p className="text-sm text-slate-400 mt-4">
-
+      <p className="text-sm text-slate-400 dark:text-slate-500 mt-4">
         {isStrong
           ? "Excellent consistency. Keep it going."
           : "Build momentum with daily practice."}
-
       </p>
-
     </div>
   );
 };

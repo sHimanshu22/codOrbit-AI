@@ -10,51 +10,61 @@ const ActivityHeatmap = ({
   data,
   type,
 }) => {
-
-  const totalActivities =
-    data.reduce(
-      (sum, day) =>
-        sum + day.count,
-      0
-    );
+  const totalActivities = data.reduce(
+    (sum, day) => sum + day.count,
+    0
+  );
 
   return (
-
     <div
       className="
       bg-white
+      dark:bg-slate-900
       border
       border-slate-200
+      dark:border-slate-800
       rounded-3xl
       p-6
       shadow-sm
       "
     >
-
       <div className="mb-6">
-
-        <h2 className="text-xl font-bold text-slate-900">
-
+        <h2
+          className="
+          text-xl
+          font-bold
+          text-slate-900
+          dark:text-slate-100
+          "
+        >
           {title}
-
         </h2>
 
-        <p className="text-slate-500 text-sm mt-1">
-
+        <p
+          className="
+          text-slate-500
+          dark:text-slate-400
+          text-sm
+          mt-1
+          "
+        >
           Total Activity
-
         </p>
 
-        <p className="text-3xl font-bold mt-2">
-
+        <p
+          className="
+          text-3xl
+          font-bold
+          mt-2
+          text-slate-900
+          dark:text-slate-100
+          "
+        >
           {totalActivities}
-
         </p>
-
       </div>
 
       <div className="overflow-x-auto">
-
         <CalendarHeatmap
           startDate={
             new Date(
@@ -66,17 +76,12 @@ const ActivityHeatmap = ({
                   1000
             )
           }
-          endDate={
-            new Date()
-          }
+          endDate={new Date()}
           values={data}
           showMonthLabels
           showWeekdayLabels
           gutterSize={4}
-          classForValue={(
-            value
-          ) => {
-
+          classForValue={(value) => {
             if (
               !value ||
               value.count === 0
@@ -85,25 +90,20 @@ const ActivityHeatmap = ({
             }
 
             if (
-              type ===
-              "coding"
+              type === "coding"
             ) {
-
               if (
-                value.count <=
-                2
+                value.count <= 2
               )
                 return "green-scale-1";
 
               if (
-                value.count <=
-                5
+                value.count <= 5
               )
                 return "green-scale-2";
 
               if (
-                value.count <=
-                10
+                value.count <= 10
               )
                 return "green-scale-3";
 
@@ -127,10 +127,7 @@ const ActivityHeatmap = ({
 
             return "blue-scale-4";
           }}
-          tooltipDataAttrs={(
-            value
-          ) => {
-
+          tooltipDataAttrs={(value) => {
             if (!value)
               return null;
 
@@ -140,20 +137,29 @@ const ActivityHeatmap = ({
             };
           }}
         />
-
       </div>
 
       <div className="flex items-center gap-2 mt-6">
-
-        <span className="text-sm text-slate-500">
-
+        <span
+          className="
+          text-sm
+          text-slate-500
+          dark:text-slate-400
+          "
+        >
           Less
-
         </span>
 
         <div className="flex gap-1">
-
-          <div className="w-4 h-4 rounded bg-slate-100"></div>
+          <div
+            className="
+            w-4
+            h-4
+            rounded
+            bg-slate-100
+            dark:bg-slate-700
+            "
+          />
 
           <div
             className={`w-4 h-4 rounded ${
@@ -178,19 +184,20 @@ const ActivityHeatmap = ({
                 : "bg-blue-600"
             }`}
           />
-
         </div>
 
-        <span className="text-sm text-slate-500">
-
+        <span
+          className="
+          text-sm
+          text-slate-500
+          dark:text-slate-400
+          "
+        >
           More
-
         </span>
-
       </div>
 
       <Tooltip />
-
     </div>
   );
 };

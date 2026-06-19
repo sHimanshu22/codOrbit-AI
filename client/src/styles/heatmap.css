@@ -2,7 +2,14 @@
   fill: #f1f5f9;
 }
 
-/* Coding */
+/* Dark Mode Empty Cells */
+.dark .color-empty {
+  fill: #1e293b;
+}
+
+/* =========================
+   Coding Heatmap (Green)
+========================= */
 
 .green-scale-1 {
   fill: #bbf7d0;
@@ -20,7 +27,9 @@
   fill: #15803d;
 }
 
-/* Development */
+/* =========================
+   Development Heatmap (Blue)
+========================= */
 
 .blue-scale-1 {
   fill: #bfdbfe;
@@ -38,12 +47,43 @@
   fill: #1d4ed8;
 }
 
+/* =========================
+   Labels
+========================= */
+
 .react-calendar-heatmap text {
   fill: #64748b;
   font-size: 10px;
 }
 
+.dark .react-calendar-heatmap text {
+  fill: #94a3b8;
+}
+
+/* =========================
+   Cells
+========================= */
+
 .react-calendar-heatmap rect {
   rx: 3;
   ry: 3;
+  transition: all 0.2s ease;
+}
+
+.react-calendar-heatmap rect:hover {
+  stroke: #64748b;
+  stroke-width: 1px;
+}
+
+.dark .react-calendar-heatmap rect:hover {
+  stroke: #cbd5e1;
+}
+
+/* =========================
+   Month Labels
+========================= */
+
+.dark .react-calendar-heatmap-month-label,
+.dark .react-calendar-heatmap-weekday-label {
+  fill: #94a3b8;
 }

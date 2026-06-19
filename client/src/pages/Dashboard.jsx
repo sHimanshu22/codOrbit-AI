@@ -101,13 +101,13 @@ const Dashboard = () => {
     fetchDashboard();
   }, []);
 
-if (loading) {
-  return (
-    <DashboardLayout>
-      <PageLoader />
-    </DashboardLayout>
-  );
-}
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <PageLoader />
+      </DashboardLayout>
+    );
+  }
 
   console.log("Insights:", insights);
 
@@ -115,9 +115,11 @@ if (loading) {
     <DashboardLayout>
       <div className="flex justify-between items-center mb-10">
         <div>
-          <p className="text-slate-500">Welcome back</p>
+          <p className="text-slate-500 dark:text-slate-400">Welcome back</p>
 
-          <h1 className="text-4xl font-bold">Developer Dashboard</h1>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            Developer Dashboard
+          </h1>
         </div>
 
         <SyncButton onSuccess={fetchDashboard} />
@@ -133,7 +135,19 @@ if (loading) {
       )}
 
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>
+        <div
+          className="
+        bg-red-100
+        dark:bg-red-900/20
+        text-red-700
+        dark:text-red-400
+        p-3
+        rounded-xl
+        mb-4
+        "
+        >
+          {error}
+        </div>
       )}
 
       <div className="mt-14">
@@ -141,7 +155,8 @@ if (loading) {
           title="Performance Overview"
           subtitle="Your coding and development metrics"
         />
-        <div className=" mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
+
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
           <OverviewCard
             title="GitHub Repos"
             value={overview?.githubRepos}
@@ -207,6 +222,7 @@ if (loading) {
           title="Activity"
           subtitle="Your contributions over the last year"
         />
+
         {heatmap && (
           <div className="mt-6 space-y-8">
             <ActivityHeatmap
@@ -229,7 +245,8 @@ if (loading) {
           title="Insights"
           subtitle="Understand your growth patterns"
         />
-        <div className=" mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {insights && <ActivityInsights insights={insights} />}
 
           {activityCoach && <ActivityCoachCard coach={activityCoach} />}
@@ -238,9 +255,10 @@ if (loading) {
 
       <div className="mt-14">
         <SectionHeader
-          title="Insights"
-          subtitle="Understand your growth patterns"
+          title="AI Insights"
+          subtitle="Personalized recommendations from CodOrbit AI"
         />
+
         <div className="mt-6">
           <AIInsightsCard insights={aiInsights} />
         </div>
