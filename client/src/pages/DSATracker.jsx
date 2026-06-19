@@ -109,8 +109,7 @@ const DSATracker = () => {
         }
       } catch (error) {
         console.error(error);
-      }
-      finally{
+      } finally {
         setLoading(false);
       }
     };
@@ -151,21 +150,25 @@ const DSATracker = () => {
   };
 
   if (loading) {
-  return (
-    <DashboardLayout>
-      <PageLoader />
-    </DashboardLayout>
-  );
-}
+    return (
+      <DashboardLayout>
+        <PageLoader />
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
       <div className="mb-10">
-        <p className="text-slate-500 text-sm">DSA Preparation</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">
+          DSA Preparation
+        </p>
 
-        <h1 className="text-4xl font-bold text-slate-900">{selectedSheet}</h1>
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+          {selectedSheet}
+        </h1>
 
-        <p className="text-slate-500 mt-2">
+        <p className="text-slate-500 dark:text-slate-400 mt-2">
           Track your progress and prepare for placements
         </p>
       </div>

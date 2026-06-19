@@ -9,20 +9,25 @@ const QuestionCard = ({
   onToggle,
   onBookmark,
 }) => {
-
   const difficultyColors = {
-    Easy: "bg-green-100 text-green-700",
-    Medium: "bg-yellow-100 text-yellow-700",
-    Hard: "bg-red-100 text-red-700",
+    Easy:
+      "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400",
+
+    Medium:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400",
+
+    Hard:
+      "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400",
   };
 
   return (
-
     <div
       className="
       bg-white
+      dark:bg-slate-900
       border
       border-slate-200
+      dark:border-slate-800
       rounded-2xl
       p-5
       shadow-sm
@@ -31,7 +36,6 @@ const QuestionCard = ({
       duration-200
       "
     >
-
       <div className="flex items-center justify-between">
 
         {/* Left */}
@@ -45,11 +49,11 @@ const QuestionCard = ({
             className="
             mt-1
             text-slate-500
+            dark:text-slate-400
             hover:text-yellow-500
             transition
             "
           >
-
             {question.bookmarked ? (
               <BookmarkCheck
                 size={22}
@@ -58,16 +62,15 @@ const QuestionCard = ({
             ) : (
               <Bookmark size={22} />
             )}
-
           </button>
 
           <div>
-
             <h3
               className="
               text-lg
               font-semibold
               text-slate-900
+              dark:text-white
               "
             >
               {question.title}
@@ -83,6 +86,8 @@ const QuestionCard = ({
                 text-xs
                 bg-blue-50
                 text-blue-700
+                dark:bg-blue-900/20
+                dark:text-blue-400
                 "
               >
                 {question.topic}
@@ -101,13 +106,10 @@ const QuestionCard = ({
                 }
                 `}
               >
-                {
-                  question.difficulty
-                }
+                {question.difficulty}
               </span>
 
             </div>
-
           </div>
 
         </div>
@@ -126,31 +128,32 @@ const QuestionCard = ({
           py-2
           rounded-xl
           border
+          border-slate-200
+          dark:border-slate-700
+          hover:bg-slate-50
+          dark:hover:bg-slate-800
           transition
           "
         >
-
           <CheckCircle2
             size={18}
             className={
               question.solved
-                ? "text-green-600"
-                : "text-slate-400"
+                ? "text-green-600 dark:text-green-400"
+                : "text-slate-400 dark:text-slate-500"
             }
           />
 
           <span
             className={
               question.solved
-                ? "text-green-600 font-medium"
-                : "text-slate-500"
+                ? "text-green-600 dark:text-green-400 font-medium"
+                : "text-slate-500 dark:text-slate-400"
             }
           >
-
             {question.solved
               ? "Solved"
               : "Mark Solved"}
-
           </span>
 
         </button>
@@ -158,24 +161,30 @@ const QuestionCard = ({
       </div>
 
       {question.solvedAt && (
-
-        <div className="mt-4 pt-4 border-t border-slate-100">
-
-          <p className="text-xs text-slate-400">
-
+        <div
+          className="
+          mt-4
+          pt-4
+          border-t
+          border-slate-100
+          dark:border-slate-800
+          "
+        >
+          <p
+            className="
+            text-xs
+            text-slate-400
+            dark:text-slate-500
+            "
+          >
             Solved on{" "}
             {new Date(
               question.solvedAt
             ).toLocaleDateString()}
-
           </p>
-
         </div>
-
       )}
-
     </div>
-
   );
 };
 
