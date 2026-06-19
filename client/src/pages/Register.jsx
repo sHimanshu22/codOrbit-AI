@@ -1,67 +1,50 @@
 import { useState } from "react";
 
-import {
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
 
 const Register = () => {
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      email: "",
-      password: "",
-    });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit =
-    async (e) => {
-      e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      try {
-        const res =
-          await api.post(
-            "/auth/register",
-            formData
-          );
+    try {
+      const res = await api.post("/auth/register", formData);
 
-        localStorage.setItem(
-          "token",
-          res.data.token
-        );
+      localStorage.setItem("token", res.data.token);
 
-        navigate(
-          "/dashboard"
-        );
-      } catch (error) {
-        alert(
-          error.response?.data
-            ?.message ||
-            "Registration Failed"
-        );
-      }
-    };
+      navigate("/login");
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration Failed");
+    }
+  };
 
   return (
     <div
       className="
       min-h-screen
       bg-slate-50
+      dark:bg-slate-950
+
       flex
       items-center
       justify-center
+
       px-4
       "
     >
@@ -69,39 +52,58 @@ const Register = () => {
         className="
         w-full
         max-w-md
+
         bg-white
+        dark:bg-slate-900
+
         border
         border-slate-200
+        dark:border-slate-800
+
         rounded-3xl
         shadow-lg
+
         p-8
         "
       >
         <div className="mb-8 text-center">
+          <h1
+            className="
+            text-3xl
+            font-bold
 
-          <h1 className="text-3xl font-bold">
+            text-slate-900
+            dark:text-white
+            "
+          >
             CodOrbit AI
           </h1>
 
-          <p className="text-slate-500 mt-2">
+          <p
+            className="
+            text-slate-500
+            dark:text-slate-400
+
+            mt-2
+            "
+          >
             Start your developer growth journey
           </p>
-
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5"
-        >
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name */}
 
           <div>
-
             <label
               className="
               block
               text-sm
               font-medium
+
               text-slate-600
+              dark:text-slate-300
+
               mb-2
               "
             >
@@ -116,27 +118,44 @@ const Register = () => {
               placeholder="Enter your name"
               className="
               w-full
+
+              bg-white
+              dark:bg-slate-800
+
+              text-slate-900
+              dark:text-white
+
+              placeholder:text-slate-400
+              dark:placeholder:text-slate-500
+
               border
               border-slate-200
+              dark:border-slate-700
+
               rounded-xl
+
               px-4
               py-3
+
               focus:outline-none
               focus:ring-2
               focus:ring-blue-500
               "
             />
-
           </div>
 
-          <div>
+          {/* Email */}
 
+          <div>
             <label
               className="
               block
               text-sm
               font-medium
+
               text-slate-600
+              dark:text-slate-300
+
               mb-2
               "
             >
@@ -151,27 +170,44 @@ const Register = () => {
               placeholder="Enter your email"
               className="
               w-full
+
+              bg-white
+              dark:bg-slate-800
+
+              text-slate-900
+              dark:text-white
+
+              placeholder:text-slate-400
+              dark:placeholder:text-slate-500
+
               border
               border-slate-200
+              dark:border-slate-700
+
               rounded-xl
+
               px-4
               py-3
+
               focus:outline-none
               focus:ring-2
               focus:ring-blue-500
               "
             />
-
           </div>
 
-          <div>
+          {/* Password */}
 
+          <div>
             <label
               className="
               block
               text-sm
               font-medium
+
               text-slate-600
+              dark:text-slate-300
+
               mb-2
               "
             >
@@ -186,58 +222,79 @@ const Register = () => {
               placeholder="Create a password"
               className="
               w-full
+
+              bg-white
+              dark:bg-slate-800
+
+              text-slate-900
+              dark:text-white
+
+              placeholder:text-slate-400
+              dark:placeholder:text-slate-500
+
               border
               border-slate-200
+              dark:border-slate-700
+
               rounded-xl
+
               px-4
               py-3
+
               focus:outline-none
               focus:ring-2
               focus:ring-blue-500
               "
             />
-
           </div>
 
           <button
             type="submit"
             className="
             w-full
+
             bg-blue-600
             hover:bg-blue-700
+
             text-white
+
             py-3
+
             rounded-xl
+
             font-medium
+
             transition-all
+            duration-200
             "
           >
             Create Account
           </button>
-
         </form>
 
         <div className="mt-6 text-center">
-
-          <p className="text-slate-500">
-
+          <p
+            className="
+            text-slate-500
+            dark:text-slate-400
+            "
+          >
             Already have an account?
 
             <Link
-              to="/"
+              to="/login"
               className="
               text-blue-600
+              dark:text-blue-400
+
               font-medium
               ml-1
               "
             >
               Login
             </Link>
-
           </p>
-
         </div>
-
       </div>
     </div>
   );

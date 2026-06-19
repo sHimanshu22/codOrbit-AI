@@ -11,13 +11,14 @@ import SheetManagement from "./pages/SheetManagement";
 import Contests from "./pages/Contests";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Landing from "./pages/Landing";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         <Route
