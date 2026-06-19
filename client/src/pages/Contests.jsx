@@ -19,23 +19,27 @@ import RatingGraph from "../components/RatingGraph";
 import ContestPerformance from "../components/ContestPerformance";
 
 import ContestCalendar from "../components/ContestCalendar";
+
 import SectionHeader from "../components/ui/SectionHeader";
 
 const Contests = () => {
   const [upcoming, setUpcoming] = useState([]);
-
   const [analytics, setAnalytics] = useState(null);
-
   const [history, setHistory] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [ratingHistory, setRatingHistory] = useState([]);
-
   const [performance, setPerformance] = useState(null);
 
-  const statCardClass =
-    "bg-white border border-slate-200 rounded-2xl p-6 shadow-sm";
+  const statCardClass = `
+    bg-white
+    dark:bg-slate-900
+    border
+    border-slate-200
+    dark:border-slate-800
+    rounded-2xl
+    p-6
+    shadow-sm
+  `;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +55,9 @@ const Contests = () => {
         const performanceData = await getPerformance();
 
         setRatingHistory(
-          ratingHistoryData.history || ratingHistoryData.ratingHistory || [],
+          ratingHistoryData.history ||
+            ratingHistoryData.ratingHistory ||
+            []
         );
 
         setPerformance(performanceData.performance);
@@ -81,26 +87,38 @@ const Contests = () => {
 
   return (
     <DashboardLayout>
+      {/* Header */}
+
       <div className="mb-10">
-        <p className="text-slate-500 text-sm">Competitive Programming</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">
+          Competitive Programming
+        </p>
 
-        <h1 className="text-4xl font-bold text-slate-900">Contest Center</h1>
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+          Contest Center
+        </h1>
 
-        <p className="text-slate-500 mt-2">
+        <p className="text-slate-500 dark:text-slate-400 mt-2">
           Track contests, ratings and performance
         </p>
       </div>
+
+      {/* Performance */}
+
       <div className="mt-12">
         <SectionHeader
           title="Performance Overview"
           subtitle="Your competitive programming profile"
         />
+
         {performance && (
-          <div className="mb-8">
+          <div className="mt-6">
             <ContestPerformance performance={performance} />
           </div>
         )}
       </div>
+
+      {/* Upcoming Contests */}
 
       <div className="mt-12">
         <SectionHeader
@@ -111,15 +129,33 @@ const Contests = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
           <ContestCalendar contests={upcoming} />
 
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Upcoming Contests</h2>
+          <div
+            className="
+            bg-white
+            dark:bg-slate-900
+            border
+            border-slate-200
+            dark:border-slate-800
+            rounded-3xl
+            p-6
+            shadow-sm
+            "
+          >
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">
+              Upcoming Contests
+            </h2>
 
             {upcoming.length === 0 ? (
-              <p className="text-slate-500">No upcoming contests found.</p>
+              <p className="text-slate-500 dark:text-slate-400">
+                No upcoming contests found.
+              </p>
             ) : (
               <div className="space-y-4">
                 {upcoming.map((contest) => (
-                  <ContestCard key={contest.name} contest={contest} />
+                  <ContestCard
+                    key={contest.name}
+                    contest={contest}
+                  />
                 ))}
               </div>
             )}
@@ -128,48 +164,71 @@ const Contests = () => {
       </div>
 
       {/* Analytics */}
+
       <div className="mt-12">
         <SectionHeader
           title="Contest Analytics"
           subtitle="Historical contest performance"
         />
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+          <div className={statCardClass}>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
+              Total Contests
+            </p>
+
+            <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
+              {analytics?.totalContests ?? 0}
+            </p>
+          </div>
+
+          <div className={statCardClass}>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
+              Best Rank
+            </p>
+
+            <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
+              {analytics?.bestRank ?? "N/A"}
+            </p>
+          </div>
+
+          <div className={statCardClass}>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
+              Average Rank
+            </p>
+
+            <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
+              {analytics?.averageRank ?? "N/A"}
+            </p>
+          </div>
+
+          <div className={statCardClass}>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
+              Highest Gain
+            </p>
+
+            <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
+              {analytics?.highestRatingGain ?? "N/A"}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className={statCardClass}>
-          <h3>Total Contests</h3>
-          <p className="text-2xl font-bold">{analytics?.totalContests ?? 0}</p>
-        </div>
-
-        <div className={statCardClass}>
-          <h3>Best Rank</h3>
-          <p className="text-2xl font-bold">{analytics?.bestRank ?? "N/A"}</p>
-        </div>
-
-        <div className={statCardClass}>
-          <h3>Average Rank</h3>
-          <p className="text-2xl font-bold">
-            {analytics?.averageRank ?? "N/A"}
-          </p>
-        </div>
-
-        <div className={statCardClass}>
-          <h3>Highest Gain</h3>
-          <p className="text-2xl font-bold">
-            {analytics?.highestRatingGain ?? "N/A"}
-          </p>
-        </div>
-      </div>
+      {/* Rating Journey */}
 
       <div className="mt-12">
         <SectionHeader
           title="Rating Journey"
           subtitle="Track your rating growth over time"
         />
-        <RatingGraph data={ratingHistory} />
+
+        <div className="mt-6">
+          <RatingGraph data={ratingHistory} />
+        </div>
       </div>
 
-      {/* History */}
+      {/* Contest History */}
+
       <div className="mt-12">
         <SectionHeader
           title="Contest History"
@@ -179,52 +238,85 @@ const Contests = () => {
 
       {history.length === 0 ? (
         <div
-          className="bg-white
-border
-border-slate-200
-rounded-2xl
-p-6
-shadow-sm"
+          className="
+          mt-6
+          bg-white
+          dark:bg-slate-900
+          border
+          border-slate-200
+          dark:border-slate-800
+          rounded-2xl
+          p-6
+          shadow-sm
+          text-slate-500
+          dark:text-slate-400
+          "
         >
           No contests participated yet.
         </div>
       ) : (
         <div
           className="
-  bg-white
-  border
-  border-slate-200
-  rounded-3xl
-  shadow-sm
-  overflow-hidden
-  "
+          mt-6
+          bg-white
+          dark:bg-slate-900
+          border
+          border-slate-200
+          dark:border-slate-800
+          rounded-3xl
+          shadow-sm
+          overflow-hidden
+          "
         >
           <table className="w-full">
             <thead>
-              <tr className="bg-slate-50">
-                <th className="p-3 text-left">Contest</th>
+              <tr className="bg-slate-50 dark:bg-slate-800">
+                <th className="p-4 text-left text-slate-600 dark:text-slate-300">
+                  Contest
+                </th>
 
-                <th className="p-3 text-left">Rank</th>
+                <th className="p-4 text-left text-slate-600 dark:text-slate-300">
+                  Rank
+                </th>
 
-                <th className="p-3 text-left">Rating Change</th>
+                <th className="p-4 text-left text-slate-600 dark:text-slate-300">
+                  Rating Change
+                </th>
 
-                <th className="p-3 text-left">Date</th>
+                <th className="p-4 text-left text-slate-600 dark:text-slate-300">
+                  Date
+                </th>
               </tr>
             </thead>
 
             <tbody>
               {history.map((contest) => (
                 <tr
-                  className="border-t border-slate-100"
                   key={contest.contestName}
+                  className="
+                  border-t
+                  border-slate-100
+                  dark:border-slate-800
+                  hover:bg-slate-50
+                  dark:hover:bg-slate-800/50
+                  transition-colors
+                  "
                 >
-                  <td className="p-3">{contest.contestName}</td>
+                  <td className="p-4 text-slate-900 dark:text-white">
+                    {contest.contestName}
+                  </td>
 
-                  <td className="p-3">{contest.rank}</td>
+                  <td className="p-4 text-slate-900 dark:text-white">
+                    {contest.rank}
+                  </td>
 
-                  <td className="p-3">{contest.ratingChange}</td>
+                  <td className="p-4 text-slate-900 dark:text-white">
+                    {contest.ratingChange}
+                  </td>
 
-                  <td className="p-3">{contest.date}</td>
+                  <td className="p-4 text-slate-500 dark:text-slate-400">
+                    {contest.date}
+                  </td>
                 </tr>
               ))}
             </tbody>
