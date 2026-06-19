@@ -1,23 +1,35 @@
 import { useEffect, useState } from "react";
 
+import {
+  User,
+  GraduationCap,
+  GitBranch,
+  Code2,
+  Trophy,
+  BookOpen,
+  Terminal,
+} from "lucide-react";
+
 import PageLoader from "../components/ui/PageLoader";
-
 import DashboardLayout from "../layouts/DashboardLayout";
-
 import { getProfile, updateProfile } from "../services/profileService";
-
 import SectionHeader from "../components/ui/SectionHeader";
 
 const inputClass = `
-  w-full
-  border
-  border-slate-200
-  rounded-xl
-  px-4
-  py-3
-  focus:outline-none
-  focus:ring-2
-  focus:ring-blue-500
+w-full
+border
+border-slate-200
+dark:border-slate-700
+bg-white
+dark:bg-slate-950
+text-slate-900
+dark:text-white
+rounded-xl
+px-4
+py-3
+focus:outline-none
+focus:ring-2
+focus:ring-blue-500
 `;
 
 const Settings = () => {
@@ -55,7 +67,6 @@ const Settings = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-
       [e.target.name]: e.target.value,
     });
   };
@@ -84,15 +95,19 @@ const Settings = () => {
 
   return (
     <DashboardLayout>
-      <div className="max-w-6xl">
+      <div className="max-w-7xl">
         {/* Header */}
 
         <div className="mb-10">
-          <p className="text-slate-500 text-sm">Account Management</p>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            Account Management
+          </p>
 
-          <h1 className="text-4xl font-bold text-slate-900">Settings</h1>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            Settings
+          </h1>
 
-          <p className="text-slate-500 mt-2">
+          <p className="text-slate-500 dark:text-slate-400 mt-2">
             Manage your profile and coding platforms
           </p>
         </div>
@@ -103,8 +118,10 @@ const Settings = () => {
           <div
             className="
             bg-white
+            dark:bg-slate-900
             border
             border-slate-200
+            dark:border-slate-800
             rounded-3xl
             p-8
             shadow-sm
@@ -116,37 +133,65 @@ const Settings = () => {
             />
 
             <div className="grid md:grid-cols-2 gap-5 mt-6">
-              <input
-                name="name"
-                value={formData.name || ""}
-                onChange={handleChange}
-                placeholder="Name"
-                className={inputClass}
-              />
+              <div className="relative">
+                <User
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
 
-              <input
-                name="college"
-                value={formData.college || ""}
-                onChange={handleChange}
-                placeholder="College"
-                className={inputClass}
-              />
+                <input
+                  name="name"
+                  value={formData.name || ""}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
 
-              <input
-                name="branch"
-                value={formData.branch || ""}
-                onChange={handleChange}
-                placeholder="Branch"
-                className={inputClass}
-              />
+              <div className="relative">
+                <GraduationCap
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
 
-              <input
-                name="graduationYear"
-                value={formData.graduationYear || ""}
-                onChange={handleChange}
-                placeholder="Graduation Year"
-                className={inputClass}
-              />
+                <input
+                  name="college"
+                  value={formData.college || ""}
+                  onChange={handleChange}
+                  placeholder="College"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
+
+              <div className="relative">
+                <BookOpen
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+
+                <input
+                  name="branch"
+                  value={formData.branch || ""}
+                  onChange={handleChange}
+                  placeholder="Branch"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
+
+              <div className="relative">
+                <Trophy
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+
+                <input
+                  name="graduationYear"
+                  value={formData.graduationYear || ""}
+                  onChange={handleChange}
+                  placeholder="Graduation Year"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
             </div>
           </div>
 
@@ -155,8 +200,10 @@ const Settings = () => {
           <div
             className="
             bg-white
+            dark:bg-slate-900
             border
             border-slate-200
+            dark:border-slate-800
             rounded-3xl
             p-8
             shadow-sm
@@ -167,55 +214,93 @@ const Settings = () => {
               subtitle="Usernames used for syncing data"
             />
 
-            <div className="grid gap-5 mt-6">
-              <input
-                name="githubUsername"
-                value={formData.githubUsername || ""}
-                onChange={handleChange}
-                placeholder="GitHub Username"
-                className={inputClass}
-              />
+            <div className="grid md:grid-cols-2 gap-5 mt-6">
+              <div className="relative">
+                <GitBranch
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
 
-              <input
-                name="leetcodeUsername"
-                value={formData.leetcodeUsername || ""}
-                onChange={handleChange}
-                placeholder="LeetCode Username"
-                className={inputClass}
-              />
+                <input
+                  name="githubUsername"
+                  value={formData.githubUsername || ""}
+                  onChange={handleChange}
+                  placeholder="GitHub Username"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
 
-              <input
-                name="codeforcesUsername"
-                value={formData.codeforcesUsername || ""}
-                onChange={handleChange}
-                placeholder="Codeforces Username"
-                className={inputClass}
-              />
+              <div className="relative">
+                <Code2
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
 
-              <input
-                name="gfgUsername"
-                value={formData.gfgUsername || ""}
-                onChange={handleChange}
-                placeholder="GeeksforGeeks Username"
-                className={inputClass}
-              />
+                <input
+                  name="leetcodeUsername"
+                  value={formData.leetcodeUsername || ""}
+                  onChange={handleChange}
+                  placeholder="LeetCode Username"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
 
-              <input
-                name="hackerrankUsername"
-                value={formData.hackerrankUsername || ""}
-                onChange={handleChange}
-                placeholder="HackerRank Username"
-                className={inputClass}
-              />
+              <div className="relative">
+                <Trophy
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+
+                <input
+                  name="codeforcesUsername"
+                  value={formData.codeforcesUsername || ""}
+                  onChange={handleChange}
+                  placeholder="Codeforces Username"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
+
+              <div className="relative">
+                <BookOpen
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+
+                <input
+                  name="gfgUsername"
+                  value={formData.gfgUsername || ""}
+                  onChange={handleChange}
+                  placeholder="GeeksforGeeks Username"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
+
+              <div className="relative md:col-span-2">
+                <Terminal
+                  size={18}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+
+                <input
+                  name="hackerrankUsername"
+                  value={formData.hackerrankUsername || ""}
+                  onChange={handleChange}
+                  placeholder="HackerRank Username"
+                  className={`${inputClass} pl-11`}
+                />
+              </div>
             </div>
           </div>
 
           {/* Save Button */}
 
-          <div>
+          <div className="mt-10">
             <button
               type="submit"
               className="
+              inline-flex
+              items-center
+              gap-2
               bg-blue-600
               hover:bg-blue-700
               text-white
@@ -224,6 +309,7 @@ const Settings = () => {
               rounded-xl
               font-medium
               transition-all
+              shadow-sm
               "
             >
               Save Changes
