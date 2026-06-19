@@ -5,17 +5,26 @@ import {
   Trophy,
   BookOpen,
   Layers3,
-  Settings,
-  Flame,
+  UserCircle,
+  LogOut,
 } from "lucide-react";
 
 import {
   Link,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+
+    navigate("/");
+  };
 
   const navItems = [
     {
@@ -49,9 +58,9 @@ const Sidebar = () => {
       icon: Layers3,
     },
     {
-      name: "Settings",
-      path: "/settings",
-      icon: Settings,
+      name: "Profile",
+      path: "/profile",
+      icon: UserCircle,
     },
   ];
 
@@ -102,8 +111,7 @@ const Sidebar = () => {
         {navItems.map((item) => {
           const Icon = item.icon;
 
-          const active =
-            location.pathname === item.path;
+          const active = location.pathname === item.path;
 
           return (
             <Link
@@ -145,59 +153,34 @@ const Sidebar = () => {
         })}
       </nav>
 
-      {/* Bottom Card */}
+      {/* Logout */}
 
-      <div className="mt-5">
-        <div
+      <div className="mt-auto pt-6 border-t border-slate-200 dark:border-slate-800">
+        <button
+          onClick={logout}
           className="
-          bg-blue-50
-          dark:bg-slate-800
-          border
-          border-blue-100
-          dark:border-slate-700
-          rounded-2xl
-          p-4
+          w-full
+          flex
+          items-center
+          gap-3
+          px-4
+          py-3
+          rounded-xl
+
+          text-red-500
+          dark:text-red-400
+
+          hover:bg-red-50
+          dark:hover:bg-red-500/10
+
+          transition-all
+          duration-200
           "
         >
-          <div className="flex items-center gap-2 mb-2">
-            <Flame
-              size={18}
-              className="text-orange-500"
-            />
+          <LogOut size={20} />
 
-            <span
-              className="
-              font-semibold
-              text-slate-900
-              dark:text-slate-100
-              "
-            >
-              Current Streak
-            </span>
-          </div>
-
-          <p
-            className="
-            text-3xl
-            font-bold
-            text-blue-600
-            dark:text-blue-400
-            "
-          >
-            4 Days
-          </p>
-
-          <p
-            className="
-            text-sm
-            text-slate-500
-            dark:text-slate-400
-            mt-1
-            "
-          >
-            Keep building every day 🚀
-          </p>
-        </div>
+          Logout
+        </button>
       </div>
     </aside>
   );

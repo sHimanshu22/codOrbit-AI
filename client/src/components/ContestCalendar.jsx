@@ -1,4 +1,6 @@
 import Calendar from "react-calendar";
+import { CalendarDays } from "lucide-react";
+
 import "react-calendar/dist/Calendar.css";
 
 const ContestCalendar = ({
@@ -36,9 +38,7 @@ const ContestCalendar = ({
 
       <div className="overflow-x-auto">
         <Calendar
-          tileClassName={({
-            date,
-          }) => {
+          tileClassName={({ date }) => {
             const hasContest =
               contestDates.includes(
                 date.toDateString(),
@@ -48,9 +48,7 @@ const ContestCalendar = ({
               ? "contest-day"
               : "";
           }}
-          tileContent={({
-            date,
-          }) => {
+          tileContent={({ date }) => {
             const hasContest =
               contestDates.includes(
                 date.toDateString(),
@@ -58,9 +56,13 @@ const ContestCalendar = ({
 
             return hasContest ? (
               <div className="flex justify-center">
-                <span className="text-xs">
-                  🏆
-                </span>
+                <CalendarDays
+                  size={12}
+                  className="
+                  text-white
+                  dark:text-white
+                  "
+                />
               </div>
             ) : null;
           }}

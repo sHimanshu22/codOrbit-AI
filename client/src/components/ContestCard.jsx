@@ -1,18 +1,16 @@
 import ContestCountdown from "./ContestCountdown";
 
-const ContestCard = ({
-  contest,
-}) => {
-  const start = new Date(
-    contest.startTime,
-  );
+import {
+  CalendarDays,
+  Clock3,
+  MonitorPlay,
+} from "lucide-react";
 
-  const getPlatformColor = (
-    platform,
-  ) => {
-    switch (
-      platform?.toLowerCase()
-    ) {
+const ContestCard = ({ contest }) => {
+  const start = new Date(contest.startTime);
+
+  const getPlatformColor = (platform) => {
+    switch (platform?.toLowerCase()) {
       case "codeforces":
         return "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400";
 
@@ -36,30 +34,52 @@ const ContestCard = ({
       border-slate-200
       dark:border-slate-800
       rounded-2xl
-      p-5
+      p-4
       shadow-sm
       hover:shadow-md
       transition-all
       duration-300
       "
     >
-      <div className="flex justify-between items-start gap-4">
-        <div>
+      <div className="flex items-start justify-between gap-4">
+        {/* Left */}
+
+        <div className="min-w-0 flex-1">
           <h3
             className="
             font-semibold
-            text-lg
             text-slate-900
             dark:text-white
+            truncate
             "
           >
             {contest.name}
           </h3>
 
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
-            {contest.platform}
-          </p>
+          <div
+            className="
+            flex
+            items-center
+            gap-2
+            mt-2
+            text-xs
+            text-slate-500
+            dark:text-slate-400
+            "
+          >
+            <CalendarDays size={14} />
+
+            <span>
+              {start.toLocaleDateString()} •{" "}
+              {start.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </div>
         </div>
+
+        {/* Platform Badge */}
 
         <span
           className={`
@@ -68,69 +88,58 @@ const ContestCard = ({
           rounded-full
           text-xs
           font-medium
-          ${getPlatformColor(
-            contest.platform,
-          )}
+          whitespace-nowrap
+          ${getPlatformColor(contest.platform)}
           `}
         >
           {contest.platform}
         </span>
       </div>
 
-      <div className="mt-5">
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          Starts At
-        </p>
-
-        <p
-          className="
-          mt-1
-          font-medium
-          text-slate-900
-          dark:text-white
-          "
-        >
-          {start.toLocaleString()}
-        </p>
-      </div>
+      {/* Countdown */}
 
       <div
         className="
-        mt-5
-        p-4
+        mt-4
+        flex
+        items-center
+        justify-between
+
+        bg-slate-50
+        dark:bg-slate-800/50
+
         rounded-xl
-        bg-green-50
-        dark:bg-green-900/20
-        border
-        border-green-100
-        dark:border-green-900/30
+        px-3
+        py-2
         "
       >
-        <p
+        <div className="flex items-center gap-2">
+          <Clock3
+            size={15}
+            className="text-green-600 dark:text-green-400"
+          />
+
+          <span
+            className="
+            text-sm
+            text-slate-600
+            dark:text-slate-300
+            "
+          >
+            Starts In
+          </span>
+        </div>
+
+        <span
           className="
           text-sm
+          font-semibold
           text-green-700
           dark:text-green-400
-          font-medium
           "
         >
-          ⏳ Starts In
-        </p>
-
-        <div
-          className="
-          mt-1
-          font-semibold
-          text-green-800
-          dark:text-green-300
-          "
-        >
-          <ContestCountdown
-            startTime={
-              contest.startTime
-            }
-          />
-        </div>
+          <ContestCountdown startTime={contest.startTime} />
+        </span>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import {
-  Flame,
-  Trophy,
+  Code2,
+  Award,
+  GitCommit,
 } from "lucide-react";
 
 const StreakCard = ({
@@ -8,8 +9,10 @@ const StreakCard = ({
   current,
   longest,
 }) => {
-  const isStrong =
-    current >= 7;
+  const isStrong = current >= 7;
+
+  const isCoding =
+    title.toLowerCase().includes("coding");
 
   return (
     <div
@@ -51,23 +54,38 @@ const StreakCard = ({
         </div>
 
         <div
-          className="
+          className={`
           h-12
           w-12
           rounded-xl
-          bg-orange-50
-          dark:bg-orange-900/20
           flex
           items-center
           justify-center
-          "
+
+          ${
+            isCoding
+              ? "bg-blue-50 dark:bg-blue-900/20"
+              : "bg-violet-50 dark:bg-violet-900/20"
+          }
+          `}
         >
-          <Flame
-            size={22}
-            className="
-            text-orange-500
-            "
-          />
+          {isCoding ? (
+            <Code2
+              size={22}
+              className="
+              text-blue-600
+              dark:text-blue-400
+              "
+            />
+          ) : (
+            <GitCommit
+              size={22}
+              className="
+              text-violet-600
+              dark:text-violet-400
+              "
+            />
+          )}
         </div>
       </div>
 
@@ -81,15 +99,15 @@ const StreakCard = ({
         "
       >
         <div className="flex items-center gap-2">
-          <Trophy
+          <Award
             size={16}
             className="
-            text-yellow-500
+            text-amber-500
             "
           />
 
           <span className="text-sm text-slate-600 dark:text-slate-400">
-            Longest Streak
+            Longest {title}
           </span>
         </div>
 

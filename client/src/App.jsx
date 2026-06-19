@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 import Analytics from "./pages/Analytics";
 import DSATracker from "./pages/DSATracker";
 import DSAOverview from "./pages/DSAOverview";
@@ -30,10 +30,10 @@ function App() {
         />
 
         <Route
-          path="/settings"
+          path="/profile"
           element={
             <ProtectedRoute>
-              <Settings />
+              <Profile />
             </ProtectedRoute>
           }
         />

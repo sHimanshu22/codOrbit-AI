@@ -1,3 +1,5 @@
+import { Code2  } from "lucide-react";
+
 const DeveloperScoreCard = ({
   score,
   level,
@@ -57,11 +59,16 @@ const DeveloperScoreCard = ({
           flex
           items-center
           justify-center
-        "
+          "
         >
-          <span className="text-4xl">
-            🏆
-          </span>
+          <Code2 
+
+            size={42}
+            className="
+            text-blue-600
+            dark:text-blue-400
+            "
+          />
         </div>
       </div>
 
@@ -83,14 +90,16 @@ const DeveloperScoreCard = ({
           dark:bg-slate-800
           rounded-full
           overflow-hidden
-        "
+          "
         >
           <div
             className="
             h-full
             bg-blue-600
             rounded-full
-          "
+            transition-all
+            duration-500
+            "
             style={{
               width: `${score}%`,
             }}

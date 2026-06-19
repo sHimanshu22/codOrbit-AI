@@ -1,6 +1,6 @@
-const SkillAnalysisCard = ({
-  analysis,
-}) => {
+import { Brain, TrendingUp, Target, Lightbulb, Zap } from "lucide-react";
+
+const SkillAnalysisCard = ({ analysis }) => {
   return (
     <div
       className="
@@ -14,18 +14,34 @@ const SkillAnalysisCard = ({
       shadow-sm
       "
     >
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-          🧠 Skill Analysis
-        </h2>
+      <div className="flex items-center gap-4 mb-8">
+        <div
+          className="
+          h-12
+          w-12
+          rounded-xl
+          bg-blue-50
+          dark:bg-blue-900/20
+          flex
+          items-center
+          justify-center
+          "
+        >
+          <Brain size={24} className="text-blue-600 dark:text-blue-400"/>
+        </div>
 
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Understand your strongest and weakest areas
-        </p>
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            Skill Analysis
+          </h2>
+
+          <p className="text-slate-500 dark:text-slate-400">
+            Understand your strongest and weakest areas
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
         {/* Strengths */}
 
         <div
@@ -36,27 +52,29 @@ const SkillAnalysisCard = ({
           p-5
           "
         >
-          <h3 className="font-semibold text-green-700 dark:text-green-400 mb-4">
-            🚀 Strengths
-          </h3>
+          <div className="flex items-center gap-2 mb-4">
+            <Zap
+              size={20}
+              className="text-green-600 dark:text-green-400"
+            />
+
+            <h3 className="font-semibold text-green-700 dark:text-green-400">
+              Strengths
+            </h3>
+          </div>
 
           <div className="space-y-3">
-            {analysis.strengths.map(
-              (item) => (
-                <div
-                  key={item.topic}
-                  className="flex justify-between"
-                >
-                  <span className="text-slate-700 dark:text-slate-300">
-                    {item.topic}
-                  </span>
+            {analysis.strengths.map((item) => (
+              <div key={item.topic} className="flex justify-between">
+                <span className="text-slate-700 dark:text-slate-300">
+                  {item.topic}
+                </span>
 
-                  <span className="font-semibold text-green-600 dark:text-green-400">
-                    {item.percentage}%
-                  </span>
-                </div>
-              ),
-            )}
+                <span className="font-semibold text-green-600 dark:text-green-400">
+                  {item.percentage}%
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -70,27 +88,26 @@ const SkillAnalysisCard = ({
           p-5
           "
         >
-          <h3 className="font-semibold text-red-700 dark:text-red-400 mb-4">
-            🎯 Focus Areas
-          </h3>
+          <div className="flex items-center gap-2 mb-4">
+            <Target size={20} className="text-red-600 dark:text-red-400" />
+
+            <h3 className="font-semibold text-red-700 dark:text-red-400">
+              Focus Areas
+            </h3>
+          </div>
 
           <div className="space-y-3">
-            {analysis.weaknesses.map(
-              (item) => (
-                <div
-                  key={item.topic}
-                  className="flex justify-between"
-                >
-                  <span className="text-slate-700 dark:text-slate-300">
-                    {item.topic}
-                  </span>
+            {analysis.weaknesses.map((item) => (
+              <div key={item.topic} className="flex justify-between">
+                <span className="text-slate-700 dark:text-slate-300">
+                  {item.topic}
+                </span>
 
-                  <span className="font-semibold text-red-600 dark:text-red-400">
-                    {item.percentage}%
-                  </span>
-                </div>
-              ),
-            )}
+                <span className="font-semibold text-red-600 dark:text-red-400">
+                  {item.percentage}%
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -109,9 +126,13 @@ const SkillAnalysisCard = ({
         dark:border-blue-800
         "
       >
-        <h3 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">
-          💡 AI Recommendation
-        </h3>
+        <div className="flex items-center gap-2 mb-3">
+          <Lightbulb size={20} className="text-blue-600 dark:text-blue-400" />
+
+          <h3 className="font-semibold text-blue-700 dark:text-blue-400">
+            AI Recommendation
+          </h3>
+        </div>
 
         <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
           {analysis.recommendation}

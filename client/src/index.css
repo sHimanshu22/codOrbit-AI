@@ -2,6 +2,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@plugin "@tailwindcss/typography";
 :root {
 
   --background:
@@ -11,7 +12,7 @@
     #ffffff;
 
   --primary:
-    #2563eb;
+    #002a85;
 
   --text:
     #0f172a;

@@ -32,7 +32,7 @@ focus:ring-2
 focus:ring-blue-500
 `;
 
-const Settings = () => {
+const Profile = () => {
   const [formData, setFormData] = useState({
     name: "",
     college: "",
@@ -104,7 +104,7 @@ const Settings = () => {
           </p>
 
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-            Settings
+            Profile
           </h1>
 
           <p className="text-slate-500 dark:text-slate-400 mt-2">
@@ -321,4 +321,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Profile;
