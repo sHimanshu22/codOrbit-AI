@@ -8,7 +8,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 
 import ProgressBar from "../components/ProgressBar";
 
-import QuestionCard from "../components/QuestionCard";
+import ModuleAccordion from "../components/dsa/ModuleAccordion";
 
 import {
   getQuestions,
@@ -63,11 +63,13 @@ const DSATracker = () => {
     try {
       const questionsData = await getQuestions(selectedSheet);
 
-      const progressData = await getProgress(selectedSheet);
-
       setQuestions(questionsData.questions);
 
-      setProgress(progressData.progress);
+      const progressData = await getProgress(selectedSheet);
+
+      console.log("PROGRESS API RESPONSE:", progressData);
+
+      setProgress(progressData);
 
       const coachData = await getAICoach(selectedSheet);
 
@@ -120,17 +122,13 @@ const DSATracker = () => {
   const handleToggle = async (question) => {
     try {
       await toggleQuestion({
-        questionId: question.id,
-
+        questionId: question._id,
         title: question.title,
-
-        topic: question.topic,
-
-        pattern: question.pattern,
-
+        module: question.module,
+        section: question.section,
         difficulty: question.difficulty,
-
-        sheet: selectedSheet,
+        sheetName: question.sheetName,
+        isConcept: question.isConcept,
       });
 
       fetchData();
@@ -141,8 +139,8 @@ const DSATracker = () => {
 
   const handleBookmark = async (question) => {
     try {
-      await toggleBookmark(question.id);
-      console.log(question);
+      await toggleBookmark(question._id);
+
       fetchData();
     } catch (error) {
       console.error(error);
@@ -156,6 +154,58 @@ const DSATracker = () => {
       </DashboardLayout>
     );
   }
+
+  const MODULE_ORDER = [
+    "Learn the Basics",
+
+    "Learn Important Sorting Techniques",
+
+    "Arrays",
+
+    "Binary Search",
+
+    "Strings",
+
+    "Linked List",
+
+    "Recursion & Backtracking",
+
+    "Bit Manipulation",
+
+    "Stack & Queue",
+
+    "Sliding Window & Two Pointers",
+
+    "Heaps",
+
+    "Greedy Algorithms",
+
+    "Binary Trees",
+
+    "Binary Search Trees",
+
+    "Graphs",
+
+    "Dynamic Programming",
+
+    "Tries",
+
+    "Strings [Hard]",
+  ];
+
+  const groupedQuestions = questions.reduce((acc, question) => {
+    if (!acc[question.module]) {
+      acc[question.module] = {};
+    }
+
+    if (!acc[question.module][question.section]) {
+      acc[question.module][question.section] = [];
+    }
+
+    acc[question.module][question.section].push(question);
+
+    return acc;
+  }, {});
 
   return (
     <DashboardLayout>
@@ -184,16 +234,18 @@ const DSATracker = () => {
             value={progress?.totalQuestions || 0}
           />
 
-          <DSAStatCard title="Solved" value={progress?.solvedCount || 0} />
+          <DSAStatCard title="Solved" value={progress?.solvedQuestions || 0} />
 
           <DSAStatCard
             title="Pending"
-            value={progress?.pendingQuestions || 0}
+            value={
+              (progress?.totalQuestions || 0) - (progress?.solvedQuestions || 0)
+            }
           />
 
           <DSAStatCard
             title="Completion"
-            value={`${progress?.percentage || 0}%`}
+            value={`${progress?.completionPercentage || 0}%`}
           />
         </div>
       </div>
@@ -206,7 +258,7 @@ const DSATracker = () => {
           />
 
           <div className="mt-6">
-            <ProgressBar percentage={progress.percentage} />
+            <ProgressBar percentage={progress?.completionPercentage || 0} />
           </div>
         </div>
       )}
@@ -239,8 +291,7 @@ const DSATracker = () => {
           {skillAnalysis && <SkillAnalysisCard analysis={skillAnalysis} />}
         </div>
       </div>
-
-      {/* Analytics */}
+      {/* Topic Analysis
       <div className="mt-12">
         <SectionHeader
           title="Analytics"
@@ -256,7 +307,7 @@ const DSATracker = () => {
       </div>
 
       {/* Insight Cards */}
-      <div className="mt-12">
+      {/* <div className="mt-12">
         <SectionHeader
           title="Performance Insights"
           subtitle="Key takeaways from your preparation"
@@ -273,7 +324,7 @@ const DSATracker = () => {
             <InsightCard title="Readiness" value={progress.readiness} />
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className="mt-12">
         <SectionHeader
@@ -288,19 +339,25 @@ const DSATracker = () => {
         )}
       </div>
 
-      <div className="mt-12 space-y-5">
+      <div className="mt-12">
         <SectionHeader
-          title="Question Bank"
+          title="DSA Roadmap"
           subtitle={`${questions.length} questions available`}
         />
-        {questions.map((question) => (
-          <QuestionCard
-            key={question.id}
-            question={question}
-            onToggle={handleToggle}
-            onBookmark={handleBookmark}
-          />
-        ))}
+
+        <div className="mt-6 space-y-5">
+          {MODULE_ORDER.filter(
+            (moduleName) => groupedQuestions[moduleName],
+          ).map((moduleName,index) => (
+            <ModuleAccordion
+              key={moduleName}
+              moduleName={`${index + 1}. ${moduleName}`}
+              sections={groupedQuestions[moduleName]}
+              onToggle={handleToggle}
+              onBookmark={handleBookmark}
+            />
+          ))}
+        </div>
       </div>
     </DashboardLayout>
   );

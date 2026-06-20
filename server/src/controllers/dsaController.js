@@ -1,24 +1,28 @@
 const DSAProgress = require("../models/DSAProgress");
-const dsaSheets = require("../data/dsaSheets");
-const User = require("../models/User");
 
+const User = require("../models/User");
+const DSAQuestion = require("../models/DSAQuestion");
 const getQuestions = async (req, res) => {
   try {
+    const sheet = req.query.sheet || "Striver A2Z";
+
     const progress = await DSAProgress.findOne({
       userId: req.user._id,
     });
 
-    const sheet = req.query.sheet || "Striver A2Z";
-
-    const questionsData = dsaSheets[sheet] || [];
+    const questionsData = await DSAQuestion.find({
+      sheetName: sheet,
+    }).sort({
+      order: 1,
+    });
 
     const questions = questionsData.map((question) => {
       const solvedQuestion = progress?.questions.find(
-        (q) => q.questionId === question.id,
+        (q) => q.questionId?.toString() === question._id.toString(),
       );
 
       return {
-        ...question,
+        ...question.toObject(),
 
         solved: solvedQuestion?.solved || false,
 
@@ -44,7 +48,15 @@ const getQuestions = async (req, res) => {
 
 const toggleQuestion = async (req, res) => {
   try {
-    const { questionId, title, topic, difficulty, sheet } = req.body;
+    const {
+      questionId,
+      title,
+      module,
+      section,
+      difficulty,
+      sheetName,
+      isConcept,
+    } = req.body;
 
     let progress = await DSAProgress.findOne({
       userId: req.user._id,
@@ -58,7 +70,7 @@ const toggleQuestion = async (req, res) => {
     }
 
     const existingQuestion = progress.questions.find(
-      (q) => q.questionId === questionId,
+      (q) => q.questionId.toString() === questionId,
     );
 
     if (existingQuestion) {
@@ -68,10 +80,18 @@ const toggleQuestion = async (req, res) => {
     } else {
       progress.questions.push({
         questionId,
+
         title,
-        topic,
-        sheet,
+
+        module,
+
+        section,
+
+        sheetName,
+
         difficulty,
+
+        isConcept,
 
         solved: true,
 
@@ -102,37 +122,68 @@ const toggleBookmark = async (req, res) => {
   try {
     const { questionId } = req.body;
 
-    const progress = await DSAProgress.findOne({
+    let progress = await DSAProgress.findOne({
       userId: req.user._id,
     });
 
     if (!progress) {
-      return res.status(404).json({
-        success: false,
-        message: "Progress not found",
+      progress = await DSAProgress.create({
+        userId: req.user._id,
+        questions: [],
       });
     }
-    console.log(progress.questions);
 
-    const question = progress.questions.find(
-      (q) => q.questionId === questionId,
+    let questionProgress = progress.questions.find(
+      (q) => q.questionId?.toString() === questionId,
     );
 
-    if (!question) {
-      return res.status(404).json({
-        success: false,
-        message: "Question not found",
+    // Question never touched before
+    if (!questionProgress) {
+      const question = await DSAQuestion.findById(questionId);
+
+      if (!question) {
+        return res.status(404).json({
+          success: false,
+          message: "Question not found",
+        });
+      }
+
+      progress.questions.push({
+        questionId: question._id,
+
+        title: question.title,
+
+        sheetName: question.sheetName,
+
+        module: question.module,
+
+        section: question.section,
+
+        difficulty: question.difficulty,
+
+        isConcept: question.isConcept,
+
+        solved: false,
+
+        bookmarked: true,
+      });
+
+      await progress.save();
+
+      return res.status(200).json({
+        success: true,
+        bookmarked: true,
       });
     }
 
-    question.bookmarked = !question.bookmarked;
+    // Existing entry
+    questionProgress.bookmarked = !questionProgress.bookmarked;
 
     await progress.save();
 
     res.status(200).json({
       success: true,
-
-      bookmarked: question.bookmarked,
+      bookmarked: questionProgress.bookmarked,
     });
   } catch (error) {
     res.status(500).json({
@@ -142,158 +193,113 @@ const toggleBookmark = async (req, res) => {
   }
 };
 
-const getBookmarkedQuestions =
-  async (req, res) => {
-
-    try {
-
-      const progress =
-        await DSAProgress.findOne({
-          userId:
-            req.user._id,
-        });
-
-      const questions =
-        progress?.questions.filter(
-          (q) =>
-            q.bookmarked
-        ) || [];
-
-      res.status(200).json({
-        success: true,
-        questions,
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-        success: false,
-        message:
-          error.message,
-      });
-
-    }
-  };
-
-const getProgress = async (req, res) => {
-  const sheet = req.query.sheet || "Striver A2Z";
-
-  const questionsData = dsaSheets[sheet] || [];
+const getBookmarkedQuestions = async (req, res) => {
   try {
     const progress = await DSAProgress.findOne({
       userId: req.user._id,
     });
 
-    const solvedQuestions =
-      progress?.questions.filter((q) => q.solved && q.sheet === sheet) || [];
+    if (!progress) {
+      return res.status(200).json({
+        success: true,
+        questions: [],
+      });
+    }
 
-    const totalQuestions = questionsData.length;
+    const bookmarkedIds = progress.questions
+      .filter((q) => q.bookmarked)
+      .map((q) => q.questionId);
 
-    const solvedCount = solvedQuestions.length;
+    const questions = await DSAQuestion.find({
+      _id: { $in: bookmarkedIds },
+    });
 
-    const percentage =
-      totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
+    const mergedQuestions = questions.map((question) => {
+      const progressData = progress.questions.find(
+        (q) => q.questionId.toString() === question._id.toString(),
+      );
 
-    // Topic Stats
-    const topicStats = {};
+      return {
+        ...question.toObject(),
 
-    questionsData.forEach((question) => {
-      if (!topicStats[question.topic]) {
-        topicStats[question.topic] = {
+        solved: progressData?.solved || false,
+
+        bookmarked: progressData?.bookmarked || false,
+
+        solvedAt: progressData?.solvedAt || null,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      questions: mergedQuestions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getProgress = async (req, res) => {
+  try {
+    const sheet = req.query.sheet || "Striver A2Z";
+
+    const questions = await DSAQuestion.find({
+      sheetName: sheet,
+    });
+
+    const progress = await DSAProgress.findOne({
+      userId: req.user._id,
+    });
+
+    const solvedQuestionIds = new Set(
+      progress?.questions
+        .filter((q) => q.solved)
+        .map((q) => q.questionId.toString()) || [],
+    );
+
+    const totalQuestions = questions.length;
+
+    const solvedQuestions = questions.filter((question) =>
+      solvedQuestionIds.has(question._id.toString()),
+    ).length;
+
+    const completionPercentage =
+      totalQuestions > 0
+        ? Math.round((solvedQuestions / totalQuestions) * 100)
+        : 0;
+
+    const moduleProgress = {};
+
+    questions.forEach((question) => {
+      const module = question.module;
+
+      if (!moduleProgress[module]) {
+        moduleProgress[module] = {
           total: 0,
           solved: 0,
         };
       }
 
-      topicStats[question.topic].total++;
-    });
+      moduleProgress[module].total++;
 
-    solvedQuestions.forEach((question) => {
-      if (topicStats[question.topic]) {
-        topicStats[question.topic].solved++;
+      if (solvedQuestionIds.has(question._id.toString())) {
+        moduleProgress[module].solved++;
       }
     });
-
-    // Difficulty Stats
-    const difficultyStats = {
-      Easy: {
-        total: 0,
-        solved: 0,
-      },
-      Medium: {
-        total: 0,
-        solved: 0,
-      },
-      Hard: {
-        total: 0,
-        solved: 0,
-      },
-    };
-
-    questionsData.forEach((question) => {
-      if (difficultyStats[question.difficulty]) {
-        difficultyStats[question.difficulty].total++;
-      }
-    });
-
-    solvedQuestions.forEach((question) => {
-      if (difficultyStats[question.difficulty]) {
-        difficultyStats[question.difficulty].solved++;
-      }
-    });
-
-    // Strongest & Weakest Topic
-    let strongestTopic = null;
-    let weakestTopic = null;
-
-    let highestPercentage = -1;
-    let lowestPercentage = 101;
-
-    Object.entries(topicStats).forEach(([topic, stats]) => {
-      const topicPercentage =
-        stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0;
-
-      if (topicPercentage > highestPercentage) {
-        highestPercentage = topicPercentage;
-
-        strongestTopic = topic;
-      }
-
-      if (topicPercentage < lowestPercentage) {
-        lowestPercentage = topicPercentage;
-
-        weakestTopic = topic;
-      }
-    });
-
-    const pendingQuestions = totalQuestions - solvedCount;
-
-    let readiness = "Beginner";
-
-    if (percentage >= 30) {
-      readiness = "Intermediate";
-    }
-
-    if (percentage >= 70) {
-      readiness = "Placement Ready";
-    }
 
     res.status(200).json({
       success: true,
 
-      progress: {
-        totalQuestions,
-        solvedCount,
-        pendingQuestions,
-        percentage,
+      totalQuestions,
 
-        strongestTopic,
-        weakestTopic,
-        readiness,
+      solvedQuestions,
 
-        topicStats,
-        difficultyStats,
-      },
+      completionPercentage,
+
+      moduleProgress,
     });
   } catch (error) {
     res.status(500).json({
@@ -309,18 +315,28 @@ const getOverallProgress = async (req, res) => {
       userId: req.user._id,
     });
 
-    const solvedQuestions = progress?.questions.filter((q) => q.solved) || [];
+    const solvedIds = new Set(
+      progress?.questions
+        ?.filter((q) => q.solved)
+        .map((q) => q.questionId.toString()) || [],
+    );
+
+    const sheetNames = await DSAQuestion.distinct("sheetName");
 
     const sheetStats = [];
 
     let totalQuestions = 0;
     let totalSolved = 0;
 
-    Object.entries(dsaSheets).forEach(([sheetName, questions]) => {
+    for (const sheetName of sheetNames) {
+      const questions = await DSAQuestion.find({
+        sheetName,
+      });
+
       const sheetTotal = questions.length;
 
-      const sheetSolved = solvedQuestions.filter(
-        (q) => q.sheet === sheetName,
+      const sheetSolved = questions.filter((q) =>
+        solvedIds.has(q._id.toString()),
       ).length;
 
       const percentage =
@@ -328,18 +344,14 @@ const getOverallProgress = async (req, res) => {
 
       sheetStats.push({
         sheet: sheetName,
-
         total: sheetTotal,
-
         solved: sheetSolved,
-
         percentage,
       });
 
       totalQuestions += sheetTotal;
-
       totalSolved += sheetSolved;
-    });
+    }
 
     const overallPercentage =
       totalQuestions > 0 ? Math.round((totalSolved / totalQuestions) * 100) : 0;
@@ -349,18 +361,14 @@ const getOverallProgress = async (req, res) => {
 
       overview: {
         totalQuestions,
-
         totalSolved,
-
         overallPercentage,
-
         sheetStats,
       },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-
       message: error.message,
     });
   }
@@ -374,7 +382,11 @@ const getActiveSheetsOverview = async (req, res) => {
       userId: req.user._id,
     });
 
-    const solvedQuestions = progress?.questions.filter((q) => q.solved) || [];
+    const solvedQuestionIds = new Set(
+      progress?.questions
+        ?.filter((q) => q.solved)
+        .map((q) => q.questionId.toString()) || [],
+    );
 
     const sheetStats = [];
 
@@ -382,12 +394,14 @@ const getActiveSheetsOverview = async (req, res) => {
     let totalSolved = 0;
 
     for (const sheetName of user.activeSheets) {
-      const questions = dsaSheets[sheetName] || [];
+      const questions = await DSAQuestion.find({
+        sheetName,
+      });
 
       const sheetTotal = questions.length;
 
-      const sheetSolved = solvedQuestions.filter(
-        (q) => q.sheet === sheetName,
+      const sheetSolved = questions.filter((q) =>
+        solvedQuestionIds.has(q._id.toString()),
       ).length;
 
       const percentage =
@@ -429,7 +443,6 @@ const getActiveSheetsOverview = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-
       message: error.message,
     });
   }
@@ -439,7 +452,9 @@ const getAICoach = async (req, res) => {
   try {
     const sheet = req.query.sheet || "Striver A2Z";
 
-    const questionsData = dsaSheets[sheet] || [];
+    const questions = await DSAQuestion.find({
+      sheetName: sheet,
+    });
 
     const progress = await DSAProgress.findOne({
       userId: req.user._id,
@@ -448,84 +463,83 @@ const getAICoach = async (req, res) => {
     if (!progress) {
       return res.status(200).json({
         success: true,
-
         coach: {
           title: "Getting Started",
-
+          completion: 0,
+          readiness: "Beginner",
+          weakTopics: [],
           recommendation:
             "Start solving your first DSA problem to unlock AI insights.",
-
-          focusTopics: [],
-
-          readiness: "Beginner",
         },
       });
     }
 
-    const solvedQuestions = progress.questions.filter(
-      (q) => q.solved && q.sheet === sheet,
+    const solvedIds = new Set(
+      progress.questions
+        .filter((q) => q.solved)
+        .map((q) => q.questionId.toString()),
     );
 
-    const totalQuestions = questionsData.length;
+    const totalQuestions = questions.length;
 
-    const solvedCount = solvedQuestions.length;
+    const solvedCount = questions.filter((q) =>
+      solvedIds.has(q._id.toString()),
+    ).length;
 
     const percentage =
       totalQuestions > 0 ? Math.round((solvedCount / totalQuestions) * 100) : 0;
 
-    const topicStats = {};
+    const moduleStats = {};
 
-    questionsData.forEach((question) => {
-      if (!topicStats[question.topic]) {
-        topicStats[question.topic] = {
+    questions.forEach((question) => {
+      const module = question.module;
+
+      if (!moduleStats[module]) {
+        moduleStats[module] = {
           total: 0,
           solved: 0,
         };
       }
 
-      topicStats[question.topic].total++;
-    });
+      moduleStats[module].total++;
 
-    solvedQuestions.forEach((question) => {
-      if (topicStats[question.topic]) {
-        topicStats[question.topic].solved++;
+      if (solvedIds.has(question._id.toString())) {
+        moduleStats[module].solved++;
       }
     });
 
-    const weakTopics = Object.entries(topicStats)
-      .map(([topic, stats]) => ({
-        topic,
-
+    const weakTopics = Object.entries(moduleStats)
+      .map(([module, stats]) => ({
+        module,
         percentage:
           stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0,
       }))
       .sort((a, b) => a.percentage - b.percentage)
       .slice(0, 3)
-      .map((item) => item.topic);
+      .map((item) => item.module);
 
     let title = "Beginner Stage";
 
-    let recommendation = "";
-
     let readiness = "Beginner";
 
-    if (percentage < 30) {
-      recommendation =
-        "Focus on Arrays, Hashing and Basic Recursion before moving to advanced topics.";
-    } else if (percentage < 70) {
+    let recommendation = "Focus on fundamentals and build consistency.";
+
+    if (percentage >= 30 && percentage < 70) {
       title = "Intermediate Stage";
 
       readiness = "Intermediate";
 
       recommendation =
-        "Focus on Graphs, Trees and Dynamic Programming. Improve problem solving speed.";
-    } else {
+        "Focus on Trees, Graphs and Dynamic Programming. Improve problem solving speed.";
+    }
+
+    if (percentage >= 70) {
       title = "Placement Ready";
 
       readiness = "Placement Ready";
 
       recommendation =
-        "Start solving Hard problems, mock interviews and contest questions regularly.";
+        "Start solving hard problems, contests and mock interviews regularly.";
     }
 
     res.status(200).json({
@@ -555,7 +569,9 @@ const getSkillAnalysis = async (req, res) => {
   try {
     const sheet = req.query.sheet || "Striver A2Z";
 
-    const questionsData = dsaSheets[sheet] || [];
+    const questions = await DSAQuestion.find({
+      sheetName: sheet,
+    });
 
     const progress = await DSAProgress.findOne({
       userId: req.user._id,
@@ -564,56 +580,54 @@ const getSkillAnalysis = async (req, res) => {
     if (!progress) {
       return res.status(200).json({
         success: true,
-
         analysis: {
           strengths: [],
-
           weaknesses: [],
-
           focusTopics: [],
-
           recommendation: "Start solving problems to unlock analysis.",
         },
       });
     }
 
-    const solvedQuestions = progress.questions.filter(
-      (q) => q.solved && q.sheet === sheet,
+    const solvedIds = new Set(
+      progress.questions
+        .filter((q) => q.solved)
+        .map((q) => q.questionId.toString()),
     );
 
-    const topicStats = {};
+    const moduleStats = {};
 
-    questionsData.forEach((question) => {
-      if (!topicStats[question.topic]) {
-        topicStats[question.topic] = {
+    questions.forEach((question) => {
+      const module = question.module;
+
+      if (!moduleStats[module]) {
+        moduleStats[module] = {
           total: 0,
           solved: 0,
         };
       }
 
-      topicStats[question.topic].total++;
-    });
+      moduleStats[module].total++;
 
-    solvedQuestions.forEach((question) => {
-      if (topicStats[question.topic]) {
-        topicStats[question.topic].solved++;
+      if (solvedIds.has(question._id.toString())) {
+        moduleStats[module].solved++;
       }
     });
 
-    const topicPerformance = Object.entries(topicStats)
-      .map(([topic, stats]) => ({
-        topic,
+    const performance = Object.entries(moduleStats)
+      .map(([module, stats]) => ({
+        module,
 
         percentage:
           stats.total > 0 ? Math.round((stats.solved / stats.total) * 100) : 0,
       }))
       .sort((a, b) => b.percentage - a.percentage);
 
-    const strengths = topicPerformance.slice(0, 3);
+    const strengths = performance.slice(0, 3);
 
-    const weaknesses = [...topicPerformance].reverse().slice(0, 3);
+    const weaknesses = [...performance].reverse().slice(0, 3);
 
-    const focusTopics = weaknesses.map((item) => item.topic);
+    const focusTopics = weaknesses.map((item) => item.module);
 
     const recommendation = focusTopics.length
       ? `Focus on ${focusTopics.join(", ")} over the next week.`
@@ -624,18 +638,14 @@ const getSkillAnalysis = async (req, res) => {
 
       analysis: {
         strengths,
-
         weaknesses,
-
         focusTopics,
-
         recommendation,
       },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-
       message: error.message,
     });
   }

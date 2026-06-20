@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "UpdateSeed:striver": "node seeders/seedStriver.js",
+    "ResetSeed:striver" : " node seeders/CompleteSeederStriver.js"
   },
   "keywords": [],
   "author": "",
