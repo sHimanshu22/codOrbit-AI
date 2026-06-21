@@ -34,6 +34,7 @@ focus:ring-blue-500
 
 const Profile = () => {
   const [formData, setFormData] = useState({
+    username: "",
     name: "",
     college: "",
     branch: "",
@@ -294,26 +295,77 @@ const Profile = () => {
 
           {/* Save Button */}
 
-          <div className="mt-10">
+          <div
+            className="
+  mt-10
+
+  flex
+  flex-wrap
+  gap-4
+  "
+          >
             <button
               type="submit"
               className="
-              inline-flex
-              items-center
-              gap-2
-              bg-blue-600
-              hover:bg-blue-700
-              text-white
-              px-8
-              py-3
-              rounded-xl
-              font-medium
-              transition-all
-              shadow-sm
-              "
+    inline-flex
+    items-center
+    gap-2
+
+    bg-blue-600
+    hover:bg-blue-700
+
+    text-white
+
+    px-8
+    py-3
+
+    rounded-xl
+
+    font-medium
+
+    transition-all
+    shadow-sm
+    "
             >
               Save Changes
             </button>
+
+            {formData.username && (
+              <a
+                href={`/u/${formData.username}`}
+                target="_blank"
+                rel="noreferrer"
+                className="
+      inline-flex
+      items-center
+      justify-center
+
+      px-8
+      py-3
+
+      rounded-xl
+
+      border
+      border-slate-200
+      dark:border-slate-700
+
+      bg-white
+      dark:bg-slate-900
+
+      text-slate-700
+      dark:text-slate-300
+
+      font-medium
+
+      hover:bg-slate-50
+      dark:hover:bg-slate-800
+
+      transition-all
+      "
+              >
+                View Public Profile
+              </a>
+            )}
           </div>
         </form>
       </div>

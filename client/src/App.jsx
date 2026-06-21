@@ -12,6 +12,7 @@ import Contests from "./pages/Contests";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Landing from "./pages/Landing";
+import PublicProfile from "./pages/PublicProfile";
 
 function App() {
   return (
@@ -82,6 +83,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/u/:username" element={<PublicProfile />} />
       </Routes>
     </BrowserRouter>
   );

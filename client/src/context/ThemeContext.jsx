@@ -1,25 +1,36 @@
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-export const ThemeContext = createContext();
+export const ThemeContext =
+  createContext();
 
 export const ThemeProvider = ({
   children,
 }) => {
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") || "light",
-  );
+  const [theme, setTheme] =
+    useState(
+      localStorage.getItem(
+        "theme"
+      ) || "light"
+    );
 
   useEffect(() => {
     document.documentElement.classList.remove(
       "light",
-      "dark",
+      "dark"
     );
 
-    document.documentElement.classList.add(theme);
+    document.documentElement.classList.add(
+      theme
+    );
 
     localStorage.setItem(
       "theme",
-      theme,
+      theme
     );
   }, [theme]);
 
@@ -27,7 +38,7 @@ export const ThemeProvider = ({
     setTheme((prev) =>
       prev === "light"
         ? "dark"
-        : "light",
+        : "light"
     );
   };
 
@@ -41,4 +52,19 @@ export const ThemeProvider = ({
       {children}
     </ThemeContext.Provider>
   );
+};
+
+/* Custom Hook */
+
+export const useTheme = () => {
+  const context =
+    useContext(ThemeContext);
+
+  if (!context) {
+    throw new Error(
+      "useTheme must be used within ThemeProvider"
+    );
+  }
+
+  return context;
 };

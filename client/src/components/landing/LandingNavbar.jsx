@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import ThemeToggle from "../ui/ThemeToggle";
+import logoLight from "../../assets/logo-light.png";
+import logoDark from "../../assets/logo-dark.png";
 
 const LandingNavbar = () => {
   return (
@@ -35,40 +37,53 @@ const LandingNavbar = () => {
       >
         {/* Logo */}
 
-        <div>
+        <div className="flex items-center gap-3">
+          {/* Light Mode Logo */}
+
+          <img
+            src={logoLight}
+            alt="CodOrbit"
+            className="
+    h-10
+    w-10
+    object-contain
+    dark:hidden
+    "
+          />
+
+          {/* Dark Mode Logo */}
+
+          <img
+            src={logoDark}
+            alt="CodOrbit"
+            className="
+    h-10
+    w-10
+    object-contain
+    hidden
+    dark:block
+    "
+          />
+
           <h1
             className="
-            text-2xl
-            font-bold
-            flex
-            items-center
+  text-3xl
+  lg:text-4xl
 
-            text-slate-900
-            dark:text-white
-            "
+  font-extrabold
+
+  flex
+  items-center
+
+  text-slate-900
+  dark:text-white
+
+  tracking-tight
+  "
           >
             CodOrbit
-
-            <span
-              className="
-              ml-2
-              px-2
-              py-1
-
-              rounded-md
-
-              bg-blue-600
-              text-white
-
-              text-xs
-              font-semibold
-              "
-            >
-              AI
-            </span>
           </h1>
         </div>
-
         {/* Navigation */}
 
         <nav

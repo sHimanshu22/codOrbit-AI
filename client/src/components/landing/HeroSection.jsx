@@ -1,5 +1,6 @@
 import { Brain } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Zap, Flame, Target } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -71,9 +72,8 @@ const HeroSection = () => {
             max-w-xl
             "
           >
-            CodOrbit AI helps you track coding progress, master DSA,
-            monitor contests, and get AI-powered insights to achieve
-            your dream job.
+            CodOrbit AI helps you track coding progress, master DSA, monitor
+            contests, and get AI-powered insights to achieve your dream job.
           </p>
 
           {/* CTA Buttons */}
@@ -131,22 +131,35 @@ const HeroSection = () => {
 
           <div
             className="
-            flex
-            flex-wrap
-            gap-6
-            mt-6
+   flex
+  items-center
+  gap-8
 
-            text-sm
+  mt-6
 
-            text-slate-500
-            dark:text-slate-400
-            "
+  text-sm
+
+  text-slate-500
+  dark:text-slate-400
+  "
           >
-            <span>✓ No Credit Card</span>
+            <div className="flex items-center gap-2">
+              <Zap size={16} className="text-blue-500" />
 
-            <span>✓ Sync in 1 Click</span>
+              <span>Sync Coding Profiles</span>
+            </div>
 
-            <span>✓ Free to Start</span>
+            <div className="flex items-center gap-2">
+              <Flame size={16} className="text-orange-500" />
+
+              <span>Maintain Coding Streaks</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Target size={16} className="text-green-500" />
+
+              <span>Placement-Focused Learning</span>
+            </div>
           </div>
         </div>
 
@@ -179,17 +192,11 @@ const HeroSection = () => {
             text-white
             "
           >
-            <p className="text-blue-100 text-sm">
-              Developer Score
-            </p>
+            <p className="text-blue-100 text-sm">Developer Score</p>
 
-            <h3 className="text-5xl font-bold mt-2">
-              82
-            </h3>
+            <h3 className="text-5xl font-bold mt-2">82</h3>
 
-            <p className="mt-2 text-blue-100">
-              Placement Ready
-            </p>
+            <p className="mt-2 text-blue-100">Placement Ready</p>
           </div>
 
           {/* Stats */}
@@ -331,8 +338,8 @@ const HeroSection = () => {
               dark:text-slate-300
               "
             >
-              Focus on Dynamic Programming and Graphs
-              to improve placement readiness.
+              Focus on Dynamic Programming and Graphs to improve placement
+              readiness.
             </p>
           </div>
         </div>

@@ -1,14 +1,36 @@
-import { User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import ThemeToggle from "./ui/ThemeToggle";
+import { getProfile } from "../services/userService";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await getProfile();
+
+        setUser(data.user);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadProfile();
+  }, []);
+
+  const firstName =
+    user?.name?.trim()?.split(" ")[0] || "Developer";
+
   return (
     <header
       className="
-  
-
       h-20
+
       bg-white
       dark:bg-slate-900
 
@@ -17,6 +39,7 @@ const Navbar = () => {
       dark:border-slate-800
 
       px-8
+
       flex
       items-center
       justify-between
@@ -38,6 +61,7 @@ const Navbar = () => {
         <h2
           className="
           font-semibold
+
           text-slate-900
           dark:text-slate-100
           "
@@ -51,26 +75,85 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         <ThemeToggle />
 
-        <div
+        <button
+          onClick={() => {
+            if (user?.username) {
+              navigate("/profile");
+            }
+          }}
           className="
           flex
           items-center
           gap-3
-          px-4
+
+          px-3
           py-2
+
           rounded-xl
 
           bg-slate-100
           dark:bg-slate-800
 
-          text-slate-900
-          dark:text-slate-100
+          hover:bg-slate-200
+          dark:hover:bg-slate-700
+
+          transition-all
+          duration-200
           "
         >
-          <User size={18} />
+          {user?.profileImage ? (
+            <img
+              src={user.profileImage}
+              alt={user.name}
+              className="
+              w-9
+              h-9
 
-          <span>Developer</span>
-        </div>
+              rounded-full
+              object-cover
+              "
+            />
+          ) : (
+            <div
+              className="
+              w-9
+              h-9
+
+              rounded-full
+
+              bg-blue-600
+
+              flex
+              items-center
+              justify-center
+
+              text-white
+              font-semibold
+              text-sm
+              "
+            >
+              {firstName.charAt(0).toUpperCase()}
+            </div>
+          )}
+
+          <div className="hidden md:block text-left">
+            <p
+              className="
+              text-base
+              lg:text-lg
+
+              font-medium
+
+              text-slate-900
+              dark:text-slate-100
+
+              leading-none
+              "
+            >
+              {firstName}
+            </p>
+          </div>
+        </button>
       </div>
     </header>
   );

@@ -9,11 +9,10 @@ import {
   LogOut,
 } from "lucide-react";
 
-import {
-  Link,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import lightLogo from "../assets/logo-light.png";
+import darkLogo from "../assets/logo-dark.png";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -83,26 +82,49 @@ const Sidebar = () => {
       {/* Logo */}
 
       <div className="mb-10">
-        <h1
-          className="
-          text-2xl
-          font-bold
-          text-slate-900
-          dark:text-slate-100
-          "
-        >
-          CodOrbit
-        </h1>
+        <div className="flex items-center gap-3">
+          {/* Light Mode Logo */}
+          <img
+            src={lightLogo}
+            alt="CodOrbit"
+            className="w-12 h-12 dark:hidden"
+          />
 
-        <p
-          className="
-          text-sm
-          text-slate-500
-          dark:text-slate-400
-          "
-        >
-          Developer Growth Platform
-        </p>
+          {/* Dark Mode Logo */}
+          <img
+            src={darkLogo}
+            alt="CodOrbit"
+            className="hidden dark:block w-12 h-12"
+          />
+
+          <div>
+            <h1
+              className="
+        text-3xl
+        font-bold
+        leading-none
+
+        text-slate-900
+        dark:text-slate-100
+        "
+            >
+              CodOrbit
+            </h1>
+
+            <p
+              className="
+        mt-1
+
+        text-sm
+
+        text-slate-500
+        dark:text-slate-400
+        "
+            >
+              Developer Growth Platform
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Navigation */}
@@ -178,7 +200,6 @@ const Sidebar = () => {
           "
         >
           <LogOut size={20} />
-
           Logout
         </button>
       </div>

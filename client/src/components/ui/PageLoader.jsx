@@ -1,7 +1,8 @@
+import logoLight from "../../assets/logo-light.png";
+import logoDark from "../../assets/logo-dark.png";
+
 const PageLoader = () => {
-
   return (
-
     <div
       className="
       flex
@@ -11,33 +12,55 @@ const PageLoader = () => {
       min-h-[60vh]
       "
     >
+      {/* Logo */}
 
-      <div
+      <div className="animate-pulse">
+        <img
+          src={logoLight}
+          alt="CodOrbit"
+          className="
+          h-24
+          w-24
+          object-contain
+          dark:hidden
+          "
+        />
+
+        <img
+          src={logoDark}
+          alt="CodOrbit"
+          className="
+          h-24
+          w-24
+          object-contain
+          hidden
+          dark:block
+          "
+        />
+      </div>
+
+      <h2
         className="
-        w-12
-        h-12
-        border-4
-        border-slate-200
-        border-t-blue-600
-        rounded-full
-        animate-spin
+        mt-6
+        text-xl
+        font-semibold
+        text-slate-900
+        dark:text-white
         "
-      />
-
-      <h2 className="mt-6 text-xl font-semibold">
-
-        Loading Dashboard
-
+      >
+        Building Your Developer Orbit
       </h2>
 
-      <p className="text-slate-500 mt-2">
-
+      <p
+        className="
+        text-slate-500
+        dark:text-slate-400
+        mt-2
+        "
+      >
         Preparing your developer data...
-
       </p>
-
     </div>
-
   );
 };
 

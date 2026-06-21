@@ -1,33 +1,22 @@
 const express = require("express");
 
-const {
-  protect,
-} = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 const {
   getUserProfile,
+  getUserProfileByUsername,
   updateUserProfile,
-  updateActiveSheets
+  updateActiveSheets,
 } = require("../controllers/userController");
 
 const router = express.Router();
 
-router.get(
-  "/profile",
-  protect,
-  getUserProfile
-);
+router.get("/profile", protect, getUserProfile);
 
-router.put(
-  "/profile",
-  protect,
-  updateUserProfile
-);
+router.get("/u/:username", protect, getUserProfileByUsername);
 
-router.put(
-  "/active-sheets",
-  protect,
-  updateActiveSheets
-);
+router.put("/profile", protect, updateUserProfile);
+
+router.put("/active-sheets", protect, updateActiveSheets);
 
 module.exports = router;

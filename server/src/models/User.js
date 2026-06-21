@@ -84,6 +84,14 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: ["Striver A2Z"],
     },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      minlength: 3,
+      maxlength: 20,
+    },
   },
   {
     timestamps: true,

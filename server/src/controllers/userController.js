@@ -1,14 +1,10 @@
 const User = require("../models/User");
+const DSAProgress = require("../models/DSAProgress");
 
 // GET PROFILE
-const getUserProfile = async (
-  req,
-  res
-) => {
+const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(
-      req.user._id
-    );
+    const user = await User.findById(req.user._id);
 
     res.status(200).json({
       success: true,
@@ -23,14 +19,9 @@ const getUserProfile = async (
 };
 
 // UPDATE PROFILE
-const updateUserProfile = async (
-  req,
-  res
-) => {
+const updateUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(
-      req.user._id
-    );
+    const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({
@@ -39,48 +30,31 @@ const updateUserProfile = async (
       });
     }
 
-    user.name =
-      req.body.name || user.name;
+    user.name = req.body.name || user.name;
 
-    user.college =
-      req.body.college ||
-      user.college;
+    user.college = req.body.college || user.college;
 
-    user.branch =
-      req.body.branch ||
-      user.branch;
+    user.branch = req.body.branch || user.branch;
 
-    user.graduationYear =
-      req.body.graduationYear ||
-      user.graduationYear;
+    user.graduationYear = req.body.graduationYear || user.graduationYear;
 
-    user.githubUsername =
-      req.body.githubUsername ||
-      user.githubUsername;
+    user.githubUsername = req.body.githubUsername || user.githubUsername;
 
-    user.leetcodeUsername =
-      req.body.leetcodeUsername ||
-      user.leetcodeUsername;
+    user.leetcodeUsername = req.body.leetcodeUsername || user.leetcodeUsername;
 
     user.codeforcesUsername =
-      req.body.codeforcesUsername ||
-      user.codeforcesUsername;
+      req.body.codeforcesUsername || user.codeforcesUsername;
 
-    user.gfgUsername =
-      req.body.gfgUsername ||
-      user.gfgUsername;
+    user.gfgUsername = req.body.gfgUsername || user.gfgUsername;
 
     user.hackerrankUsername =
-      req.body.hackerrankUsername ||
-      user.hackerrankUsername;
+      req.body.hackerrankUsername || user.hackerrankUsername;
 
-    const updatedUser =
-      await user.save();
+    const updatedUser = await user.save();
 
     res.status(200).json({
       success: true,
       user: updatedUser,
-      
     });
   } catch (error) {
     res.status(500).json({
@@ -90,46 +64,90 @@ const updateUserProfile = async (
   }
 };
 
-const updateActiveSheets =
-  async (req, res) => {
+const updateActiveSheets = async (req, res) => {
+  try {
+    const { activeSheets } = req.body;
 
-    try {
+    const user = await User.findById(req.user._id);
 
-      const {
-        activeSheets,
-      } = req.body;
+    user.activeSheets = activeSheets;
 
-      const user =
-        await User.findById(
-          req.user._id
-        );
+    await user.save();
 
-      user.activeSheets =
-        activeSheets;
+    res.status(200).json({
+      success: true,
 
-      await user.save();
+      activeSheets: user.activeSheets,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
 
-      res.status(200).json({
-        success: true,
+      message: error.message,
+    });
+  }
+};
 
-        activeSheets:
-          user.activeSheets,
-      });
+const getUserProfileByUsername = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      username: req.params.username,
+    });
 
-    } catch (error) {
-
-      res.status(500).json({
+    if (!user) {
+      return res.status(404).json({
         success: false,
-
-        message:
-          error.message,
+        message: "User not found",
       });
-
     }
-  };
+
+    const progress = await DSAProgress.findOne({
+      userId: user._id,
+    });
+
+    const solvedQuestions =
+      progress?.questions.filter((q) => q.solved).length || 0;
+
+    res.status(200).json({
+      success: true,
+
+      user: {
+        name: user.name,
+        username: user.username,
+        college: user.college,
+        branch: user.branch,
+        profileImage: user.profileImage,
+
+        githubUsername: user.githubUsername,
+
+        leetcodeUsername: user.leetcodeUsername,
+
+        codeforcesUsername: user.codeforcesUsername,
+
+        gfgUsername: user.gfgUsername,
+
+        hackerrankUsername: user.hackerrankUsername,
+
+        activeSheets: user.activeSheets,
+      },
+
+      stats: {
+        solvedQuestions,
+
+        activeSheets: user.activeSheets.length,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   getUserProfile,
+  getUserProfileByUsername,
   updateUserProfile,
   updateActiveSheets,
 };

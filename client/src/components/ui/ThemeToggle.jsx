@@ -14,8 +14,8 @@ const ThemeToggle = () => {
       flex
       items-center
       justify-center
-      w-10
-      h-10
+      w-13
+      h-13
       rounded-xl
       border
       border-slate-200
@@ -29,7 +29,7 @@ const ThemeToggle = () => {
       transition-all
       "
     >
-      {theme === "dark" ? <Moon size={18} /> : <Sun size={18} />}
+      {theme === "dark" ? <Moon size={20} /> : <Sun size={20} />}
     </button>
   );
 };
