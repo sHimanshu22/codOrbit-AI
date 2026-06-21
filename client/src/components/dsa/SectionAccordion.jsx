@@ -4,7 +4,13 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 
 import QuestionRow from "./QuestionRow";
 
-const SectionAccordion = ({ title, questions, onToggle, onBookmark }) => {
+const SectionAccordion = ({
+  title,
+  questions,
+  onToggle,
+  onBookmark,
+  onNotes,
+}) => {
   const [open, setOpen] = useState(true);
 
   const solved = questions.filter((q) => q.solved).length;
@@ -78,6 +84,7 @@ const SectionAccordion = ({ title, questions, onToggle, onBookmark }) => {
               question={question}
               onToggle={onToggle}
               onBookmark={onBookmark}
+              onNotes={onNotes}
             />
           ))}
         </div>

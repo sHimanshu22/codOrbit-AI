@@ -5,8 +5,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "UpdateSeed:striver": "node seeders/seedStriver.js",
-    "ResetSeed:striver" : " node seeders/CompleteSeederStriver.js"
+
+    "seed:striver" : " node seeders/SeedStriver.js",
+    "seed:blind75": "node seeders/SeedBlind75.js"
   },
   "keywords": [],
   "author": "",

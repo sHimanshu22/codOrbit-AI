@@ -193,6 +193,83 @@ const toggleBookmark = async (req, res) => {
   }
 };
 
+const updateNotes = async (req, res) => {
+  try {
+    const { questionId, notes } = req.body;
+
+    let progress = await DSAProgress.findOne({
+      userId: req.user._id,
+    });
+
+    if (!progress) {
+      progress = await DSAProgress.create({
+        userId: req.user._id,
+        questions: [],
+      });
+    }
+
+    let questionProgress = progress.questions.find(
+      (q) => q.questionId?.toString() === questionId,
+    );
+
+    // Question never touched before
+    if (!questionProgress) {
+      const question = await DSAQuestion.findById(questionId);
+
+      if (!question) {
+        return res.status(404).json({
+          success: false,
+          message: "Question not found",
+        });
+      }
+
+      progress.questions.push({
+        questionId: question._id,
+
+        title: question.title,
+
+        sheetName: question.sheetName,
+
+        module: question.module,
+
+        section: question.section,
+
+        difficulty: question.difficulty,
+
+        isConcept: question.isConcept,
+
+        solved: false,
+
+        bookmarked: false,
+
+        notes: notes || "",
+      });
+
+      await progress.save();
+
+      return res.status(200).json({
+        success: true,
+        notes,
+      });
+    }
+
+    // Existing entry
+    questionProgress.notes = notes || "";
+
+    await progress.save();
+
+    res.status(200).json({
+      success: true,
+      notes: questionProgress.notes,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const getBookmarkedQuestions = async (req, res) => {
   try {
     const progress = await DSAProgress.findOne({
@@ -661,4 +738,5 @@ module.exports = {
   getSkillAnalysis,
   toggleBookmark,
   getBookmarkedQuestions,
+  updateNotes,
 };

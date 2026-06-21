@@ -47,23 +47,15 @@ const seed = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
 
-    for (const question of questions) {
-      await DSAQuestion.updateOne(
-        {
-          sheetName: question.sheetName,
-          module: question.module,
-          title: question.title,
-        },
-        {
-          $set: question,
-        },
-        {
-          upsert: true,
-        },
-      );
-    }
+    await DSAQuestion.deleteMany({
+      sheetName: "Striver A2Z",
+    });
 
-    console.log(`✅ Seed Complete (${questions.length} questions inserted)`);
+    await DSAQuestion.insertMany(questions);
+
+    console.log(
+      `✅ Seed Complete (${questions.length} questions inserted)`
+    );
 
     process.exit(0);
   } catch (error) {

@@ -53,3 +53,12 @@ export const getBookmarks = async () => {
 
   return response.data;
 };
+
+export const updateNotes = async (questionId, notes) => {
+  const response = await api.patch("/dsa/notes", {
+    questionId,
+    notes,
+  });
+
+  return response.data;
+};

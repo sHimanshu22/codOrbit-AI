@@ -10,6 +10,8 @@ import ProgressBar from "../components/ProgressBar";
 
 import ModuleAccordion from "../components/dsa/ModuleAccordion";
 
+import NotesModal from "../components/NotesModal";
+
 import {
   getQuestions,
   getProgress,
@@ -17,6 +19,7 @@ import {
   getAICoach,
   getSkillAnalysis,
   toggleBookmark,
+  updateNotes,
 } from "../services/dsaService";
 
 import TopicAnalytics from "../components/TopicAnalytics";
@@ -50,7 +53,7 @@ const DSATracker = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedSheet, setSelectedSheet] = useState(
-    () => searchParams.get("sheet") || "Striver A2Z",
+    searchParams.get("sheet") || "",
   );
 
   const [coach, setCoach] = useState(null);
@@ -58,6 +61,9 @@ const DSATracker = () => {
   const [skillAnalysis, setSkillAnalysis] = useState(null);
 
   const [bookmarks, setBookmarks] = useState([]);
+
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [showNotesModal, setShowNotesModal] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -88,6 +94,8 @@ const DSATracker = () => {
   };
 
   useEffect(() => {
+    if (!selectedSheet) return;
+
     fetchData();
   }, [selectedSheet]);
 
@@ -106,8 +114,14 @@ const DSATracker = () => {
 
         setActiveSheets(sheets);
 
-        if (sheets.length > 0 && !sheets.includes(selectedSheet)) {
-          setSelectedSheet(sheets[0]);
+        if (sheets.length > 0) {
+          const urlSheet = searchParams.get("sheet");
+
+          if (urlSheet && sheets.includes(urlSheet)) {
+            setSelectedSheet(urlSheet);
+          } else {
+            setSelectedSheet(sheets[0]);
+          }
         }
       } catch (error) {
         console.error(error);
@@ -147,6 +161,23 @@ const DSATracker = () => {
     }
   };
 
+  const handleNotes = (question) => {
+    setSelectedQuestion(question);
+    setShowNotesModal(true);
+  };
+
+  const handleSaveNotes = async (questionId, notes) => {
+    try {
+      await updateNotes(questionId, notes);
+
+      setShowNotesModal(false);
+
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (loading) {
     return (
       <DashboardLayout>
@@ -155,43 +186,45 @@ const DSATracker = () => {
     );
   }
 
-  const MODULE_ORDER = [
-    "Learn the Basics",
+  const MODULE_ORDERS = {
+    "Striver A2Z": [
+      "Learn the Basics",
+      "Learn Important Sorting Techniques",
+      "Arrays",
+      "Binary Search",
+      "Strings",
+      "Linked List",
+      "Recursion & Backtracking",
+      "Bit Manipulation",
+      "Stack & Queue",
+      "Sliding Window & Two Pointers",
+      "Heaps",
+      "Greedy Algorithms",
+      "Binary Trees",
+      "Binary Search Trees",
+      "Graphs",
+      "Dynamic Programming",
+      "Tries",
+      "Strings [Hard]",
+    ],
 
-    "Learn Important Sorting Techniques",
+    "Blind 75": [
+      "Array",
+      "String",
+      "Linked List",
+      "Binary",
+      "Interval",
+      "Matrix",
+      "Tree",
+      "Heap",
+      "Backtracking",
+      "Graph",
+      "Dynamic Programming",
+    ],
+  };
 
-    "Arrays",
-
-    "Binary Search",
-
-    "Strings",
-
-    "Linked List",
-
-    "Recursion & Backtracking",
-
-    "Bit Manipulation",
-
-    "Stack & Queue",
-
-    "Sliding Window & Two Pointers",
-
-    "Heaps",
-
-    "Greedy Algorithms",
-
-    "Binary Trees",
-
-    "Binary Search Trees",
-
-    "Graphs",
-
-    "Dynamic Programming",
-
-    "Tries",
-
-    "Strings [Hard]",
-  ];
+  const currentOrder =
+    MODULE_ORDERS[selectedSheet] || Object.keys(groupedQuestions);
 
   const groupedQuestions = questions.reduce((acc, question) => {
     if (!acc[question.module]) {
@@ -210,17 +243,39 @@ const DSATracker = () => {
   return (
     <DashboardLayout>
       <div className="mb-10">
-        <p className="text-slate-500 dark:text-slate-400 text-sm">
-          DSA Preparation
-        </p>
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
+              DSA Preparation
+            </p>
 
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-          {selectedSheet}
-        </h1>
+            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+              {selectedSheet}
+            </h1>
 
-        <p className="text-slate-500 dark:text-slate-400 mt-2">
-          Track your progress and prepare for placements
-        </p>
+            <p className="text-slate-500 dark:text-slate-400 mt-2">
+              Track your progress and prepare for placements
+            </p>
+          </div>
+
+          <div className="lg:ml-auto">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                Active Sheet
+              </h3>
+
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Switch between your learning tracks
+              </p>
+            </div>
+
+            <SheetSelector
+              sheets={activeSheets}
+              selectedSheet={selectedSheet}
+              setSelectedSheet={setSelectedSheet}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="mt-12">
@@ -262,21 +317,6 @@ const DSATracker = () => {
           </div>
         </div>
       )}
-
-      <div className="mt-12">
-        <SectionHeader
-          title="Active Sheet"
-          subtitle="Switch between your learning tracks"
-        />
-
-        <div className="mt-6">
-          <SheetSelector
-            sheets={activeSheets}
-            selectedSheet={selectedSheet}
-            setSelectedSheet={setSelectedSheet}
-          />
-        </div>
-      </div>
 
       {/* AI Coach */}
       <div className="mt-12">
@@ -346,19 +386,30 @@ const DSATracker = () => {
         />
 
         <div className="mt-6 space-y-5">
-          {MODULE_ORDER.filter(
-            (moduleName) => groupedQuestions[moduleName],
-          ).map((moduleName,index) => (
-            <ModuleAccordion
-              key={moduleName}
-              moduleName={`${index + 1}. ${moduleName}`}
-              sections={groupedQuestions[moduleName]}
-              onToggle={handleToggle}
-              onBookmark={handleBookmark}
-            />
-          ))}
+          {currentOrder
+            .filter((moduleName) => groupedQuestions[moduleName])
+            .map((moduleName, index) => (
+              <ModuleAccordion
+                key={moduleName}
+                moduleName={`${index + 1}.${moduleName}`}
+                sections={groupedQuestions[moduleName]}
+                onToggle={handleToggle}
+                onBookmark={handleBookmark}
+                onNotes={handleNotes}
+              />
+            ))}
         </div>
       </div>
+
+      <NotesModal
+        isOpen={showNotesModal}
+        question={selectedQuestion}
+        onClose={() => {
+          setShowNotesModal(false);
+          setSelectedQuestion(null);
+        }}
+        onSave={handleSaveNotes}
+      />
     </DashboardLayout>
   );
 };

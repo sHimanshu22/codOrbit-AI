@@ -4,7 +4,13 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 
 import SectionAccordion from "./SectionAccordion";
 
-const ModuleAccordion = ({ moduleName, sections, onToggle, onBookmark }) => {
+const ModuleAccordion = ({
+  moduleName,
+  sections,
+  onToggle,
+  onBookmark,
+  onNotes,
+}) => {
   const [open, setOpen] = useState(false);
 
   const allQuestions = Object.values(sections).flat();
@@ -64,7 +70,7 @@ const ModuleAccordion = ({ moduleName, sections, onToggle, onBookmark }) => {
           )}
 
           <h3
-  className="
+            className="
   text-lg
   md:text-xl
 
@@ -77,9 +83,9 @@ const ModuleAccordion = ({ moduleName, sections, onToggle, onBookmark }) => {
 
   text-left
   "
->
-  {moduleName}
-</h3>
+          >
+            {moduleName}
+          </h3>
         </div>
 
         {/* Right */}
@@ -170,6 +176,7 @@ const ModuleAccordion = ({ moduleName, sections, onToggle, onBookmark }) => {
               questions={questions}
               onToggle={onToggle}
               onBookmark={onBookmark}
+              onNotes={onNotes}
             />
           ))}
         </div>
