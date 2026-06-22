@@ -62,3 +62,9 @@ export const updateNotes = async (questionId, notes) => {
 
   return response.data;
 };
+
+export const getSheets = async () => {
+  const response = await api.get("/dsa/sheets");
+
+  return response.data;
+};

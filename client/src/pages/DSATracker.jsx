@@ -20,6 +20,7 @@ import {
   getSkillAnalysis,
   toggleBookmark,
   updateNotes,
+  getSheets,
 } from "../services/dsaService";
 
 import TopicAnalytics from "../components/TopicAnalytics";
@@ -42,6 +43,7 @@ import SavedQuestions from "../components/SavedQuestions";
 
 import { getBookmarks } from "../services/dsaService";
 import SectionHeader from "../components/ui/SectionHeader";
+import { MODULE_ORDERS } from "../constants/moduleOrders";
 
 const DSATracker = () => {
   const [loading, setLoading] = useState(true);
@@ -108,19 +110,28 @@ const DSATracker = () => {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const data = await getProfile();
+        const [profileRes, sheetsRes] = await Promise.all([
+          getProfile(),
+          getSheets(),
+        ]);
 
-        const sheets = data.user.activeSheets || [];
+        const activeSheets = profileRes.user.activeSheets || [];
 
-        setActiveSheets(sheets);
+        const availableSheetNames = sheetsRes.sheets.map((sheet) => sheet.name);
 
-        if (sheets.length > 0) {
+        const validActiveSheets = activeSheets.filter((sheet) =>
+          availableSheetNames.includes(sheet),
+        );
+
+        setActiveSheets(validActiveSheets);
+
+        if (validActiveSheets.length > 0) {
           const urlSheet = searchParams.get("sheet");
 
-          if (urlSheet && sheets.includes(urlSheet)) {
+          if (urlSheet && validActiveSheets.includes(urlSheet)) {
             setSelectedSheet(urlSheet);
           } else {
-            setSelectedSheet(sheets[0]);
+            setSelectedSheet(validActiveSheets[0]);
           }
         }
       } catch (error) {
@@ -186,45 +197,70 @@ const DSATracker = () => {
     );
   }
 
-  const MODULE_ORDERS = {
-    "Striver A2Z": [
-      "Learn the Basics",
-      "Learn Important Sorting Techniques",
-      "Arrays",
-      "Binary Search",
-      "Strings",
-      "Linked List",
-      "Recursion & Backtracking",
-      "Bit Manipulation",
-      "Stack & Queue",
-      "Sliding Window & Two Pointers",
-      "Heaps",
-      "Greedy Algorithms",
-      "Binary Trees",
-      "Binary Search Trees",
-      "Graphs",
-      "Dynamic Programming",
-      "Tries",
-      "Strings [Hard]",
-    ],
+  if (activeSheets.length === 0) {
+    return (
+      <DashboardLayout>
+        <div
+          className="
+        flex
+        flex-col
+        items-center
+        justify-center
 
-    "Blind 75": [
-      "Array",
-      "String",
-      "Linked List",
-      "Binary",
-      "Interval",
-      "Matrix",
-      "Tree",
-      "Heap",
-      "Backtracking",
-      "Graph",
-      "Dynamic Programming",
-    ],
-  };
+        min-h-[70vh]
 
-  const currentOrder =
-    MODULE_ORDERS[selectedSheet] || Object.keys(groupedQuestions);
+        text-center
+        "
+        >
+          <h1
+            className="
+          text-4xl
+          font-bold
+
+          text-slate-900
+          dark:text-white
+          "
+          >
+            No Active Sheets
+          </h1>
+
+          <p
+            className="
+          mt-3
+
+          text-slate-500
+          dark:text-slate-400
+          "
+          >
+            Activate a DSA sheet from Sheet Management to start tracking
+            progress.
+          </p>
+
+          <a
+            href="/sheet-management"
+            className="
+          mt-6
+
+          px-6
+          py-3
+
+          rounded-xl
+
+          bg-blue-600
+          hover:bg-blue-700
+
+          text-white
+          font-medium
+
+          transition-all
+          "
+          >
+            Manage Sheets
+          </a>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   const groupedQuestions = questions.reduce((acc, question) => {
     if (!acc[question.module]) {
@@ -239,6 +275,9 @@ const DSATracker = () => {
 
     return acc;
   }, {});
+
+  const currentOrder =
+    MODULE_ORDERS[selectedSheet] || Object.keys(groupedQuestions);
 
   return (
     <DashboardLayout>
@@ -331,7 +370,8 @@ const DSATracker = () => {
           {skillAnalysis && <SkillAnalysisCard analysis={skillAnalysis} />}
         </div>
       </div>
-      {/* Topic Analysis
+      
+      {/* Topic Analysis */}
       <div className="mt-12">
         <SectionHeader
           title="Analytics"
@@ -347,7 +387,7 @@ const DSATracker = () => {
       </div>
 
       {/* Insight Cards */}
-      {/* <div className="mt-12">
+      <div className="mt-12">
         <SectionHeader
           title="Performance Insights"
           subtitle="Key takeaways from your preparation"
@@ -364,7 +404,7 @@ const DSATracker = () => {
             <InsightCard title="Readiness" value={progress.readiness} />
           </div>
         )}
-      </div> */}
+      </div>
 
       <div className="mt-12">
         <SectionHeader

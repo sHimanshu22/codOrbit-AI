@@ -3,40 +3,27 @@ import { useEffect, useState } from "react";
 import PageLoader from "../components/ui/PageLoader";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { getProfile, updateActiveSheets } from "../services/userService";
-
-const SHEETS = [
-  {
-    name: "Striver A2Z",
-    questions: 5,
-    description: "Complete DSA roadmap",
-  },
-  {
-    name: "Blind 75",
-    questions: 3,
-    description: "Top interview questions",
-  },
-  {
-    name: "NeetCode 150",
-    questions: 2,
-    description: "Placement focused preparation",
-  },
-  {
-    name: "Love Babbar 450",
-    questions: 2,
-    description: "Comprehensive DSA practice",
-  },
-];
+import { getSheets } from "../services/dsaService";
+import { MODULE_ORDERS } from "../constants/moduleOrders";
 
 const SheetManagement = () => {
   const [selectedSheets, setSelectedSheets] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [sheets, setSheets] = useState([]);
+
+  const [expandedSheet, setExpandedSheet] = useState(null);
+
   useEffect(() => {
     const loadUser = async () => {
       try {
         const data = await getProfile();
-
         setSelectedSheets(data.user.activeSheets || []);
+
+        const sheetsRes = await getSheets();
+
+        setSheets(sheetsRes.sheets);
+        console.log(sheetsRes.sheets);
       } catch (error) {
         console.error(error);
       } finally {
@@ -47,24 +34,23 @@ const SheetManagement = () => {
     loadUser();
   }, []);
 
-  const handleCheckbox = (sheet) => {
-    if (selectedSheets.includes(sheet)) {
-      setSelectedSheets(
-        selectedSheets.filter((s) => s !== sheet)
-      );
-    } else {
-      setSelectedSheets([
-        ...selectedSheets,
-        sheet,
-      ]);
-    }
+  const toggleRoadmap = (sheetName) => {
+    setExpandedSheet(expandedSheet === sheetName ? null : sheetName);
   };
 
-  const handleSave = async () => {
+  const handleSheetToggle = async (sheetName) => {
     try {
-      await updateActiveSheets(selectedSheets);
+      let updatedSheets;
 
-      alert("Sheets updated successfully");
+      if (selectedSheets.includes(sheetName)) {
+        updatedSheets = selectedSheets.filter((sheet) => sheet !== sheetName);
+      } else {
+        updatedSheets = [...selectedSheets, sheetName];
+      }
+
+      setSelectedSheets(updatedSheets);
+
+      await updateActiveSheets(updatedSheets);
     } catch (error) {
       console.error(error);
     }
@@ -94,10 +80,9 @@ const SheetManagement = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {SHEETS.map((sheet) => {
-          const active =
-            selectedSheets.includes(sheet.name);
+      <div className="space-y-5 gap-6">
+        {sheets.map((sheet) => {
+          const active = selectedSheets.includes(sheet.name);
 
           return (
             <div
@@ -151,26 +136,157 @@ const SheetManagement = () => {
                   }
                   `}
                 >
-                  {active
-                    ? "Active"
-                    : "Inactive"}
+                  {active ? "Active" : "Inactive"}
                 </span>
               </div>
 
               <div className="mt-6">
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Questions
-                </p>
+                <div className="flex gap-8">
+                  <div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      Questions
+                    </p>
 
-                <p className="text-3xl font-bold mt-1 text-slate-900 dark:text-white">
-                  {sheet.questions}
-                </p>
+                    <p
+                      className="
+        text-3xl
+        font-bold
+        mt-1
+
+        text-slate-900
+        dark:text-white
+        "
+                    >
+                      {sheet.questionCount}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      Modules
+                    </p>
+
+                    <p
+                      className="
+        text-3xl
+        font-bold
+        mt-1
+
+        text-slate-900
+        dark:text-white
+        "
+                    >
+                      {sheet.moduleCount}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <button
-                onClick={() =>
-                  handleCheckbox(sheet.name)
-                }
+                onClick={() => toggleRoadmap(sheet.name)}
+                className="
+  w-full
+
+  mt-6
+  py-3
+
+  rounded-xl
+
+  border
+  border-slate-200
+  dark:border-slate-700
+
+  bg-slate-50
+  dark:bg-slate-800
+
+  text-slate-700
+  dark:text-slate-300
+
+  font-medium
+
+  hover:bg-slate-100
+  dark:hover:bg-slate-700
+
+  transition-all
+  "
+              >
+                {expandedSheet === sheet.name ? "Hide Roadmap" : "View Roadmap"}
+              </button>
+
+              {expandedSheet === sheet.name && (
+                <div
+                  className="
+    mt-5
+
+    border-t
+    border-slate-200
+    dark:border-slate-800
+
+    pt-5
+    "
+                >
+                  <p
+                    className="
+      font-semibold
+      mb-4
+
+      text-slate-900
+      dark:text-white
+      "
+                  >
+                    Roadmap Modules
+                  </p>
+
+                  <div className="space-y-2">
+                    {(MODULE_ORDERS[sheet.name] || sheet.modules || []).map(
+                      (module, index) => (
+                        <div
+                          key={module}
+                          className="
+            flex
+            items-center
+            gap-3
+
+            text-sm
+
+            text-slate-600
+            dark:text-slate-300
+            "
+                        >
+                          <span
+                            className="
+              w-6
+              h-6
+
+              rounded-full
+
+              bg-blue-100
+              dark:bg-blue-900/30
+
+              text-blue-600
+              dark:text-blue-400
+
+              flex
+              items-center
+              justify-center
+
+              text-xs
+              font-medium
+              "
+                          >
+                            {index + 1}
+                          </span>
+
+                          <span>{module}</span>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={() => handleSheetToggle(sheet.name)}
                 className={`
                 w-full
                 mt-6
@@ -197,31 +313,11 @@ const SheetManagement = () => {
                 }
                 `}
               >
-                {active
-                  ? "Deactivate"
-                  : "Activate"}
+                {active ? "Deactivate" : "Activate"}
               </button>
             </div>
           );
         })}
-      </div>
-
-      <div className="mt-10">
-        <button
-          onClick={handleSave}
-          className="
-          bg-blue-600
-          hover:bg-blue-700
-          text-white
-          px-8
-          py-3
-          rounded-xl
-          font-medium
-          transition-all
-          "
-        >
-          Save Changes
-        </button>
       </div>
     </DashboardLayout>
   );

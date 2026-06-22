@@ -1,6 +1,4 @@
-const TopicAnalytics = ({
-  topicStats,
-}) => {
+const TopicAnalytics = ({ topicStats }) => {
   return (
     <div
       className="
@@ -25,55 +23,63 @@ const TopicAnalytics = ({
       </div>
 
       <div className="space-y-5">
-        {Object.entries(topicStats).map(
-          ([topic, stats]) => {
-            const percentage =
-              Math.round(
-                (stats.solved /
-                  stats.total) *
-                  100,
-              ) || 0;
+        {!topicStats || Object.keys(topicStats).length === 0 ? (
+          <div
+            className="
+    py-10
+    text-center
 
-            return (
-              <div key={topic}>
-                <div className="flex justify-between items-center mb-2">
-                  <div>
-                    <p
-                      className="
+    text-slate-500
+    dark:text-slate-400
+    "
+          >
+            No topic analytics available yet.
+          </div>
+        ) : (
+          <div className="space-y-5">
+            {Object.entries(topicStats).map(([topic, stats]) => {
+              const percentage =
+                Math.round((stats.solved / stats.total) * 100) || 0;
+
+              return (
+                <div key={topic}>
+                  <div className="flex justify-between items-center mb-2">
+                    <div>
+                      <p
+                        className="
                       font-medium
                       text-slate-900
                       dark:text-white
                       "
-                    >
-                      {topic}
-                    </p>
+                      >
+                        {topic}
+                      </p>
 
-                    <p
-                      className="
+                      <p
+                        className="
                       text-xs
                       text-slate-500
                       dark:text-slate-400
                       "
-                    >
-                      {stats.solved}/
-                      {stats.total} Solved
-                    </p>
-                  </div>
+                      >
+                        {stats.solved}/{stats.total} Solved
+                      </p>
+                    </div>
 
-                  <span
-                    className="
+                    <span
+                      className="
                     text-sm
                     font-semibold
                     text-blue-600
                     dark:text-blue-400
                     "
-                  >
-                    {percentage}%
-                  </span>
-                </div>
+                    >
+                      {percentage}%
+                    </span>
+                  </div>
 
-                <div
-                  className="
+                  <div
+                    className="
                   w-full
                   h-3
                   bg-slate-200
@@ -81,23 +87,24 @@ const TopicAnalytics = ({
                   rounded-full
                   overflow-hidden
                   "
-                >
-                  <div
-                    className="
+                  >
+                    <div
+                      className="
                     h-full
                     bg-blue-600
                     rounded-full
                     transition-all
                     duration-500
                     "
-                    style={{
-                      width: `${percentage}%`,
-                    }}
-                  />
+                      style={{
+                        width: `${percentage}%`,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          },
+              );
+            })}
+          </div>
         )}
       </div>
     </div>

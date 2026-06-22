@@ -727,6 +727,57 @@ const getSkillAnalysis = async (req, res) => {
     });
   }
 };
+const getAvailableSheets = async (req, res) => {
+  try {
+    const sheets = await DSAQuestion.aggregate([
+      {
+        $group: {
+          _id: "$sheetName",
+
+          questionCount: {
+            $sum: 1,
+          },
+
+          modules: {
+            $addToSet: "$module",
+          },
+        },
+      },
+
+      {
+        $project: {
+          _id: 0,
+
+          name: "$_id",
+
+          questionCount: 1,
+
+          moduleCount: {
+            $size: "$modules",
+          },
+
+          modules: 1,
+        },
+      },
+
+      {
+        $sort: {
+          name: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      sheets,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   getQuestions,
@@ -739,4 +790,5 @@ module.exports = {
   toggleBookmark,
   getBookmarkedQuestions,
   updateNotes,
+  getAvailableSheets,
 };

@@ -31,31 +31,37 @@ const Sidebar = () => {
       path: "/dashboard",
       icon: LayoutDashboard,
     },
-    {
-      name: "Analytics",
-      path: "/analytics",
-      icon: BarChart3,
-    },
+
     {
       name: "DSA Tracker",
       path: "/dsa-tracker",
       icon: Code2,
     },
-    {
-      name: "Contests",
-      path: "/contests",
-      icon: Trophy,
-    },
+
     {
       name: "DSA Overview",
       path: "/dsa-overview",
       icon: BookOpen,
     },
+
     {
       name: "DSA Sheets",
       path: "/sheet-management",
       icon: Layers3,
     },
+
+    {
+      name: "Contests",
+      path: "/contests",
+      icon: Trophy,
+    },
+
+    {
+      name: "Analytics",
+      path: "/analytics",
+      icon: BarChart3,
+    },
+
     {
       name: "Profile",
       path: "/profile",
