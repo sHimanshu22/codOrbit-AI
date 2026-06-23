@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
-
+import lightLogo from "../assets/logo-light.png";
+import darkLogo from "../assets/logo-dark.png";
 const Register = () => {
   const navigate = useNavigate();
 
@@ -67,29 +68,78 @@ const Register = () => {
         "
       >
         <div className="mb-8 text-center">
-          <h1
-            className="
-            text-3xl
-            font-bold
+  <div className="flex justify-center mb-5">
+    <div
+      className="
+      w-24
+      h-24
 
-            text-slate-900
-            dark:text-white
-            "
-          >
-            CodOrbit AI
-          </h1>
+      rounded-3xl
 
-          <p
-            className="
-            text-slate-500
-            dark:text-slate-400
+      bg-slate-50
+      dark:bg-slate-800
 
-            mt-2
-            "
-          >
-            Start your developer growth journey
-          </p>
-        </div>
+      border
+      border-slate-200
+      dark:border-slate-700
+
+      flex
+      items-center
+      justify-center
+
+      shadow-sm
+      "
+    >
+      {/* Light Logo */}
+      <img
+        src={lightLogo}
+        alt="CodOrbit"
+        className="
+        w-16
+        h-16
+
+        dark:hidden
+        "
+      />
+
+      {/* Dark Logo */}
+      <img
+        src={darkLogo}
+        alt="CodOrbit"
+        className="
+        hidden
+        dark:block
+
+        w-16
+        h-16
+        "
+      />
+    </div>
+  </div>
+
+  <h1
+    className="
+    text-3xl
+    font-bold
+
+    text-slate-900
+    dark:text-white
+    "
+  >
+    CodOrbit
+  </h1>
+
+  <p
+    className="
+    text-slate-500
+    dark:text-slate-400
+
+    mt-2
+    "
+  >
+    Start your developer growth journey
+  </p>
+</div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
@@ -280,7 +330,6 @@ const Register = () => {
             "
           >
             Already have an account?
-
             <Link
               to="/login"
               className="

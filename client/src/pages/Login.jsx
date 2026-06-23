@@ -6,6 +6,9 @@ import api from "../services/api";
 
 import { AuthContext } from "../context/AuthContext";
 
+import lightLogo from "../assets/logo-light.png";
+import darkLogo from "../assets/logo-dark.png";
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -78,31 +81,81 @@ const Login = () => {
       >
         {/* Header */}
 
+        {/* Header */}
+
         <div className="mb-8 text-center">
+          <div className="flex justify-center mb-5">
+            <div
+              className="
+      w-24
+      h-24
+
+      rounded-3xl
+
+      bg-slate-50
+      dark:bg-slate-800
+
+      border
+      border-slate-200
+      dark:border-slate-700
+
+      shadow-sm
+
+      flex
+      items-center
+      justify-center
+      "
+            >
+              {/* Light Logo */}
+              <img
+                src={lightLogo}
+                alt="CodOrbit"
+                className="
+        w-20
+        h-20
+
+        dark:hidden
+        "
+              />
+
+              {/* Dark Logo */}
+              <img
+                src={darkLogo}
+                alt="CodOrbit"
+                className="
+        hidden
+        dark:block
+
+        w-20
+        h-20
+        "
+              />
+            </div>
+          </div>
+
           <h1
             className="
-            text-3xl
-            font-bold
+    text-3xl
+    font-bold
 
-            text-slate-900
-            dark:text-white
-            "
+    text-slate-900
+    dark:text-white
+    "
           >
             CodOrbit AI
           </h1>
 
           <p
             className="
-            text-slate-500
-            dark:text-slate-400
+    mt-2
 
-            mt-2
-            "
+    text-slate-500
+    dark:text-slate-400
+    "
           >
             AI-Powered Developer Growth Platform
           </p>
         </div>
-
         {/* Form */}
 
         <form onSubmit={handleSubmit} className="space-y-5">
