@@ -14,6 +14,8 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Landing from "./pages/Landing";
 import PublicProfile from "./pages/PublicProfile";
 
+import ForgotPassword from "./pages/ForgotPassword";
+
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +23,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route
           path="/dashboard"

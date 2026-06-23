@@ -1,5 +1,8 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const {
+  sendResetOtpEmail,
+} = require("../services/emailService");
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
@@ -26,8 +29,7 @@ const registerUser = async (req, res) => {
       name
         .split(" ")[0]
         .toLowerCase()
-        .replace(/[^a-z0-9]/g, "") +
-      Math.floor(100 + Math.random() * 900);
+        .replace(/[^a-z0-9]/g, "") + Math.floor(100 + Math.random() * 900);
 
     const user = await User.create({
       name,
@@ -102,8 +104,133 @@ const getMe = async (req, res) => {
   });
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.resetOtp = otp;
+
+    user.resetOtpExpires = Date.now() + 10 * 60 * 1000;
+
+    await user.save();
+
+    await sendResetOtpEmail(email, otp);
+
+    res.status(200).json({
+      success: true,
+      message: "OTP sent successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const verifyResetOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (user.resetOtp !== otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    if (user.resetOtpExpires < Date.now()) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP expired",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "OTP verified",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, otp, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (user.resetOtp !== otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    if (user.resetOtpExpires < Date.now()) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP expired",
+      });
+    }
+
+    user.password = password;
+
+    user.resetOtp = undefined;
+
+    user.resetOtpExpires = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+
+  forgotPassword,
+  verifyResetOtp,
+  resetPassword,
 };

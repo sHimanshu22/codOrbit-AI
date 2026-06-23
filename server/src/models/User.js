@@ -97,6 +97,10 @@ const userSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 20,
     },
+
+    resetOtp: String,
+
+    resetOtpExpires: Date,
   },
   {
     timestamps: true,
