@@ -20,24 +20,18 @@ const getAnalytics = async (req, res) => {
     const githubScore = Math.min(
       (profile.github?.publicRepos || 0) * 3 +
         (profile.github?.totalStars || 0) * 2,
-      100
+      100,
     );
 
-    const dsaScore = Math.min(
-      (profile.leetcode?.totalSolved || 0) / 2,
-      100
-    );
+    const dsaScore = Math.min((profile.leetcode?.totalSolved || 0) / 2, 100);
 
     const competitiveScore = Math.min(
       (profile.codeforces?.currentRating || 0) / 20,
-      100
+      100,
     );
 
     const overallScore = Math.round(
-      (githubScore +
-        dsaScore +
-        competitiveScore) /
-        3
+      (githubScore + dsaScore + competitiveScore) / 3,
     );
 
     // =========================
@@ -53,36 +47,39 @@ const getAnalytics = async (req, res) => {
       },
 
       github: {
-        languages:
-          profile.github?.languagesUsed || [],
+        languages: profile.github?.languagesUsed || [],
 
-        totalRepos:
-          profile.github?.publicRepos || 0,
+        totalRepos: profile.github?.publicRepos || 0,
 
-        totalStars:
-          profile.github?.totalStars || 0,
+        totalStars: profile.github?.totalStars || 0,
       },
 
       leetcode: {
-        easy:
-          profile.leetcode?.easySolved || 0,
+        easy: profile.leetcode?.easySolved || 0,
 
-        medium:
-          profile.leetcode?.mediumSolved || 0,
+        medium: profile.leetcode?.mediumSolved || 0,
 
-        hard:
-          profile.leetcode?.hardSolved || 0,
+        hard: profile.leetcode?.hardSolved || 0,
 
-        total:
-          profile.leetcode?.totalSolved || 0,
+        total: profile.leetcode?.totalSolved || 0,
       },
 
       codeforces: {
-        rating:
-          profile.codeforces?.currentRating || 0,
+        rating: profile.codeforces?.currentRating || 0,
 
-        contests:
-          profile.codeforces?.contestCount || 0,
+        contests: profile.codeforces?.contestCount || 0,
+      },
+
+      codechef: {
+        currentRating: profile.codechef?.currentRating || 0,
+
+        highestRating: profile.codechef?.highestRating || 0,
+
+        stars: profile.codechef?.stars || "",
+
+        globalRank: profile.codechef?.globalRank || 0,
+
+        countryRank: profile.codechef?.countryRank || 0,
       },
     };
 

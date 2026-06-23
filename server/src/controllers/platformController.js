@@ -8,6 +8,8 @@ const { syncUserActivity } = require("../services/activityService");
 
 const { syncGitHubActivity } = require("../services/githubActivityService");
 
+const { syncCodeChefData } = require("./codechefController");
+
 const syncAllPlatforms = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -30,6 +32,12 @@ const syncAllPlatforms = async (req, res) => {
       results.codeforces = await syncCodeforcesData(userId);
     } catch (err) {
       results.codeforces = err.message;
+    }
+
+    try {
+      results.codechef = await syncCodeChefData(userId);
+    } catch (err) {
+      results.codechef = err.message;
     }
 
     try {

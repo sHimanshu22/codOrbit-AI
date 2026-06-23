@@ -5,6 +5,7 @@ import codeforcesLogo from "../assets/platforms/codeforces.svg";
 import gfgLogo from "../assets/platforms/gfg.svg";
 import hackerrankLogo from "../assets/platforms/hackerrank.svg";
 import codechefLogo from "../assets/platforms/codechef.svg";
+import { Share2, Copy, Check } from "lucide-react";
 
 import { User, GraduationCap, Trophy, BookOpen, AtSign } from "lucide-react";
 
@@ -54,6 +55,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   const [uploading, setUploading] = useState(false);
+
+  const [copied, setCopied] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -127,6 +130,32 @@ const Profile = () => {
       console.error(error);
 
       alert(error?.response?.data?.message || "Update Failed");
+    }
+  };
+
+  const handleShareProfile = async () => {
+    const profileUrl = `${window.location.origin}/u/${formData.username}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: `${formData.name}'s CodOrbit Profile`,
+          text: "Check out my developer profile",
+          url: profileUrl,
+        });
+
+        return;
+      }
+
+      await navigator.clipboard.writeText(profileUrl);
+
+      setCopied(true);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -206,18 +235,82 @@ const Profile = () => {
       <div className="max-w-7xl">
         {/* Header */}
 
-        <div className="mb-10">
-          <p className="text-slate-500 dark:text-slate-400 text-sm">
-            Account Management
-          </p>
+        <div
+          className="
+  mb-10
 
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-            Profile
-          </h1>
+  flex
+  flex-col
+  md:flex-row
 
-          <p className="text-slate-500 dark:text-slate-400 mt-2">
-            Manage your profile and coding platforms
-          </p>
+  md:items-start
+  md:justify-between
+
+  gap-4
+  "
+        >
+          <div>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
+              Account Management
+            </p>
+
+            <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+              Profile
+            </h1>
+
+            <p className="text-slate-500 dark:text-slate-400 mt-2">
+              Manage your profile and coding platforms
+            </p>
+          </div>
+
+          {formData.username && (
+            <button
+              type="button"
+              onClick={handleShareProfile}
+              className={`
+    inline-flex
+    items-center
+    gap-2
+
+    px-5
+    py-3
+
+    rounded-xl
+
+    font-medium
+
+    shadow-sm
+
+    transition-all
+
+    ${
+      copied
+        ? `
+        bg-green-600
+        hover:bg-green-700
+        text-white
+        `
+        : `
+        bg-blue-600
+        hover:bg-blue-700
+        text-white
+        `
+    }
+  `}
+            >
+              {copied ? (
+                <>
+                  <Check size={18} />
+                  Copied
+                </>
+              ) : (
+                <>
+                  <Share2 size={18} />
+                  Share Profile
+                </>
+              )}
+            </button>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">

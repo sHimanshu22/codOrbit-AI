@@ -10,11 +10,10 @@ import GitHubLanguageChart from "../components/GitHubLanguageChart";
 
 import LeetCodeDifficultyChart from "../components/LeetCodeDifficultyChart";
 
-import PlatformComparisonChart from "../components/PlatformComparisonChart";
-
 import ScoreCard from "../components/ScoreCard";
 
 import SectionHeader from "../components/ui/SectionHeader";
+import PlatformCard from "../components/PlatformCard ";
 
 const Analytics = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -26,14 +25,9 @@ const Analytics = () => {
       try {
         const data = await getAnalytics();
 
-        console.log(
-          "FULL API RESPONSE:",
-          data,
-        );
+        console.log("FULL API RESPONSE:", data);
 
-        setAnalytics(
-          data.analytics,
-        );
+        setAnalytics(data.analytics);
       } catch (error) {
         console.error(error);
       } finally {
@@ -104,37 +98,52 @@ const Analytics = () => {
     );
   }
 
-  const leetcodeData = [
-    {
-      name: "Easy",
-      value: analytics.leetcode.easy,
-    },
-    {
-      name: "Medium",
-      value: analytics.leetcode.medium,
-    },
-    {
-      name: "Hard",
-      value: analytics.leetcode.hard,
-    },
-  ];
+  const leetcodeData = analytics.leetcode
+    ? [
+        {
+          name: "Easy",
+          value: analytics.leetcode.easy,
+        },
+        {
+          name: "Medium",
+          value: analytics.leetcode.medium,
+        },
+        {
+          name: "Hard",
+          value: analytics.leetcode.hard,
+        },
+      ]
+    : [];
 
-  const comparisonData = [
-    {
-      platform: "GitHub Repos",
+  const comparisonData = [];
+
+  if (analytics.github) {
+    comparisonData.push({
+      platform: "GitHub",
       value: analytics.github.totalRepos,
-    },
+    });
+  }
 
-    {
+  if (analytics.leetcode) {
+    comparisonData.push({
       platform: "LeetCode",
       value: analytics.leetcode.total,
-    },
+    });
+  }
 
-    {
+  if (analytics.codeforces) {
+    comparisonData.push({
       platform: "Codeforces",
       value: analytics.codeforces.rating,
-    },
-  ];
+    });
+  }
+
+  if (analytics.codechef) {
+    comparisonData.push({
+      platform: "CodeChef",
+      value: analytics.codechef.currentRating,
+    });
+  }
 
   return (
     <DashboardLayout>
@@ -187,10 +196,7 @@ const Analytics = () => {
             score={analytics.scores.githubScore}
           />
 
-          <ScoreCard
-            title="DSA Score"
-            score={analytics.scores.dsaScore}
-          />
+          <ScoreCard title="DSA Score" score={analytics.scores.dsaScore} />
 
           <ScoreCard
             title="CP Score"
@@ -208,47 +214,67 @@ const Analytics = () => {
 
       <div className="mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          <div>
-            <SectionHeader
-              title="GitHub Analysis"
-              subtitle="Technology distribution across repositories"
-            />
-
-            <div className="mt-6">
-              <GitHubLanguageChart
-                data={analytics.github.languages}
+          {analytics.github && (
+            <div>
+              <SectionHeader
+                title="GitHub Analysis"
+                subtitle="Technology distribution across repositories"
               />
+
+              <div className="mt-6">
+                <GitHubLanguageChart data={analytics.github.languages} />
+              </div>
             </div>
-          </div>
+          )}
 
-          <div>
-            <SectionHeader
-              title="DSA Analysis"
-              subtitle="Difficulty-wise problem solving"
-            />
-
-            <div className="mt-6">
-              <LeetCodeDifficultyChart
-                data={leetcodeData}
+          {analytics.leetcode && (
+            <div>
+              <SectionHeader
+                title="DSA Analysis"
+                subtitle="Difficulty-wise problem solving"
               />
-            </div>
-          </div>
 
+              <div className="mt-6">
+                <LeetCodeDifficultyChart data={leetcodeData} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Platform Comparison */}
-
       <div className="mt-12">
         <SectionHeader
-          title="Platform Comparison"
-          subtitle="Compare activity across platforms"
+          title="Connected Platforms"
+          subtitle="Your synced coding profiles"
         />
 
-        <div className="mt-6">
-          <PlatformComparisonChart
-            data={comparisonData}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+          <PlatformCard
+            title="GitHub"
+            connected={analytics.github?.totalRepos > 0}
+            value={analytics.github?.totalRepos}
+            subtitle="Repositories"
+          />
+
+          <PlatformCard
+            title="LeetCode"
+            connected={analytics.leetcode?.total > 0}
+            value={analytics.leetcode?.total}
+            subtitle="Problems Solved"
+          />
+
+          <PlatformCard
+            title="Codeforces"
+            connected={analytics.codeforces?.rating > 0}
+            value={analytics.codeforces?.rating}
+            subtitle="Current Rating"
+          />
+
+          <PlatformCard
+            title="CodeChef"
+            connected={analytics.codechef?.currentRating > 0}
+            value={analytics.codechef?.currentRating}
+            subtitle={analytics.codechef?.stars}
           />
         </div>
       </div>
