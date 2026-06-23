@@ -88,19 +88,49 @@ const Sidebar = () => {
       {/* Logo */}
 
       <div className="mb-10">
-        <div className="flex items-center gap-3">
+        <Link
+          to="/"
+          className="
+    flex
+    items-center
+    gap-3
+
+    group
+    "
+        >
           {/* Light Mode Logo */}
           <img
             src={lightLogo}
             alt="CodOrbit"
-            className="w-12 h-12 dark:hidden"
+            className="
+      w-12
+      h-12
+
+      dark:hidden
+
+      transition-transform
+      duration-200
+
+      group-hover:scale-105
+      "
           />
 
           {/* Dark Mode Logo */}
           <img
             src={darkLogo}
             alt="CodOrbit"
-            className="hidden dark:block w-12 h-12"
+            className="
+      hidden
+      dark:block
+
+      w-12
+      h-12
+
+      transition-transform
+      duration-200
+
+      group-hover:scale-105
+      "
           />
 
           <div>
@@ -130,7 +160,7 @@ const Sidebar = () => {
               Developer Growth Platform
             </p>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Navigation */}

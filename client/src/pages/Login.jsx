@@ -105,10 +105,7 @@ const Login = () => {
 
         {/* Form */}
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5"
-        >
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
               className="
@@ -237,7 +234,6 @@ const Login = () => {
             "
           >
             Don't have an account?
-
             <Link
               to="/register"
               className="
