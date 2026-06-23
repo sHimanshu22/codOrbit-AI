@@ -10,6 +10,7 @@ const ModuleAccordion = ({
   onToggle,
   onBookmark,
   onNotes,
+  onOpenVideo,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -177,6 +178,7 @@ const ModuleAccordion = ({
               onToggle={onToggle}
               onBookmark={onBookmark}
               onNotes={onNotes}
+              onOpenVideo={onOpenVideo}
             />
           ))}
         </div>

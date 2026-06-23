@@ -10,6 +10,7 @@ const SectionAccordion = ({
   onToggle,
   onBookmark,
   onNotes,
+  onOpenVideo,
 }) => {
   const [open, setOpen] = useState(true);
 
@@ -85,6 +86,7 @@ const SectionAccordion = ({
               onToggle={onToggle}
               onBookmark={onBookmark}
               onNotes={onNotes}
+              onOpenVideo={onOpenVideo}
             />
           ))}
         </div>

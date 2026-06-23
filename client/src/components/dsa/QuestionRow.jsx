@@ -9,7 +9,13 @@ import {
 import leetcodeLogo from "../../assets/platforms/leetcode.svg";
 import youtubeLogo from "../../assets/platforms/youtube.svg";
 
-const QuestionRow = ({ question, onToggle, onBookmark, onNotes }) => {
+const QuestionRow = ({
+  question,
+  onToggle,
+  onBookmark,
+  onNotes,
+  onOpenVideo,
+}) => {
   const difficultyStyles = {
     Easy: "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400",
 
@@ -168,42 +174,40 @@ const QuestionRow = ({ question, onToggle, onBookmark, onNotes }) => {
 
       <div
         className="
-        w-16
-        hidden
-        md:flex
-        justify-center
-        "
+  w-16
+  hidden
+  md:flex
+  justify-center
+  "
       >
         {question.solutionUrl ? (
-          <a
-            href={question.solutionUrl}
-            target="_blank"
-            rel="noreferrer"
+          <button
+            onClick={() => onOpenVideo(question.solutionUrl)}
             className="
-            p-2
+      p-2
 
-            rounded-xl
+      rounded-xl
 
-            bg-slate-100
-            dark:bg-slate-800
+      bg-slate-100
+      dark:bg-slate-800
 
-            hover:scale-105
-            hover:bg-slate-200
-            dark:hover:bg-slate-700
+      hover:scale-105
+      hover:bg-slate-200
+      dark:hover:bg-slate-700
 
-            transition
-            "
+      transition
+      "
           >
             <img
               src={youtubeLogo}
               alt="Solution"
               className="
-              w-5
-              h-5
-              object-contain
-              "
+        w-5
+        h-5
+        object-contain
+        "
             />
-          </a>
+          </button>
         ) : (
           <span className="text-slate-400">-</span>
         )}

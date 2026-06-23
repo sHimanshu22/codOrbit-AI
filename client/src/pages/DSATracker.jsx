@@ -67,6 +67,8 @@ const DSATracker = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [showNotesModal, setShowNotesModal] = useState(false);
 
+  const [videoUrl, setVideoUrl] = useState(null);
+
   const fetchData = async () => {
     try {
       const questionsData = await getQuestions(selectedSheet);
@@ -370,7 +372,7 @@ const DSATracker = () => {
           {skillAnalysis && <SkillAnalysisCard analysis={skillAnalysis} />}
         </div>
       </div>
-      
+
       {/* Topic Analysis */}
       <div className="mt-12">
         <SectionHeader
@@ -436,10 +438,76 @@ const DSATracker = () => {
                 onToggle={handleToggle}
                 onBookmark={handleBookmark}
                 onNotes={handleNotes}
+                onOpenVideo={setVideoUrl}
               />
             ))}
         </div>
       </div>
+
+      {videoUrl && (
+        <div
+          className="
+    fixed
+    inset-0
+    z-[100]
+
+    bg-black/80
+
+    flex
+    items-center
+    justify-center
+
+    p-4
+    "
+          onClick={() => setVideoUrl(null)}
+        >
+          <div
+            className="
+      w-full
+      max-w-5xl
+
+      bg-white
+      dark:bg-slate-900
+
+      rounded-2xl
+
+      p-4
+      "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <iframe
+              src={videoUrl.replace("watch?v=", "embed/").split("&")[0]}
+              title="Solution Video"
+              className="
+        w-full
+        aspect-video
+
+        rounded-xl
+        "
+              allowFullScreen
+            />
+
+            <button
+              onClick={() => setVideoUrl(null)}
+              className="
+        mt-4
+
+        px-4
+        py-2
+
+        bg-red-500
+        hover:bg-red-600
+
+        text-white
+
+        rounded-xl
+        "
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       <NotesModal
         isOpen={showNotesModal}
