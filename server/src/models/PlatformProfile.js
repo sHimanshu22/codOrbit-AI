@@ -90,6 +90,30 @@ const platformProfileSchema = new mongoose.Schema(
       syncedAt: Date,
     },
 
+    codechef: {
+      username: String,
+
+      currentRating: Number,
+
+      highestRating: Number,
+
+      stars: String,
+
+      globalRank: Number,
+
+      countryRank: Number,
+
+      syncStatus: {
+        type: String,
+        enum: ["success", "failed", "pending"],
+        default: "pending",
+      },
+
+      lastError: String,
+
+      syncedAt: Date,
+    },
+
     gfg: {},
 
     hackerrank: {},

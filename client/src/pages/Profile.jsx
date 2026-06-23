@@ -4,6 +4,7 @@ import leetcodeLogo from "../assets/platforms/leetcode.svg";
 import codeforcesLogo from "../assets/platforms/codeforces.svg";
 import gfgLogo from "../assets/platforms/gfg.svg";
 import hackerrankLogo from "../assets/platforms/hackerrank.svg";
+import codechefLogo from "../assets/platforms/codechef.svg";
 
 import { User, GraduationCap, Trophy, BookOpen, AtSign } from "lucide-react";
 
@@ -46,6 +47,7 @@ const Profile = () => {
     codeforcesUsername: "",
     gfgUsername: "",
     hackerrankUsername: "",
+    codechefUsername: "",
     profileImage: "",
   });
 
@@ -551,6 +553,14 @@ const Profile = () => {
                 name="hackerrankUsername"
                 value={formData.hackerrankUsername}
                 placeholder="HackerRank Username"
+              />
+
+              <PlatformInputCard
+                logo={codechefLogo}
+                title="CodeChef"
+                name="codechefUsername"
+                value={formData.codechefUsername}
+                placeholder="CodeChef Username"
               />
             </div>
           </div>

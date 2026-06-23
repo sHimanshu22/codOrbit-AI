@@ -14,7 +14,7 @@ const dsaRoutes = require("./routes/dsaRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const aiRoutes = require("./routes/aiRoutes");
-
+const codechefRoutes = require("./routes/codechefRoutes");
 
 dotenv.config();
 const app = express();
@@ -26,7 +26,6 @@ app.get("/", (req, res) => {
   res.send("CodOrbit AI Backend Running");
 });
 
-app.use("/api/test", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/github", githubRoutes);
@@ -39,6 +38,8 @@ app.use("/api/dsa", dsaRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api/contests", contestRoutes);
 app.use("/api/ai", aiRoutes);
+
+app.use("/api/codechef", codechefRoutes);
 
 app.use(
   cors({

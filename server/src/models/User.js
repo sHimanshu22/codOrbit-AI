@@ -70,6 +70,11 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    codechefUsername: {
+      type: String,
+      default: "",
+    },
+
     role: {
       type: String,
       enum: ["student", "admin"],
