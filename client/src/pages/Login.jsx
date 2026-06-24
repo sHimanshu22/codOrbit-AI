@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { Loader2 } from "lucide-react";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { loadUser } = useContext(AuthContext);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -31,6 +32,8 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
+
       const res = await api.post("/auth/login", formData);
 
       localStorage.setItem("token", res.data.token);
@@ -40,9 +43,10 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       alert(error.response?.data?.message || "Login Failed");
+    } finally {
+      setLoading(false);
     }
   };
-
   return (
     <div
       className="
@@ -269,25 +273,41 @@ const Login = () => {
 
           <button
             type="submit"
+            disabled={loading}
             className="
-            w-full
+  w-full
 
-            bg-blue-600
-            hover:bg-blue-700
+  bg-blue-600
+  hover:bg-blue-700
 
-            text-white
+  disabled:bg-blue-400
+  disabled:cursor-not-allowed
 
-            py-3
+  text-white
 
-            rounded-xl
+  py-3
 
-            font-medium
+  rounded-xl
 
-            transition-all
-            duration-200
-            "
+  font-medium
+
+  transition-all
+  duration-200
+
+  flex
+  items-center
+  justify-center
+  gap-2
+  "
           >
-            Sign In
+            {loading ? (
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                Signing In...
+              </>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 

@@ -602,10 +602,87 @@ const Profile = () => {
             shadow-sm
             "
           >
-            <SectionHeader
-              title="Connected Platforms"
-              subtitle="Usernames used for syncing data"
-            />
+            <div>
+              <SectionHeader
+                title="Connected Platforms"
+                subtitle="Usernames used for syncing data"
+              />
+
+              <div
+                className="
+    mt-4
+
+    flex
+    items-start
+    gap-3
+
+    p-4
+
+    rounded-2xl
+
+    border
+    border-amber-200
+    dark:border-amber-900/40
+
+    bg-amber-50
+    dark:bg-amber-900/10
+    "
+              >
+                <div
+                  className="
+      shrink-0
+
+      w-6
+      h-6
+
+      rounded-full
+
+      bg-amber-100
+      dark:bg-amber-900/30
+
+      flex
+      items-center
+      justify-center
+
+      text-amber-600
+      dark:text-amber-400
+
+      text-sm
+      font-bold
+      "
+                >
+                  !
+                </div>
+
+                <div>
+                  <p
+                    className="
+        text-sm
+        font-medium
+
+        text-amber-800
+        dark:text-amber-300
+        "
+                  >
+                    Connected profiles are self-reported by users.
+                  </p>
+
+                  <p
+                    className="
+        mt-1
+
+        text-xs
+
+        text-amber-700
+        dark:text-amber-400
+        "
+                  >
+                    Ensure you enter your own usernames. Platform ownership
+                    verification will be available in a future update.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <div className="space-y-4 mt-6">
               <PlatformInputCard
@@ -632,7 +709,7 @@ const Profile = () => {
                 placeholder="Codeforces Username"
               />
 
-              <PlatformInputCard
+              {/* <PlatformInputCard
                 logo={gfgLogo}
                 title="GeeksforGeeks"
                 name="gfgUsername"
@@ -646,7 +723,7 @@ const Profile = () => {
                 name="hackerrankUsername"
                 value={formData.hackerrankUsername}
                 placeholder="HackerRank Username"
-              />
+              /> */}
 
               <PlatformInputCard
                 logo={codechefLogo}

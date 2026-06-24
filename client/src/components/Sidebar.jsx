@@ -13,14 +13,20 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import lightLogo from "../assets/logo-light.png";
 import darkLogo from "../assets/logo-dark.png";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Sidebar = () => {
   const location = useLocation();
 
   const navigate = useNavigate();
 
+  const { setUser } = useContext(AuthContext);
+
   const logout = () => {
     localStorage.removeItem("token");
+
+    setUser(null);
 
     navigate("/");
   };

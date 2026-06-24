@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
@@ -7,6 +7,7 @@ import lightLogo from "../assets/logo-light.png";
 import darkLogo from "../assets/logo-dark.png";
 const Register = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -25,6 +26,8 @@ const Register = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
+
       const res = await api.post("/auth/register", formData);
 
       localStorage.setItem("token", res.data.token);
@@ -32,6 +35,8 @@ const Register = () => {
       navigate("/login");
     } catch (error) {
       alert(error.response?.data?.message || "Registration Failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,9 +73,9 @@ const Register = () => {
         "
       >
         <div className="mb-8 text-center">
-  <div className="flex justify-center mb-5">
-    <div
-      className="
+          <div className="flex justify-center mb-5">
+            <div
+              className="
       w-24
       h-24
 
@@ -89,57 +94,57 @@ const Register = () => {
 
       shadow-sm
       "
-    >
-      {/* Light Logo */}
-      <img
-        src={lightLogo}
-        alt="CodOrbit"
-        className="
+            >
+              {/* Light Logo */}
+              <img
+                src={lightLogo}
+                alt="CodOrbit"
+                className="
         w-16
         h-16
 
         dark:hidden
         "
-      />
+              />
 
-      {/* Dark Logo */}
-      <img
-        src={darkLogo}
-        alt="CodOrbit"
-        className="
+              {/* Dark Logo */}
+              <img
+                src={darkLogo}
+                alt="CodOrbit"
+                className="
         hidden
         dark:block
 
         w-16
         h-16
         "
-      />
-    </div>
-  </div>
+              />
+            </div>
+          </div>
 
-  <h1
-    className="
+          <h1
+            className="
     text-3xl
     font-bold
 
     text-slate-900
     dark:text-white
     "
-  >
-    CodOrbit
-  </h1>
+          >
+            CodOrbit
+          </h1>
 
-  <p
-    className="
+          <p
+            className="
     text-slate-500
     dark:text-slate-400
 
     mt-2
     "
-  >
-    Start your developer growth journey
-  </p>
-</div>
+          >
+            Start your developer growth journey
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
@@ -300,25 +305,41 @@ const Register = () => {
 
           <button
             type="submit"
+            disabled={loading}
             className="
-            w-full
+  w-full
 
-            bg-blue-600
-            hover:bg-blue-700
+  bg-blue-600
+  hover:bg-blue-700
 
-            text-white
+  disabled:bg-blue-400
+  disabled:cursor-not-allowed
 
-            py-3
+  text-white
 
-            rounded-xl
+  py-3
 
-            font-medium
+  rounded-xl
 
-            transition-all
-            duration-200
-            "
+  font-medium
+
+  transition-all
+  duration-200
+
+  flex
+  items-center
+  justify-center
+  gap-2
+  "
           >
-            Create Account
+            {loading ? (
+              <>
+                <Loader2 size={18} className="animate-spin" />
+                Creating Account...
+              </>
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
 
