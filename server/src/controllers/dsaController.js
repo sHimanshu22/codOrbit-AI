@@ -469,11 +469,15 @@ const getActiveSheetsOverview = async (req, res) => {
 
     let totalQuestions = 0;
     let totalSolved = 0;
-
     for (const sheetName of user.activeSheets) {
       const questions = await DSAQuestion.find({
         sheetName,
       });
+
+      // Skip sheets not seeded yet
+      if (questions.length === 0) {
+        continue;
+      }
 
       const sheetTotal = questions.length;
 
@@ -486,16 +490,12 @@ const getActiveSheetsOverview = async (req, res) => {
 
       sheetStats.push({
         sheet: sheetName,
-
         total: sheetTotal,
-
         solved: sheetSolved,
-
         percentage,
       });
 
       totalQuestions += sheetTotal;
-
       totalSolved += sheetSolved;
     }
 
@@ -506,7 +506,7 @@ const getActiveSheetsOverview = async (req, res) => {
       success: true,
 
       overview: {
-        activeSheets: user.activeSheets,
+        activeSheets: sheetStats.map((sheet) => sheet.sheet),
 
         totalQuestions,
 
