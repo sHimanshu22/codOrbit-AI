@@ -36,10 +36,12 @@ const getAnalytics = async (req, res) => {
 
     const dsaScore = Math.min((profile.leetcode?.totalSolved || 0) / 2, 100);
 
-    const competitiveScore = Math.min(
-      (profile.codeforces?.currentRating || 0) / 20,
-      100,
+    const bestCPRating = Math.max(
+      profile.codeforces?.currentRating || 0,
+      profile.codechef?.currentRating || 0,
     );
+
+    const competitiveScore = Math.min(bestCPRating / 20, 100);
 
     const overallScore = Math.round(
       (githubScore + dsaScore + competitiveScore) / 3,

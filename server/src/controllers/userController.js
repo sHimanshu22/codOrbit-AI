@@ -58,7 +58,7 @@ const updateUserProfile = async (req, res) => {
 
     if (req.body.codechefUsername !== undefined)
       user.codechefUsername = req.body.codechefUsername;
-    
+
     const username = req.body.username?.trim()?.toLowerCase();
     if (username && username.length < 3) {
       return res.status(400).json({
@@ -163,6 +163,8 @@ const getUserProfileByUsername = async (req, res) => {
         leetcodeUsername: user.leetcodeUsername,
 
         codeforcesUsername: user.codeforcesUsername,
+
+        codechefUsername: user.codechefUsername,
 
         gfgUsername: user.gfgUsername,
 

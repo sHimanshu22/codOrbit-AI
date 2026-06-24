@@ -31,12 +31,16 @@ const getOverview = async (req, res) => {
           ? profile.codeforces.currentRating
           : 0,
 
+      codechefRating:
+        profile.codechef?.syncStatus === "success"
+          ? profile.codechef.currentRating
+          : 0,
+
       platformsConnected: [
         profile.github?.syncStatus === "success",
-
         profile.leetcode?.syncStatus === "success",
-
         profile.codeforces?.syncStatus === "success",
+        profile.codechef?.syncStatus === "success",
       ].filter(Boolean).length,
     };
 

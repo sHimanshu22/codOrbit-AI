@@ -10,6 +10,7 @@ import leetcodeLogo from "../assets/platforms/leetcode.svg";
 import codeforcesLogo from "../assets/platforms/codeforces.svg";
 import gfgLogo from "../assets/platforms/gfg.svg";
 import hackerrankLogo from "../assets/platforms/hackerrank.svg";
+import codechefLogo from "../assets/platforms/codechef.svg";
 
 import ProfileStatCard from "../components/public/ProfileStatCard";
 import PlatformCard from "../components/public/PlatformCard";
@@ -62,7 +63,7 @@ const PublicProfile = () => {
     }, 2000);
   };
 
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   if (loading) {
     return <PageLoader />;
@@ -144,6 +145,12 @@ const PublicProfile = () => {
       username: user.hackerrankUsername,
       logo: hackerrankLogo,
       url: `https://www.hackerrank.com/${user.hackerrankUsername}`,
+    },
+    {
+      name: "CodeChef",
+      username: user.codechefUsername,
+      logo: codechefLogo,
+      url: `https://www.codechef.com/users/${user.codechefUsername}`,
     },
   ].filter((platform) => platform.username);
 
@@ -421,6 +428,17 @@ const PublicProfile = () => {
             >
               Developer Platforms
             </h2>
+
+            <p
+              className="
+  mt-2
+  text-sm
+  text-slate-500
+  dark:text-slate-400
+  "
+            >
+              Connected profiles are self-reported by users.
+            </p>
 
             <div
               className="

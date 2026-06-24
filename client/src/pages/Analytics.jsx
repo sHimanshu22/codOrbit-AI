@@ -397,7 +397,7 @@ const Analytics = () => {
 
               <PlatformCard
                 title="CodeChef"
-                connected={analytics.codechef?.currentRating > 0}
+                connected={analytics?.connectedPlatforms?.codechef}
                 value={analytics.codechef?.currentRating}
                 subtitle={analytics.codechef?.stars}
               />

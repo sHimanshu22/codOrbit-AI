@@ -332,6 +332,13 @@ const Dashboard = () => {
               />
 
               <OverviewCard
+                title="CodeChef Rating"
+                value={overview?.codechefRating}
+                icon={<Trophy size={20} />}
+                description="Current Rating"
+              />
+
+              <OverviewCard
                 title="Connected"
                 value={overview?.platformsConnected}
                 icon={<Link2 size={20} />}
