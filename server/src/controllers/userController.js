@@ -2,6 +2,7 @@ const User = require("../models/User");
 const DSAProgress = require("../models/DSAProgress");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
+const DSAQuestion = require("../models/DSAQuestion");
 
 // GET PROFILE
 const getUserProfile = async (req, res) => {
@@ -146,7 +147,13 @@ const getUserProfileByUsername = async (req, res) => {
     });
 
     const solvedQuestions =
-      progress?.questions.filter((q) => q.solved).length || 0;
+      progress?.questions?.filter((q) => q.solved).length || 0;
+
+    const seededSheets = await DSAQuestion.distinct("sheetName");
+
+    const activeSheetCount = user.activeSheets.filter((sheet) =>
+      seededSheets.includes(sheet),
+    ).length;
 
     res.status(200).json({
       success: true,
@@ -154,8 +161,10 @@ const getUserProfileByUsername = async (req, res) => {
       user: {
         name: user.name,
         username: user.username,
+
         college: user.college,
         branch: user.branch,
+
         profileImage: user.profileImage,
 
         githubUsername: user.githubUsername,
@@ -175,8 +184,7 @@ const getUserProfileByUsername = async (req, res) => {
 
       stats: {
         solvedQuestions,
-
-        activeSheets: user.activeSheets.length,
+        activeSheets: activeSheetCount,
       },
     });
   } catch (error) {
