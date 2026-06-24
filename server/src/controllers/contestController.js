@@ -11,13 +11,15 @@ const getContestHistory = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
-    if (!user.codeforcesUsername) {
-      return res.status(404).json({
-        success: false,
-
-        message: "Codeforces username not found",
-      });
-    }
+    if (
+  !user.codeforcesUsername &&
+  !user.codechefUsername
+) {
+  return res.status(200).json({
+    success: true,
+    noContestPlatforms: true,
+  });
+}
 
     const contests = await fetchContestHistory(user.codeforcesUsername);
 

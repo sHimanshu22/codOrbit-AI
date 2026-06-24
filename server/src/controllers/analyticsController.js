@@ -7,12 +7,23 @@ const getAnalytics = async (req, res) => {
     });
 
     if (!profile) {
-      return res.status(404).json({
-        success: false,
-        message: "Analytics data not found",
+      return res.status(200).json({
+        success: true,
+        analytics: {
+          scores: {
+            githubScore: 0,
+            dsaScore: 0,
+            competitiveScore: 0,
+            overallScore: 0,
+          },
+
+          github: null,
+          leetcode: null,
+          codeforces: null,
+          codechef: null,
+        },
       });
     }
-
     // =========================
     // Score Calculations
     // =========================
@@ -80,6 +91,13 @@ const getAnalytics = async (req, res) => {
         globalRank: profile.codechef?.globalRank || 0,
 
         countryRank: profile.codechef?.countryRank || 0,
+      },
+
+      connectedPlatforms: {
+        github: profile.github?.syncStatus === "success",
+        leetcode: profile.leetcode?.syncStatus === "success",
+        codeforces: profile.codeforces?.syncStatus === "success",
+        codechef: profile.codechef?.syncStatus === "success",
       },
     };
 

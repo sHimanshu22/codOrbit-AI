@@ -41,6 +41,7 @@ app.use("/api/ai", aiRoutes);
 
 app.use("/api/codechef", codechefRoutes);
 
+
 app.use(
   cors({
     origin: "http://localhost:5173",
