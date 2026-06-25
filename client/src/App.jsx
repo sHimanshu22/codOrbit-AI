@@ -15,6 +15,7 @@ import Landing from "./pages/Landing";
 import PublicProfile from "./pages/PublicProfile";
 
 import ForgotPassword from "./pages/ForgotPassword";
+import ResumeAnalysis from "./pages/ResumeAnalysis";
 
 function App() {
   return (
@@ -88,6 +89,15 @@ function App() {
         />
 
         <Route path="/u/:username" element={<PublicProfile />} />
+
+        <Route
+          path="/resume-analysis"
+          element={
+            <ProtectedRoute>
+              <ResumeAnalysis />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

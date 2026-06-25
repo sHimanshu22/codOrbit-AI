@@ -15,6 +15,7 @@ const activityRoutes = require("./routes/activityRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const codechefRoutes = require("./routes/codechefRoutes");
+const resumeRoutes = require("./routes/resumeRoutes");
 
 dotenv.config();
 const app = express();
@@ -41,6 +42,7 @@ app.use("/api/ai", aiRoutes);
 
 app.use("/api/codechef", codechefRoutes);
 
+app.use("/api/resume", resumeRoutes);
 
 app.use(
   cors({

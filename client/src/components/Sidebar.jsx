@@ -7,6 +7,7 @@ import {
   Layers3,
   UserCircle,
   LogOut,
+  FileText,
 } from "lucide-react";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -72,6 +73,11 @@ const Sidebar = () => {
       name: "Profile",
       path: "/profile",
       icon: UserCircle,
+    },
+    {
+      name: "Resume Analysis",
+      path: "/resume-analysis",
+      icon: FileText,
     },
   ];
 
