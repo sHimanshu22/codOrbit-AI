@@ -136,7 +136,9 @@ const Profile = () => {
     } catch (error) {
       console.error(error);
 
-      toast.error(error?.response?.data?.message || "Update Failed", { id: toastId });
+      toast.error(error?.response?.data?.message || "Update Failed", {
+        id: toastId,
+      });
     }
   };
 
@@ -609,86 +611,39 @@ const Profile = () => {
             shadow-sm
             "
           >
-            <div>
+            <div className="flex items-start justify-between gap-4">
               <SectionHeader
                 title="Connected Platforms"
                 subtitle="Usernames used for syncing data"
               />
 
-              <div
+              <button
+                type="submit"
                 className="
-    mt-4
-
-    flex
-    items-start
-    gap-3
-
-    p-4
-
-    rounded-2xl
-
-    border
-    border-amber-200
-    dark:border-amber-900/40
-
-    bg-amber-50
-    dark:bg-amber-900/10
-    "
-              >
-                <div
-                  className="
       shrink-0
 
-      w-6
-      h-6
-
-      rounded-full
-
-      bg-amber-100
-      dark:bg-amber-900/30
-
-      flex
+      inline-flex
       items-center
-      justify-center
+      gap-2
 
-      text-amber-600
-      dark:text-amber-400
+      bg-blue-600
+      hover:bg-blue-700
 
-      text-sm
-      font-bold
-      "
-                >
-                  !
-                </div>
+      text-white
 
-                <div>
-                  <p
-                    className="
-        text-sm
-        font-medium
+      px-6
+      py-2.5
 
-        text-amber-800
-        dark:text-amber-300
-        "
-                  >
-                    Connected profiles are self-reported by users.
-                  </p>
+      rounded-xl
 
-                  <p
-                    className="
-        mt-1
+      font-medium
 
-        text-xs
-
-        text-amber-700
-        dark:text-amber-400
-        "
-                  >
-                    Ensure you enter your own usernames. Platform ownership
-                    verification will be available in a future update.
-                  </p>
-                </div>
-              </div>
+      transition-all
+      shadow-sm
+    "
+              >
+                Save Changes
+              </button>
             </div>
 
             <div className="space-y-4 mt-6">
@@ -740,44 +695,6 @@ const Profile = () => {
                 placeholder="CodeChef Username"
               />
             </div>
-          </div>
-
-          {/* Save Button */}
-
-          <div
-            className="
-  mt-10
-
-  flex
-  flex-wrap
-  gap-4
-  "
-          >
-            <button
-              type="submit"
-              className="
-    inline-flex
-    items-center
-    gap-2
-
-    bg-blue-600
-    hover:bg-blue-700
-
-    text-white
-
-    px-8
-    py-3
-
-    rounded-xl
-
-    font-medium
-
-    transition-all
-    shadow-sm
-    "
-            >
-              Save Changes
-            </button>
           </div>
         </form>
       </div>
