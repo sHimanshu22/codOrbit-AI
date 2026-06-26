@@ -14,9 +14,9 @@ import ResumeSuggestions from "../components/resume/ResumeSuggestions";
 import ResumeJDMatch from "../components/resume/ResumeJDMatch";
 import ResumePlacementReadiness from "../components/resume/ResumePlacementReadiness";
 import ResumeUploadSection from "../components/resume/ResumeUploadSection";
+import toast from "react-hot-toast";
 
 const ResumeAnalysis = () => {
-  
   const [resumeFile, setResumeFile] = useState(null);
 
   const [jdFile, setJdFile] = useState(null);
@@ -37,7 +37,8 @@ const ResumeAnalysis = () => {
 
   const handleAnalyze = async () => {
     if (!resumeFile) {
-      return alert("Please upload a resume");
+      toast.error("Please upload your resume.");
+      return;
     }
 
     try {
@@ -59,7 +60,7 @@ const ResumeAnalysis = () => {
 
       setAnalysis(data.analysis);
     } catch (error) {
-      alert(error.response?.data?.message || "Analysis failed");
+      toast.error(error.response?.data?.message || "Analysis failed.");
     } finally {
       setLoading(false);
     }

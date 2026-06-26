@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { Loader2 } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -31,6 +32,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Signing in...");
+
     try {
       setLoading(true);
 
@@ -40,9 +43,11 @@ const Login = () => {
 
       await loadUser();
 
+      toast.success("Login successful!", { id: toastId });
+
       navigate("/dashboard");
     } catch (error) {
-      alert(error.response?.data?.message || "Login Failed");
+      toast.error(error.response?.data?.message || "Login Failed", { id: toastId });
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import api from "../services/api";
 import lightLogo from "../assets/logo-light.png";
@@ -25,6 +26,8 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Creating your account...");
+
     try {
       setLoading(true);
 
@@ -32,9 +35,11 @@ const Register = () => {
 
       localStorage.setItem("token", res.data.token);
 
+      toast.success("Account created successfully!", { id: toastId });
+
       navigate("/login");
     } catch (error) {
-      alert(error.response?.data?.message || "Registration Failed");
+      toast.error(error.response?.data?.message || "Registration Failed", { id: toastId });
     } finally {
       setLoading(false);
     }

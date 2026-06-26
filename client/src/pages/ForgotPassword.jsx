@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -40,21 +41,27 @@ const ForgotPassword = () => {
 
   const handleSendOtp =
     async () => {
+      const toastId = toast.loading(
+        "Sending OTP..."
+      );
+
       try {
         setLoading(true);
 
         await forgotPassword(email);
 
-        alert(
-          "OTP sent successfully"
+        toast.success(
+          "OTP sent successfully",
+          { id: toastId }
         );
 
         setStep(2);
       } catch (error) {
-        alert(
+        toast.error(
           error.response?.data
             ?.message ||
-            "Failed to send OTP"
+            "Failed to send OTP",
+          { id: toastId }
         );
       } finally {
         setLoading(false);
@@ -63,6 +70,10 @@ const ForgotPassword = () => {
 
   const handleVerifyOtp =
     async () => {
+      const toastId = toast.loading(
+        "Verifying OTP..."
+      );
+
       try {
         setLoading(true);
 
@@ -71,12 +82,18 @@ const ForgotPassword = () => {
           otp
         );
 
+        toast.success(
+          "OTP verified successfully",
+          { id: toastId }
+        );
+
         setStep(3);
       } catch (error) {
-        alert(
+        toast.error(
           error.response?.data
             ?.message ||
-            "Invalid OTP"
+            "Invalid OTP",
+          { id: toastId }
         );
       } finally {
         setLoading(false);
@@ -89,10 +106,14 @@ const ForgotPassword = () => {
         password !==
         confirmPassword
       ) {
-        return alert(
+        return toast.error(
           "Passwords do not match"
         );
       }
+
+      const toastId = toast.loading(
+        "Resetting password..."
+      );
 
       try {
         setLoading(true);
@@ -103,16 +124,18 @@ const ForgotPassword = () => {
           password
         );
 
-        alert(
-          "Password reset successful"
+        toast.success(
+          "Password reset successful",
+          { id: toastId }
         );
 
         navigate("/login");
       } catch (error) {
-        alert(
+        toast.error(
           error.response?.data
             ?.message ||
-            "Reset failed"
+            "Reset failed",
+          { id: toastId }
         );
       } finally {
         setLoading(false);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import githubLogo from "../assets/platforms/github.svg";
 import leetcodeLogo from "../assets/platforms/leetcode.svg";
 import codeforcesLogo from "../assets/platforms/codeforces.svg";
@@ -100,6 +101,8 @@ const Profile = () => {
 
     if (!file) return;
 
+    const toastId = toast.loading("Uploading image...");
+
     try {
       setUploading(true);
 
@@ -110,10 +113,12 @@ const Profile = () => {
 
         profileImage: res.profileImage,
       }));
+
+      toast.success("Image uploaded successfully!", { id: toastId });
     } catch (error) {
       console.error(error);
 
-      alert("Image upload failed");
+      toast.error("Image upload failed", { id: toastId });
     } finally {
       setUploading(false);
     }
@@ -122,14 +127,16 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Updating profile...");
+
     try {
       await updateProfile(formData);
 
-      alert("Profile Updated Successfully");
+      toast.success("Profile Updated Successfully", { id: toastId });
     } catch (error) {
       console.error(error);
 
-      alert(error?.response?.data?.message || "Update Failed");
+      toast.error(error?.response?.data?.message || "Update Failed", { id: toastId });
     }
   };
 

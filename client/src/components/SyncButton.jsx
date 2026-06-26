@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { RefreshCw } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 import { syncAllPlatforms } from "../services/platformService";
 
@@ -12,7 +13,9 @@ const SyncButton = ({ onSuccess }) => {
 
       await syncAllPlatforms();
 
-      alert("Platforms Synced Successfully");
+      toast.success(
+        "Platforms Synced Successfully"
+      );
 
       if (onSuccess) {
         onSuccess();
@@ -20,7 +23,7 @@ const SyncButton = ({ onSuccess }) => {
     } catch (error) {
       console.error(error);
 
-      alert("Sync Failed");
+      toast.error("Sync Failed");
     } finally {
       setLoading(false);
     }
