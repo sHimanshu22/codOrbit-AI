@@ -374,28 +374,28 @@ const Analytics = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
               <PlatformCard
                 title="GitHub"
-                connected={analytics.github?.totalRepos > 0}
+                connected={analytics.connectedPlatforms?.github}
                 value={analytics.github?.totalRepos}
                 subtitle="Repositories"
               />
 
               <PlatformCard
                 title="LeetCode"
-                connected={analytics.leetcode?.total > 0}
+                connected={analytics.connectedPlatforms?.leetcode}
                 value={analytics.leetcode?.total}
                 subtitle="Problems Solved"
               />
 
               <PlatformCard
                 title="Codeforces"
-                connected={analytics.codeforces?.rating > 0}
+                connected={analytics.connectedPlatforms?.codeforces}
                 value={analytics.codeforces?.rating}
                 subtitle="Current Rating"
               />
 
               <PlatformCard
                 title="CodeChef"
-                connected={analytics?.connectedPlatforms?.codechef}
+                connected={analytics.connectedPlatforms?.codechef}
                 value={analytics.codechef?.currentRating}
                 subtitle={analytics.codechef?.stars}
               />
