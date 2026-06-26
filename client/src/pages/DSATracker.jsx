@@ -6,8 +6,6 @@ import PageLoader from "../components/ui/PageLoader";
 
 import DashboardLayout from "../layouts/DashboardLayout";
 
-import ProgressBar from "../components/ProgressBar";
-
 import ModuleAccordion from "../components/dsa/ModuleAccordion";
 
 import NotesModal from "../components/NotesModal";
@@ -76,6 +74,8 @@ const DSATracker = () => {
       setQuestions(questionsData.questions);
 
       const progressData = await getProgress(selectedSheet);
+
+  
 
       setProgress(progressData);
 
@@ -344,18 +344,6 @@ const DSATracker = () => {
         </div>
       </div>
 
-      {progress && (
-        <div className="mt-12">
-          <SectionHeader
-            title="Progress"
-            subtitle="Track completion of the current sheet"
-          />
-
-          <div className="mt-6">
-            <ProgressBar percentage={progress?.completionPercentage || 0} />
-          </div>
-        </div>
-      )}
 
       {/* AI Coach */}
       <div className="mt-12">

@@ -35,7 +35,7 @@ const ResumeScoreCards = ({
         </p>
 
         <h2 className="mt-2 text-5xl font-bold text-slate-900 dark:text-white">
-          {analysis.score}
+          {analysis.score} / 100
         </h2>
       </div>
 
@@ -64,7 +64,7 @@ const ResumeScoreCards = ({
         </p>
 
         <h2 className="mt-2 text-5xl font-bold text-slate-900 dark:text-white">
-          {analysis.atsScore}
+          {analysis.atsScore} / 100
         </h2>
       </div>
 
