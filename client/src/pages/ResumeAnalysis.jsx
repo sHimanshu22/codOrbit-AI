@@ -77,15 +77,15 @@ const ResumeAnalysis = () => {
 
       <div className="mb-10">
         <p className="text-slate-500 dark:text-slate-400 text-sm">
-          AI Career Tools
+        Career Tools
         </p>
 
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-          Resume Analysis
+          AI Resume Analysis
         </h1>
 
         <p className="text-slate-500 dark:text-slate-400 mt-2">
-          Upload your resume and get AI-powered feedback.
+          Upload your resume and get AI-powered feedbackwith Scores.
         </p>
       </div>
 
