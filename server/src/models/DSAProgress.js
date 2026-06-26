@@ -46,6 +46,11 @@ const questionProgressSchema = new mongoose.Schema(
       default: false,
     },
 
+    bookmarkedAt: {
+      type: Date,
+      default: null,
+    },
+
     notes: {
       type: String,
       default: "",
@@ -60,7 +65,7 @@ const questionProgressSchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const dsaProgressSchema = new mongoose.Schema(
@@ -76,14 +81,11 @@ const dsaProgressSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 dsaProgressSchema.index({
   userId: 1,
 });
 
-module.exports = mongoose.model(
-  "DSAProgress",
-  dsaProgressSchema
-);
+module.exports = mongoose.model("DSAProgress", dsaProgressSchema);

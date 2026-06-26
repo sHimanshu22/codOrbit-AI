@@ -7,9 +7,10 @@ import gfgLogo from "../assets/platforms/gfg.svg";
 import hackerrankLogo from "../assets/platforms/hackerrank.svg";
 import codechefLogo from "../assets/platforms/codechef.svg";
 import { Share2, Copy, Check } from "lucide-react";
+import { Bookmark, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { User, GraduationCap, Trophy, BookOpen, AtSign } from "lucide-react";
-
 import PageLoader from "../components/ui/PageLoader";
 import DashboardLayout from "../layouts/DashboardLayout";
 import {
@@ -697,6 +698,108 @@ const Profile = () => {
             </div>
           </div>
         </form>
+
+        {/* Learning Activity */}
+
+        <div
+          className="
+  mt-8
+
+  bg-white
+  dark:bg-slate-900
+
+  border
+  border-slate-200
+  dark:border-slate-800
+
+  rounded-3xl
+
+  p-8
+
+  shadow-sm
+  "
+        >
+          <SectionHeader
+            title="Learning Activity"
+            subtitle="Access your saved learning resources"
+          />
+
+          <div
+            className="
+    mt-6
+
+    flex
+    items-center
+    justify-between
+
+    rounded-2xl
+
+    border
+    border-slate-200
+    dark:border-slate-800
+
+    bg-slate-50
+    dark:bg-slate-950
+
+    p-6
+    "
+          >
+            <div className="flex items-center gap-4">
+              <div
+                className="
+        w-14
+        h-14
+
+        rounded-2xl
+
+        bg-yellow-100
+        dark:bg-yellow-900/20
+
+        flex
+        items-center
+        justify-center
+        "
+              >
+                <Bookmark size={26} className="text-yellow-600" />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  Bookmarked Questions
+                </h3>
+
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                  View all DSA questions you've saved for future revision.
+                </p>
+              </div>
+            </div>
+
+            <Link
+              to="/saved-questions"
+              className="
+      inline-flex
+      items-center
+      gap-2
+
+      px-5
+      py-3
+
+      rounded-xl
+
+      bg-blue-600
+      hover:bg-blue-700
+
+      text-white
+      font-medium
+
+      transition-all
+      "
+            >
+              View
+              <ArrowRight size={18} />
+            </Link>
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );

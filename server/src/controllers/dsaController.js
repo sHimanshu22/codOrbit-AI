@@ -166,6 +166,8 @@ const toggleBookmark = async (req, res) => {
         solved: false,
 
         bookmarked: true,
+
+        bookmarkedAt: new Date(),
       });
 
       await progress.save();
@@ -178,6 +180,10 @@ const toggleBookmark = async (req, res) => {
 
     // Existing entry
     questionProgress.bookmarked = !questionProgress.bookmarked;
+
+    questionProgress.bookmarkedAt = questionProgress.bookmarked
+      ? new Date()
+      : null;
 
     await progress.save();
 
@@ -283,30 +289,43 @@ const getBookmarkedQuestions = async (req, res) => {
       });
     }
 
-    const bookmarkedIds = progress.questions
+    const bookmarkedProgress = progress.questions
       .filter((q) => q.bookmarked)
-      .map((q) => q.questionId);
+      .sort(
+        (a, b) => new Date(b.bookmarkedAt || 0) - new Date(a.bookmarkedAt || 0),
+      );
+
+    const bookmarkedIds = bookmarkedProgress.map((q) => q.questionId);
 
     const questions = await DSAQuestion.find({
       _id: { $in: bookmarkedIds },
     });
+const questionMap = new Map(
+  questions.map((q) => [q._id.toString(), q]),
+);
 
-    const mergedQuestions = questions.map((question) => {
-      const progressData = progress.questions.find(
-        (q) => q.questionId.toString() === question._id.toString(),
-      );
+const mergedQuestions = bookmarkedProgress
+  .map((progressData) => {
+    const question = questionMap.get(
+      progressData.questionId.toString(),
+    );
 
-      return {
-        ...question.toObject(),
+    if (!question) return null;
 
-        solved: progressData?.solved || false,
+    return {
+      ...question.toObject(),
 
-        bookmarked: progressData?.bookmarked || false,
+      solved: progressData.solved,
 
-        solvedAt: progressData?.solvedAt || null,
-      };
-    });
+      bookmarked: progressData.bookmarked,
 
+      solvedAt: progressData.solvedAt,
+
+      bookmarkedAt: progressData.bookmarkedAt,
+    };
+  })
+  .filter(Boolean);
+  
     res.status(200).json({
       success: true,
       questions: mergedQuestions,

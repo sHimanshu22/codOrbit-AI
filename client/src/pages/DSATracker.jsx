@@ -37,9 +37,6 @@ import AICoachCard from "../components/AICoachCard";
 
 import SkillAnalysisCard from "../components/SkillAnalysisCard";
 
-import SavedQuestions from "../components/SavedQuestions";
-
-import { getBookmarks } from "../services/dsaService";
 import SectionHeader from "../components/ui/SectionHeader";
 import { MODULE_ORDERS } from "../constants/moduleOrders";
 
@@ -60,8 +57,6 @@ const DSATracker = () => {
 
   const [skillAnalysis, setSkillAnalysis] = useState(null);
 
-  const [bookmarks, setBookmarks] = useState([]);
-
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [showNotesModal, setShowNotesModal] = useState(false);
 
@@ -75,8 +70,6 @@ const DSATracker = () => {
 
       const progressData = await getProgress(selectedSheet);
 
-  
-
       setProgress(progressData);
 
       const coachData = await getAICoach(selectedSheet);
@@ -86,10 +79,6 @@ const DSATracker = () => {
       const skillAnalysisData = await getSkillAnalysis(selectedSheet);
 
       setSkillAnalysis(skillAnalysisData.analysis);
-
-      const bookmarksData = await getBookmarks();
-
-      setBookmarks(bookmarksData.questions);
     } catch (error) {
       console.error(error);
     }
@@ -345,68 +334,6 @@ const DSATracker = () => {
       </div>
 
 
-      {/* AI Coach */}
-      <div className="mt-12">
-        <SectionHeader
-          title="AI Learning Center"
-          subtitle="Personalized guidance for improvement"
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          {coach && <AICoachCard coach={coach} />}
-
-          {skillAnalysis && <SkillAnalysisCard analysis={skillAnalysis} />}
-        </div>
-      </div>
-
-      {/* Topic Analysis */}
-      <div className="mt-12">
-        <SectionHeader
-          title="Analytics"
-          subtitle="Understand your strengths and weaknesses"
-        />
-        {progress && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-            <TopicAnalytics topicStats={progress.topicStats} />
-
-            <DifficultyAnalytics difficultyStats={progress.difficultyStats} />
-          </div>
-        )}
-      </div>
-
-      {/* Insight Cards */}
-      <div className="mt-12">
-        <SectionHeader
-          title="Performance Insights"
-          subtitle="Key takeaways from your preparation"
-        />
-        {progress && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <InsightCard
-              title="Strongest Topic"
-              value={progress.strongestTopic}
-            />
-
-            <InsightCard title="Weakest Topic" value={progress.weakestTopic} />
-
-            <InsightCard title="Readiness" value={progress.readiness} />
-          </div>
-        )}
-      </div>
-
-      <div className="mt-12">
-        <SectionHeader
-          title="Saved Questions"
-          subtitle="Questions marked for revision"
-        />
-
-        {bookmarks.length > 0 && (
-          <div className="mt-6">
-            <SavedQuestions questions={bookmarks} />
-          </div>
-        )}
-      </div>
-
       <div className="mt-12">
         <SectionHeader
           title="DSA Roadmap"
@@ -504,6 +431,55 @@ const DSATracker = () => {
         }}
         onSave={handleSaveNotes}
       />
+
+      {/* AI Coach */}
+      <div className="mt-12">
+        <SectionHeader
+          title="AI Learning Center"
+          subtitle="Personalized guidance for improvement"
+        />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          {coach && <AICoachCard coach={coach} />}
+
+          {skillAnalysis && <SkillAnalysisCard analysis={skillAnalysis} />}
+        </div>
+      </div>
+
+      {/* Topic Analysis */}
+      <div className="mt-12">
+        <SectionHeader
+          title="Analytics"
+          subtitle="Understand your strengths and weaknesses"
+        />
+        {progress && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <TopicAnalytics topicStats={progress.topicStats} />
+
+            <DifficultyAnalytics difficultyStats={progress.difficultyStats} />
+          </div>
+        )}
+      </div>
+
+      {/* Insight Cards */}
+      <div className="mt-12">
+        <SectionHeader
+          title="Performance Insights"
+          subtitle="Key takeaways from your preparation"
+        />
+        {progress && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <InsightCard
+              title="Strongest Topic"
+              value={progress.strongestTopic}
+            />
+
+            <InsightCard title="Weakest Topic" value={progress.weakestTopic} />
+
+            <InsightCard title="Readiness" value={progress.readiness} />
+          </div>
+        )}
+      </div>
     </DashboardLayout>
   );
 };

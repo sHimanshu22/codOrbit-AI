@@ -65,94 +65,120 @@ const SavedQuestions = ({ questions }) => {
             <div className="flex-1">
               <h3
                 className="
-                font-medium
-                text-slate-900
-                dark:text-white
-                "
+  font-semibold
+  text-lg
+
+  text-slate-900
+  dark:text-white
+  "
               >
                 {question.title}
               </h3>
 
-              <div className="flex flex-wrap gap-2 mt-3">
+              <div className="flex flex-wrap items-center gap-2 mt-3">
+                {/* Sheet */}
                 <span
                   className="
-                  px-3
-                  py-1
+    px-3
+    py-1
 
-                  rounded-full
+    rounded-full
 
-                  text-xs
-                  font-medium
+    text-xs
+    font-semibold
 
-                  bg-blue-100
-                  text-blue-700
+    bg-blue-100
+    dark:bg-blue-900/30
 
-                  dark:bg-blue-900/20
-                  dark:text-blue-400
-                  "
+    text-blue-700
+    dark:text-blue-300
+    "
+                >
+                  {question.sheetName}
+                </span>
+
+                {/* Module */}
+                <span
+                  className="
+    px-3
+    py-1
+
+    rounded-full
+
+    text-xs
+    font-medium
+
+    bg-indigo-100
+    dark:bg-indigo-900/20
+
+    text-indigo-700
+    dark:text-indigo-300
+    "
                 >
                   {question.module}
                 </span>
 
+                {/* Section */}
                 <span
                   className="
-                  px-3
-                  py-1
+    px-3
+    py-1
 
-                  rounded-full
+    rounded-full
 
-                  text-xs
-                  font-medium
+    text-xs
+    font-medium
 
-                  bg-slate-100
-                  dark:bg-slate-700
+    bg-slate-100
+    dark:bg-slate-700
 
-                  text-slate-600
-                  dark:text-slate-300
-                  "
+    text-slate-700
+    dark:text-slate-300
+    "
                 >
                   {question.section}
                 </span>
 
+                {/* Difficulty / Concept */}
                 {question.isConcept ? (
                   <span
                     className="
-                    px-3
-                    py-1
+      px-3
+      py-1
 
-                    rounded-full
+      rounded-full
 
-                    text-xs
-                    font-medium
+      text-xs
+      font-medium
 
-                    bg-purple-100
-                    text-purple-700
+      bg-purple-100
+      dark:bg-purple-900/20
 
-                    dark:bg-purple-900/20
-                    dark:text-purple-400
-                    "
+      text-purple-700
+      dark:text-purple-300
+      "
                   >
                     Concept
                   </span>
                 ) : (
                   <span
                     className={`
-                    px-3
-                    py-1
+      px-3
+      py-1
 
-                    rounded-full
+      rounded-full
 
-                    text-xs
-                    font-medium
+      text-xs
+      font-medium
 
-                    ${
-                      question.difficulty === "Easy"
-                        ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
-                        : question.difficulty === "Medium"
-                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400"
-                          : "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400"
-                    }
-                    `}
+      ${
+        question.difficulty === "Easy"
+          ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-300"
+          : question.difficulty === "Medium"
+            ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-300"
+            : "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-300"
+      }
+      `}
                   >
                     {question.difficulty}
                   </span>

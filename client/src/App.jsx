@@ -16,7 +16,7 @@ import PublicProfile from "./pages/PublicProfile";
 
 import ForgotPassword from "./pages/ForgotPassword";
 import ResumeAnalysis from "./pages/ResumeAnalysis";
-
+import SavedQuestionsPage from "./pages/SavedQuestionsPage";
 function App() {
   return (
     <BrowserRouter>
@@ -95,6 +95,15 @@ function App() {
           element={
             <ProtectedRoute>
               <ResumeAnalysis />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/saved-questions"
+          element={
+            <ProtectedRoute>
+              <SavedQuestionsPage  />
             </ProtectedRoute>
           }
         />
