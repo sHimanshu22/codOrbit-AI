@@ -23,7 +23,7 @@ const SheetManagement = () => {
         const sheetsRes = await getSheets();
 
         setSheets(sheetsRes.sheets);
-        console.log(sheetsRes.sheets);
+        
       } catch (error) {
         console.error(error);
       } finally {

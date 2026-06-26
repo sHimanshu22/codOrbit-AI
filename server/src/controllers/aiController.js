@@ -96,7 +96,7 @@ const getDeveloperScore = async (req, res) => {
 const testAI = async (req, res) => {
   try {
     const response = await generateAIResponse("Say hello from CodOrbit AI");
-    console.log(process.env.GEMINI_API_KEY);
+   
     res.status(200).json({
       success: true,
       response,

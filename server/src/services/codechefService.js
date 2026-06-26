@@ -3,8 +3,7 @@ const cheerio = require("cheerio");
 
 const fetchCodeChefProfile = async (username) => {
   try {
-    console.log("Fetching CodeChef profile:", username);
-
+  
     const { data } = await axios.get(
       `https://www.codechef.com/users/${username}`,
     );
@@ -28,8 +27,6 @@ const fetchCodeChefProfile = async (username) => {
       .eq(1)
       .text()
       .replace(/[^\d]/g, "");
-
-    console.log($(".rating-header").html());
 
     return {
       username,

@@ -111,8 +111,6 @@ const Dashboard = () => {
 
   const hasConnectedPlatform = overview?.platformsConnected > 0;
 
-  console.log("Insights:", insights);
-
   return (
     <DashboardLayout>
       {!hasConnectedPlatform ? (

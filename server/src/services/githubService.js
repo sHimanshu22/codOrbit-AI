@@ -2,8 +2,6 @@ const axios = require("axios");
 
 const fetchGitHubProfile = async (username) => {
   try {
-    console.log("Fetching GitHub profile:", username);
-
     const response = await axios.get(
       `https://api.github.com/users/${username}`,
     );
@@ -20,7 +18,6 @@ const fetchGitHubProfile = async (username) => {
 
 const fetchGitHubRepos = async (username) => {
   try {
-    console.log("Fetching GitHub repos:", username);
 
     const response = await axios.get(
       `https://api.github.com/users/${username}/repos?per_page=100`,

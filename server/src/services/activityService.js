@@ -92,16 +92,6 @@ const syncUserActivity = async (
           "{}"
       );
 
-    console.log(
-      "Latest Calendar Entries:"
-    );
-
-    console.log(
-      Object.entries(
-        calendar
-      ).slice(-5)
-    );
-
     // Rebuild from calendar
 
     for (

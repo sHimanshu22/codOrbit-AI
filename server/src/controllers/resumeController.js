@@ -65,11 +65,6 @@ const analyzeResume = async (req, res) => {
         resumeText
       );
 
-    console.log(
-      "RULE BASED SCORE:",
-      scoreData
-    );
-
     // =====================
     // JD Match
     // =====================
@@ -80,11 +75,6 @@ const analyzeResume = async (req, res) => {
         jdText
       );
 
-    console.log(
-      "JD MATCH:",
-      jdMatch
-    );
-
     // =====================
     // Gemini Analysis
     // =====================
@@ -93,11 +83,6 @@ const analyzeResume = async (req, res) => {
       await analyzeResumeWithAI(
         resumeText
       );
-
-    console.log(
-      "RAW GEMINI RESPONSE:\n",
-      analysis
-    );
 
     analysis = analysis
       .replace(/```json/gi, "")

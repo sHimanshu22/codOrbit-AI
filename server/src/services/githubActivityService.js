@@ -13,8 +13,6 @@ const syncGitHubActivity = async (userId) => {
 
   const events = await fetchGitHubEvents(user.githubUsername);
 
-  console.log(events.slice(0, 10));
-
   const activityMap = new Map();
 
   events.forEach((event) => {
@@ -31,10 +29,6 @@ const syncGitHubActivity = async (userId) => {
 
     activityMap.set(date, (activityMap.get(date) || 0) + weight);
   });
-
-  console.log("Activity Map:");
-
-  console.log([...activityMap]);
 
   for (const [date, count] of activityMap) {
     await GitHubActivity.findOneAndUpdate(

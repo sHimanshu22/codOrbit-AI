@@ -147,11 +147,6 @@ const syncCodeforcesData =
 
       await profile.save();
 
-      console.log(
-        "Codeforces Sync Success:",
-        cfData.handle
-      );
-
       return profile.codeforces;
     } catch (error) {
       console.error(

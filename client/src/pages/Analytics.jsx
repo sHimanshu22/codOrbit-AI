@@ -25,8 +25,6 @@ const Analytics = () => {
       try {
         const data = await getAnalytics();
 
-        console.log("FULL API RESPONSE:", data);
-
         setAnalytics(data.analytics);
       } catch (error) {
         console.error(error);

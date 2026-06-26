@@ -77,8 +77,6 @@ const DSATracker = () => {
 
       const progressData = await getProgress(selectedSheet);
 
-      console.log("PROGRESS API RESPONSE:", progressData);
-
       setProgress(progressData);
 
       const coachData = await getAICoach(selectedSheet);

@@ -62,17 +62,6 @@ const calculateStreak = (dates) => {
     }
   }
 
-  console.log("Incoming Dates:");
-  console.log(dates);
-
-  console.log("Sorted Dates:");
-  console.log(sortedDates);
-
-  console.log("Today:");
-  console.log(new Date());
-
-  console.log("Today String:");
-  console.log(new Date().toISOString().split("T")[0]);
 
   return {
     current,
@@ -100,13 +89,7 @@ const getUserStreaks = async (userId) => {
   const codingDates = codingDocs.map((doc) => doc.date);
 
   const githubDates = githubDocs.map((doc) => doc.date);
-
-  console.log("Coding Dates:");
-  console.log(codingDates);
-
-  console.log("GitHub Dates:");
-  console.log(githubDates);
-
+  
   return {
     coding: calculateStreak(codingDates),
 
