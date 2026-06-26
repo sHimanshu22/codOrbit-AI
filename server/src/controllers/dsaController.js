@@ -2,6 +2,8 @@ const DSAProgress = require("../models/DSAProgress");
 
 const User = require("../models/User");
 const DSAQuestion = require("../models/DSAQuestion");
+const DSASheet = require("../models/DSASheet");
+
 const getQuestions = async (req, res) => {
   try {
     const sheet = req.query.sheet || "Striver A2Z";
@@ -300,32 +302,28 @@ const getBookmarkedQuestions = async (req, res) => {
     const questions = await DSAQuestion.find({
       _id: { $in: bookmarkedIds },
     });
-const questionMap = new Map(
-  questions.map((q) => [q._id.toString(), q]),
-);
+    const questionMap = new Map(questions.map((q) => [q._id.toString(), q]));
 
-const mergedQuestions = bookmarkedProgress
-  .map((progressData) => {
-    const question = questionMap.get(
-      progressData.questionId.toString(),
-    );
+    const mergedQuestions = bookmarkedProgress
+      .map((progressData) => {
+        const question = questionMap.get(progressData.questionId.toString());
 
-    if (!question) return null;
+        if (!question) return null;
 
-    return {
-      ...question.toObject(),
+        return {
+          ...question.toObject(),
 
-      solved: progressData.solved,
+          solved: progressData.solved,
 
-      bookmarked: progressData.bookmarked,
+          bookmarked: progressData.bookmarked,
 
-      solvedAt: progressData.solvedAt,
+          solvedAt: progressData.solvedAt,
 
-      bookmarkedAt: progressData.bookmarkedAt,
-    };
-  })
-  .filter(Boolean);
-  
+          bookmarkedAt: progressData.bookmarkedAt,
+        };
+      })
+      .filter(Boolean);
+
     res.status(200).json({
       success: true,
       questions: mergedQuestions,
@@ -746,45 +744,14 @@ const getSkillAnalysis = async (req, res) => {
     });
   }
 };
+
 const getAvailableSheets = async (req, res) => {
   try {
-    const sheets = await DSAQuestion.aggregate([
-      {
-        $group: {
-          _id: "$sheetName",
-
-          questionCount: {
-            $sum: 1,
-          },
-
-          modules: {
-            $addToSet: "$module",
-          },
-        },
-      },
-
-      {
-        $project: {
-          _id: 0,
-
-          name: "$_id",
-
-          questionCount: 1,
-
-          moduleCount: {
-            $size: "$modules",
-          },
-
-          modules: 1,
-        },
-      },
-
-      {
-        $sort: {
-          name: 1,
-        },
-      },
-    ]);
+    const sheets = await DSASheet.find({})
+      .select(
+        "name description totalQuestions moduleCount difficulty bestFor roadmap",
+      )
+      .sort({ name: 1 });
 
     res.status(200).json({
       success: true,

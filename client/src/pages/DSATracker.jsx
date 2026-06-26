@@ -38,7 +38,6 @@ import AICoachCard from "../components/AICoachCard";
 import SkillAnalysisCard from "../components/SkillAnalysisCard";
 
 import SectionHeader from "../components/ui/SectionHeader";
-import { MODULE_ORDERS } from "../constants/moduleOrders";
 
 const DSATracker = () => {
   const [loading, setLoading] = useState(true);
@@ -61,6 +60,8 @@ const DSATracker = () => {
   const [showNotesModal, setShowNotesModal] = useState(false);
 
   const [videoUrl, setVideoUrl] = useState(null);
+
+  const [availableSheets, setAvailableSheets] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -113,6 +114,8 @@ const DSATracker = () => {
         );
 
         setActiveSheets(validActiveSheets);
+
+        setAvailableSheets(sheetsRes.sheets);
 
         if (validActiveSheets.length > 0) {
           const urlSheet = searchParams.get("sheet");
@@ -265,8 +268,17 @@ const DSATracker = () => {
     return acc;
   }, {});
 
-  const currentOrder =
-    MODULE_ORDERS[selectedSheet] || Object.keys(groupedQuestions);
+  const currentSheet = availableSheets.find(
+    (sheet) => sheet.name === selectedSheet,
+  );
+  console.log("Selected Sheet:", selectedSheet);
+
+  console.log("Current Sheet:", currentSheet);
+
+  console.log("Roadmap:", currentSheet?.roadmap);
+
+  console.log("Grouped Modules:", Object.keys(groupedQuestions));
+  const currentOrder = currentSheet?.roadmap || Object.keys(groupedQuestions);
 
   return (
     <DashboardLayout>
@@ -305,7 +317,6 @@ const DSATracker = () => {
           </div>
         </div>
       </div>
-
       <div className="mt-12">
         <SectionHeader
           title="Performance Overview"
@@ -332,8 +343,6 @@ const DSATracker = () => {
           />
         </div>
       </div>
-
-
       <div className="mt-12">
         <SectionHeader
           title="DSA Roadmap"
@@ -356,7 +365,6 @@ const DSATracker = () => {
             ))}
         </div>
       </div>
-
       {videoUrl && (
         <div
           className="
@@ -421,7 +429,6 @@ const DSATracker = () => {
           </div>
         </div>
       )}
-
       <NotesModal
         isOpen={showNotesModal}
         question={selectedQuestion}
@@ -431,7 +438,6 @@ const DSATracker = () => {
         }}
         onSave={handleSaveNotes}
       />
-
       {/* AI Coach */}
       <div className="mt-12">
         <SectionHeader
@@ -445,7 +451,6 @@ const DSATracker = () => {
           {skillAnalysis && <SkillAnalysisCard analysis={skillAnalysis} />}
         </div>
       </div>
-
       {/* Topic Analysis */}
       <div className="mt-12">
         <SectionHeader
@@ -460,7 +465,6 @@ const DSATracker = () => {
           </div>
         )}
       </div>
-
       {/* Insight Cards */}
       <div className="mt-12">
         <SectionHeader

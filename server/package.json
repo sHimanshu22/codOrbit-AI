@@ -6,7 +6,8 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "seed:striver": " node seeders/SeedStriver.js",
-    "seed:blind75": "node seeders/SeedBlind75.js"
+    "seed:blind75": "node seeders/SeedBlind75.js",
+    "seed:DSAseed": "node seeders/SeedDSASheets.js"
   },
   "keywords": [],
   "author": "",

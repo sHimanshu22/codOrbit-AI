@@ -1,17 +1,66 @@
-const striverA2Z = require("./striverA2Z");
+module.exports = [
+  {
+    name: "Striver A2Z",
 
-const blind75 = require("./blind75");
+    description:
+      "Complete roadmap covering every important DSA topic from fundamentals to advanced interview problems. Recommended as the primary sheet for placement preparation.",
 
-const neetcode150 = require("./neetcode150");
+    totalQuestions: 455,
 
-const loveBabbar450 = require("./loveBabbar450");
+    moduleCount: 18,
 
-module.exports = {
-  "Striver A2Z": striverA2Z,
+    difficulty: "Beginner → Advanced",
 
-  "Blind 75": blind75,
+    bestFor: "Placements",
 
-  "NeetCode 150": neetcode150,
+    roadmap: [
+      "Learn the Basics",
+      "Learn Important Sorting Techniques",
+      "Arrays",
+      "Binary Search",
+      "Strings",
+      "Linked List",
+      "Recursion & Backtracking",
+      "Bit Manipulation",
+      "Stack & Queue",
+      "Sliding Window & Two Pointers",
+      "Heaps",
+      "Greedy Algorithms",
+      "Binary Trees",
+      "Binary Search Trees",
+      "Graphs",
+      "Dynamic Programming",
+      "Tries",
+      "Strings [Hard]",
+    ],
+  },
 
-  "Love Babbar 450": loveBabbar450,
-};
+  {
+    name: "Blind 75",
+
+    description:
+      "Curated collection of the 75 most frequently asked coding interview problems. Ideal for interview revision and company-specific preparation.",
+
+    totalQuestions: 75,
+
+    moduleCount: 11,
+
+    difficulty: "Intermediate",
+
+    bestFor: "Interview Revision",
+
+    roadmap: [
+      "Array",
+      "String",
+      "Linked List",
+      "Binary",
+      "Interval",
+      "Matrix",
+      "Tree",
+      "Heap",
+      "Backtracking",
+      "Graph",
+      "Dynamic Programming",
+    ],
+  },
+];
