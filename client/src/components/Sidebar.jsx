@@ -68,23 +68,22 @@ const Sidebar = () => {
       path: "/analytics",
       icon: BarChart3,
     },
-
-    {
-      name: "Profile",
-      path: "/profile",
-      icon: UserCircle,
-    },
     {
       name: "Resume Analysis",
       path: "/resume-analysis",
       icon: FileText,
+    },
+    {
+      name: "Profile",
+      path: "/profile",
+      icon: UserCircle,
     },
   ];
 
   return (
     <aside
       className="
-      w-72
+      w-70
       min-h-screen
       bg-white
       dark:bg-slate-900

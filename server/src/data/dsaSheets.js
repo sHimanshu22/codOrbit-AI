@@ -3,7 +3,7 @@ module.exports = [
     name: "Striver A2Z",
 
     description:
-      "Complete roadmap covering every important DSA topic from fundamentals to advanced interview problems. Recommended as the primary sheet for placement preparation.",
+      "Created by Striver (Raj Vikramaditya), this comprehensive roadmap covers every major DSA topic from programming fundamentals to advanced interview patterns. Ideal for placement preparation, coding interviews, and building strong problem-solving skills.",
 
     totalQuestions: 455,
 
@@ -39,7 +39,7 @@ module.exports = [
     name: "Blind 75",
 
     description:
-      "Curated collection of the 75 most frequently asked coding interview problems. Ideal for interview revision and company-specific preparation.",
+      "Originally curated by Blind, this collection features the 75 most frequently asked coding interview problems across top tech companies. It focuses on essential patterns and is ideal for interview preparation and quick revision.",
 
     totalQuestions: 75,
 

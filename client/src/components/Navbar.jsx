@@ -23,13 +23,12 @@ const Navbar = () => {
     loadProfile();
   }, []);
 
-  const firstName =
-    user?.name?.trim()?.split(" ")[0] || "Developer";
+  const firstName = user?.name?.trim()?.split(" ")[0] || "Developer";
 
   return (
     <header
       className="
-      h-20
+      h-18
 
       bg-white
       dark:bg-slate-900
@@ -43,6 +42,11 @@ const Navbar = () => {
       flex
       items-center
       justify-between
+
+        sticky
+  top-0
+  z-50
+      
       "
     >
       {/* Left Side */}
@@ -66,7 +70,7 @@ const Navbar = () => {
           dark:text-slate-100
           "
         >
-          Today is a great day to build
+          Orbit your way to coding excellence.
         </h2>
       </div>
 
