@@ -38,6 +38,7 @@ import AICoachCard from "../components/AICoachCard";
 import SkillAnalysisCard from "../components/SkillAnalysisCard";
 
 import SectionHeader from "../components/ui/SectionHeader";
+import { BookOpen } from "lucide-react";
 
 const DSATracker = () => {
   const [loading, setLoading] = useState(true);
@@ -293,9 +294,40 @@ const DSATracker = () => {
               {selectedSheet}
             </h1>
 
-            <p className="text-slate-500 dark:text-slate-400 mt-2">
-              Track your progress and prepare for placements
-            </p>
+            <div
+              className="
+  mt-5
+
+  flex
+  items-start
+  gap-3
+
+  max-w-3xl
+  "
+            >
+              <BookOpen
+                size={20}
+                className="
+    mt-0.5
+
+    shrink-0
+
+    text-blue-600
+    dark:text-blue-400
+    "
+              />
+
+              <p
+                className="
+    leading-7
+
+    text-slate-600
+    dark:text-slate-400
+    "
+              >
+                {currentSheet?.description}
+              </p>
+            </div>
           </div>
 
           <div className="lg:ml-auto">
