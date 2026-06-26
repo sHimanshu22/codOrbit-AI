@@ -8,6 +8,7 @@ import {
   Trophy,
   BarChart3,
   UserCircle,
+  FileSearch,
   LogOut,
 } from "lucide-react";
 
@@ -48,6 +49,11 @@ const LoggedInNavbar = () => {
       name: "Sheets",
       path: "/sheet-management",
       icon: Layers3,
+    },
+    {
+      name: "Resume",
+      path: "/resume-analysis",
+      icon: FileSearch,
     },
     {
       name: "Contests",
@@ -189,41 +195,37 @@ const LoggedInNavbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                title={item.name}
                 className={`
-                flex
-                items-center
-                gap-2
+    w-11
+    h-11
 
-                px-2.5
-                py-2.5
+    flex
+    items-center
+    justify-center
 
-                rounded-xl
+    rounded-xl
 
-                text-sm
-                font-medium
+    transition-all
 
-                transition-all
+    ${
+      active
+        ? `
+        bg-blue-600
+        text-white
+        shadow-sm
+        `
+        : `
+        text-slate-600
+        dark:text-slate-300
 
-                ${
-                  active
-                    ? `
-                    bg-blue-600
-                    text-white
-                    shadow-sm
-                    `
-                    : `
-                    text-slate-600
-                    dark:text-slate-300
-
-                    hover:bg-slate-100
-                    dark:hover:bg-slate-800
-                    `
-                }
-                `}
+        hover:bg-slate-100
+        dark:hover:bg-slate-800
+        `
+    }
+  `}
               >
-                <Icon size={18} />
-
-                {item.name}
+                <Icon size={20} />
               </Link>
             );
           })}
