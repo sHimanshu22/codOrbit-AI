@@ -1,24 +1,16 @@
 const pdf = require("pdf-parse");
 
-const {
-  analyzeResumeWithAI,
-} = require("../services/resumeAnalysisService");
+const { analyzeResumeWithAI } = require("../services/resumeAnalysisService");
 
-const {
-  calculateResumeScore,
-} = require("../services/resumeScoreService");
+const { calculateResumeScore } = require("../services/resumeScoreService");
 
-const {
-  calculateJDMatch,
-} = require("../services/jdMatchService");
+const { calculateJDMatch } = require("../services/jdMatchService");
 
 const analyzeResume = async (req, res) => {
   try {
-    const resumeFile =
-      req.files?.resume?.[0];
+    const resumeFile = req.files?.resume?.[0];
 
-    const jdFile =
-      req.files?.jobDescription?.[0];
+    const jdFile = req.files?.jobDescription?.[0];
 
     if (!resumeFile) {
       return res.status(400).json({
@@ -31,11 +23,9 @@ const analyzeResume = async (req, res) => {
     // Resume Extraction
     // =====================
 
-    const resumePdf =
-      await pdf(resumeFile.buffer);
+    const resumePdf = await pdf(resumeFile.buffer);
 
-    const resumeText =
-      resumePdf.text;
+    const resumeText = resumePdf.text;
 
     // =====================
     // JD Extraction
@@ -44,53 +34,60 @@ const analyzeResume = async (req, res) => {
     let jdText = "";
 
     if (jdFile) {
-      const jdPdf =
-        await pdf(jdFile.buffer);
+      const jdPdf = await pdf(jdFile.buffer);
 
-      jdText =
-        jdPdf.text;
+      jdText = jdPdf.text;
     }
 
     if (req.body.jobDescriptionText) {
-      jdText =
-        req.body.jobDescriptionText;
+      jdText = req.body.jobDescriptionText;
     }
 
     // =====================
     // Rule Based Resume Score
     // =====================
 
-    const scoreData =
-      calculateResumeScore(
-        resumeText
-      );
+    const scoreData = calculateResumeScore(resumeText);
 
     // =====================
     // JD Match
     // =====================
 
-    const jdMatch =
-      calculateJDMatch(
-        resumeText,
-        jdText
-      );
+    const jdMatch = calculateJDMatch(resumeText, jdText);
 
     // =====================
     // Gemini Analysis
     // =====================
 
-    let analysis =
-      await analyzeResumeWithAI(
-        resumeText
-      );
+    let analysis = await analyzeResumeWithAI(resumeText);
 
     analysis = analysis
       .replace(/```json/gi, "")
       .replace(/```/g, "")
       .trim();
 
-    const parsedAnalysis =
-      JSON.parse(analysis);
+    const parsedAnalysis = JSON.parse(analysis);
+
+    const cleanMarkdown = (text) => {
+      if (!text) return text;
+
+      return text
+        .replace(/\*\*/g, "") // bold
+        .replace(/\*/g, "") // italic
+        .replace(/`/g, "") // inline code
+        .trim();
+    };
+
+    parsedAnalysis.summary = cleanMarkdown(parsedAnalysis.summary);
+
+    parsedAnalysis.strengths = parsedAnalysis.strengths?.map(cleanMarkdown);
+
+    parsedAnalysis.weaknesses = parsedAnalysis.weaknesses?.map(cleanMarkdown);
+
+    parsedAnalysis.suggestions = parsedAnalysis.suggestions?.map(cleanMarkdown);
+
+    parsedAnalysis.placementReadiness =
+      parsedAnalysis.placementReadiness?.map(cleanMarkdown);
 
     // =====================
     // Final Response
@@ -99,19 +96,13 @@ const analyzeResume = async (req, res) => {
     const finalAnalysis = {
       ...parsedAnalysis,
 
-      score:
-        scoreData.score,
+      score: scoreData.score,
 
-      atsScore: Math.min(
-        scoreData.score + 10,
-        100
-      ),
+      atsScore: Math.min(scoreData.score + 10, 100),
 
-      grade:
-        scoreData.grade,
+      grade: scoreData.grade,
 
-      breakdown:
-        scoreData.breakdown,
+      breakdown: scoreData.breakdown,
 
       strengths: [
         ...new Set([
@@ -139,19 +130,14 @@ const analyzeResume = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      analysis:
-        finalAnalysis,
+      analysis: finalAnalysis,
     });
   } catch (error) {
-    console.error(
-      "RESUME ANALYSIS ERROR:",
-      error
-    );
+    console.error("RESUME ANALYSIS ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message:
-        error.message,
+      message: error.message,
     });
   }
 };

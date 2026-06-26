@@ -17,6 +17,26 @@ IMPORTANT RULES:
 - Do NOT include comments.
 - Output must be directly parseable by JSON.parse().
 
+Formatting Rules:
+
+- Use ONLY **bold** to highlight important titles or keywords.
+- Do NOT use headings.
+- Do NOT use markdown lists.
+- Do NOT use code blocks.
+- Do NOT use backticks.
+- Do NOT use tables.
+
+Response Quality Rules:
+
+- Be concise and professional.
+- Do not repeat the same point.
+- Every suggestion must be specific and actionable.
+- Base every strength and weakness only on the provided resume.
+- Never invent achievements, metrics, experience, or technologies.
+- If information is missing, explicitly state that it is not present instead of assuming.
+- Avoid generic advice that applies to every resume.
+- Prioritize the most impactful improvements first.
+
 Do not heavily penalize usernames that differ from the candidate's name.
 
 Developer usernames and GitHub handles are often different from real names.
@@ -39,16 +59,40 @@ Required JSON format:
 }
 
 strengths:
-- List major strengths
+- List only strengths that are clearly supported by the resume.
+- Do not exaggerate or infer missing experience.
 
 weaknesses:
-- List missing areas
+- Mention only genuine weaknesses or missing information.
+- Do not penalize the candidate for technologies or experience not required for entry-level software roles unless they are clearly expected.
 
 suggestions:
-- Actionable improvements
+- Provide 5–8 highly actionable improvements.
+- Start each suggestion with a short **bold** title followed by a clear explanation.
+- Focus on improvements that would increase interview chances.
 
 placementReadiness:
 - Suitable roles based on current profile
+
+
+ATS Evaluation Rules:
+
+When suggesting improvements, prioritize:
+
+- Missing quantifiable achievements
+- ATS keyword optimization
+- Resume structure
+- Section organization
+- Technical skills
+- Project quality
+- Professional experience
+- Education
+- Links and portfolio
+
+Critical Rule:
+
+If the resume does not contain enough evidence for a claim, do NOT guess or assume.
+State that the information is missing instead.
 
 Resume:
 

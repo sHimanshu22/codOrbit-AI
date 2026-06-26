@@ -1,7 +1,4 @@
 import { useState } from "react";
-
-import { Upload, Loader2, FileText, Target } from "lucide-react";
-
 import DashboardLayout from "../layouts/DashboardLayout";
 
 import { analyzeResume } from "../services/resumeService";
@@ -41,6 +38,8 @@ const ResumeAnalysis = () => {
       return;
     }
 
+    const toastId = toast.loading("Analyzing your resume...");
+
     try {
       setLoading(true);
 
@@ -59,8 +58,14 @@ const ResumeAnalysis = () => {
       const data = await analyzeResume(formData);
 
       setAnalysis(data.analysis);
+
+      toast.success("Resume analyzed successfully!", {
+        id: toastId,
+      });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Analysis failed.");
+      toast.error(error.response?.data?.message || "Analysis failed.", {
+        id: toastId,
+      });
     } finally {
       setLoading(false);
     }
