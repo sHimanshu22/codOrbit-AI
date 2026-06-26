@@ -1,4 +1,5 @@
-import { BookmarkCheck, PlayCircle } from "lucide-react";
+import { BookmarkCheck, Clock3, PlayCircle } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 const SavedQuestions = ({ questions }) => {
   if (!questions.length) {
@@ -39,7 +40,7 @@ const SavedQuestions = ({ questions }) => {
       <div className="space-y-3">
         {questions.map((question) => (
           <div
-            key={question.questionId}
+            key={question._id}
             className="
             flex
             items-center
@@ -74,6 +75,31 @@ const SavedQuestions = ({ questions }) => {
               >
                 {question.title}
               </h3>
+
+              {question.bookmarkedAt && (
+                <div
+                  className="
+    mt-2
+
+    flex
+    items-center
+    gap-1.5
+
+    text-xs
+
+    text-slate-500
+    dark:text-slate-400
+    "
+                >
+                  <Clock3 size={13} />
+
+                  <span>
+                    {formatDistanceToNow(new Date(question.bookmarkedAt), {
+                      addSuffix: true,
+                    })}
+                  </span>
+                </div>
+              )}
 
               <div className="flex flex-wrap items-center gap-2 mt-3">
                 {/* Sheet */}
