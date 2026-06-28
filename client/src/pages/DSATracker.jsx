@@ -387,7 +387,7 @@ const DSATracker = () => {
             .map((moduleName, index) => (
               <ModuleAccordion
                 key={moduleName}
-                moduleName={`${index + 1}.${moduleName}`}
+                moduleName={`${index + 1}.${" "}${moduleName}`}
                 sections={groupedQuestions[moduleName]}
                 onToggle={handleToggle}
                 onBookmark={handleBookmark}

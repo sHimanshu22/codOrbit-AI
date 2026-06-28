@@ -85,7 +85,7 @@ const ModuleAccordion = ({
   text-left
   "
           >
-            {moduleName}
+          {moduleName}
           </h3>
         </div>
 

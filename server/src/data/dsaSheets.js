@@ -63,4 +63,93 @@ module.exports = [
       "Dynamic Programming",
     ],
   },
+
+  {
+    name: "Love Babbar DSA 450",
+
+    description:
+      "Curated by Love Babbar, this sheet contains one of the most comprehensive collections of DSA interview problems covering every major topic asked in software engineering interviews. It is designed for placement preparation, interview practice, and mastering problem-solving patterns.",
+
+    totalQuestions: 450,
+
+    moduleCount: 15,
+
+    difficulty: "Beginner → Advanced",
+
+    bestFor: "Placements & Interviews",
+
+    roadmap: [
+      "Array",
+      "Matrix",
+      "String",
+      "Searching & Sorting",
+      "Linked List",
+      "Binary Trees",
+      "Binary Search Trees",
+      "Greedy",
+      "Backtracking",
+      "Stack & Queues",
+      "Heaps",
+      "Graphs",
+      "Tries",
+      "Dynamic Programming",
+      "Bit Manipulation",
+    ],
+  },
+  {
+    name: "Striver SDE Sheet",
+
+    description:
+      "Created by Striver (Raj Vikramaditya), the SDE Sheet is a company-oriented interview preparation roadmap containing the most frequently asked coding interview problems across top product-based companies. It focuses on mastering essential DSA patterns required for software engineering interviews.",
+
+    totalQuestions: 191,
+
+    moduleCount: 14,
+
+    difficulty: "Intermediate → Advanced",
+
+    bestFor: "SDE Interviews",
+
+    roadmap: [
+      "Arrays",
+      "Arrays Part-II",
+      "Arrays Part-III",
+      "Arrays Part-IV",
+
+      "Linked List",
+      "Linked List Part-II",
+      "Linked List and Arrays",
+
+      "Greedy Algorithms",
+
+      "Recursion",
+      "Recursion and Backtracking",
+
+      "Binary Search",
+
+      "Heaps",
+
+      "Stack and Queue",
+      "Stack and Queue Part-II",
+
+      "String",
+      "String Part-II",
+
+      "Binary Tree",
+      "Binary Tree Part-II",
+      "Binary Tree Part-III",
+      "Binary Trees [Miscellaneous]",
+
+      "Binary Search Trees",
+      "Binary Search Trees Part-II",
+
+      "Graphs",
+      "Graphs Part-II",
+
+      "Dynamic Programming",
+      "Dynamic Programming Part-II",
+
+      "Trie",
+    ],
+  },
 ];
