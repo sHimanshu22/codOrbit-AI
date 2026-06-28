@@ -9,6 +9,7 @@
     "seed:blind75": "node seeders/SeedBlind75.js",
     "seed:loveBabbar": "node seeders/SeedLoveBabbar.js",
     "seed:striverSDE": "node seeders/SeedStriverSDE.js",
+    "seed:neetcode150": "node seeders/SeedNeetcode150.js",
     "seed:DSAseed": "node seeders/SeedDSASheets.js"
   },
   "keywords": [],

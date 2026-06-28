@@ -96,6 +96,7 @@ module.exports = [
       "Bit Manipulation",
     ],
   },
+
   {
     name: "Striver SDE Sheet",
 
@@ -104,7 +105,7 @@ module.exports = [
 
     totalQuestions: 191,
 
-    moduleCount: 14,
+    moduleCount: 28,
 
     difficulty: "Intermediate → Advanced",
 
@@ -150,6 +151,42 @@ module.exports = [
       "Dynamic Programming Part-II",
 
       "Trie",
+    ],
+  },
+
+  {
+    name: "NeetCode 150",
+
+    description:
+      "Created by NeetCode, this curated collection of 150 interview problems is organized by coding patterns and data structures. It is one of the most popular roadmaps for preparing for coding interviews at FAANG and top product-based companies.",
+
+    totalQuestions: 150,
+
+    moduleCount: 18,
+
+    difficulty: "Beginner → Advanced",
+
+    bestFor: "Coding Interviews",
+
+    roadmap: [
+      "Arrays & Hashing",
+      "Two Pointers",
+      "Sliding Window",
+      "Stack",
+      "Binary Search",
+      "Linked List",
+      "Trees",
+      "Tries",
+      "Heap / Priority Queue",
+      "Backtracking",
+      "Graphs",
+      "Advanced Graphs",
+      "1-D Dynamic Programming",
+      "2-D Dynamic Programming",
+      "Greedy",
+      "Intervals",
+      "Math & Geometry",
+      "Bit Manipulation",
     ],
   },
 ];
