@@ -331,7 +331,7 @@ const DSATracker = () => {
           </div>
 
           <div className="lg:ml-auto">
-            <div className="mb-4">
+            <div className="mb-3">
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                 Active Sheet
               </h3>
