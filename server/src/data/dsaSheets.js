@@ -39,28 +39,39 @@ module.exports = [
     name: "Blind 75",
 
     description:
-      "Originally curated by Blind, this collection features the 75 most frequently asked coding interview problems across top tech companies. It focuses on essential patterns and is ideal for interview preparation and quick revision.",
+      "The Blind 75 is one of the most popular coding interview problem sets, containing the most important questions asked by top tech companies. Organized into pattern-based modules, it helps you master core DSA concepts and build strong problem-solving skills for technical interviews.",
 
     totalQuestions: 75,
 
-    moduleCount: 11,
+    moduleCount: 22,
 
     difficulty: "Intermediate",
 
-    bestFor: "Interview Revision",
+    bestFor: "Coding Interviews & Pattern-Based DSA",
 
     roadmap: [
-      "Array",
-      "String",
+      "Arrays & String",
+      "HashMap / Set",
+      "Two Pointers",
+      "Sliding Window",
+      "Prefix Sum",
+      "Stack",
+      "Monotonic Stack",
+      "Queue",
+      "Binary Search",
       "Linked List",
-      "Binary",
-      "Interval",
-      "Matrix",
-      "Tree",
-      "Heap",
+      "Binary Tree - DFS",
+      "Binary Tree - BFS",
+      "Binary Search Tree",
+      "Trie",
+      "Heap / Priority Queue",
+      "Intervals",
+      "Bit Manipulation",
+      "Graph - DFS",
+      "Graph - BFS",
       "Backtracking",
-      "Graph",
-      "Dynamic Programming",
+      "1-D Dynamic Programming",
+      "Multi-dimensional Dynamic Programming",
     ],
   },
 

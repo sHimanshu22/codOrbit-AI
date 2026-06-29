@@ -8,7 +8,13 @@ import {
 
 import leetcodeLogo from "../../assets/platforms/leetcode.svg";
 import youtubeLogo from "../../assets/platforms/youtube.svg";
-
+import geegksforgeeks from "../../assets/platforms/gfg.svg";
+import codechef from "../../assets/platforms/codechef.svg";
+import codeforces from "../../assets/platforms/codeforces.svg";
+import hackerrank from "../../assets/platforms/gfg.svg";
+import hackerearth from "../../assets/platforms/hackerearth.svg";
+import spoj from "../../assets/platforms/spoj.svg";
+import interviewbit from "../../assets/platforms/interviewbit.png";
 const QuestionRow = ({
   question,
   onToggle,
@@ -29,6 +35,27 @@ const QuestionRow = ({
     switch (platform?.toLowerCase()) {
       case "leetcode":
         return leetcodeLogo;
+
+      case "geeksforgeeks":
+        return geegksforgeeks;
+
+      case "codechef":
+        return codechef;
+
+      case "codeforces":
+        return codeforces;
+
+      case "hackerrank":
+        return hackerrank;
+
+      case "hackerearth":
+        return hackerearth;
+
+      case "spoj":
+        return spoj;
+
+      case "interviewbit":
+        return interviewbit;
 
       default:
         return null;
@@ -67,24 +94,46 @@ const QuestionRow = ({
 
       {/* Title */}
 
+      {/* Title */}
+
       <div className="flex-1 min-w-0">
-        <h4
-          className="
-          text-sm
-          md:text-base
-
-          font-medium
-
-          text-slate-900
-          dark:text-white
-
-          truncate
-          "
-        >
-          {question.title}
-        </h4>
+        {question.problemUrl ? (
+          <a
+            href={question.problemUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+        block
+        text-sm
+        md:text-base
+        font-medium
+        text-slate-900
+        dark:text-white
+        truncate
+        hover:underline
+        hover:text-blue-600
+        dark:hover:text-blue-400
+        transition-colors
+        cursor-pointer
+      "
+          >
+            {question.title}
+          </a>
+        ) : (
+          <h4
+            className="
+        text-sm
+        md:text-base
+        font-medium
+        text-slate-900
+        dark:text-white
+        truncate
+      "
+          >
+            {question.title}
+          </h4>
+        )}
       </div>
-
       {/* Difficulty / Concept */}
 
       <div className="w-24 hidden md:flex justify-center">
