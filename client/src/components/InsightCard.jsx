@@ -17,7 +17,7 @@ const InsightCard = ({ title, value }) => {
         {title}
       </h3>
 
-      <p className="mt-4 text-4xl font-bold text-slate-900 dark:text-white">
+      <p className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
         {value}
       </p>
     </div>

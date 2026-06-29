@@ -39,7 +39,7 @@ const DifficultyAnalytics = ({ difficultyStats }) => {
           return (
             <div key={difficulty}>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-3xl font-medium text-slate-800 dark:text-slate-200">
+                <span className="text-xl font-medium text-slate-800 dark:text-slate-200">
                   {difficulty}
                 </span>
 
