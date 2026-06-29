@@ -21,8 +21,6 @@ import {
   getSheets,
 } from "../services/dsaService";
 
-import TopicAnalytics from "../components/TopicAnalytics";
-
 import DifficultyAnalytics from "../components/DifficultyAnalytics";
 
 import DSAStatCard from "../components/DSAStatCard";
@@ -489,30 +487,55 @@ const DSATracker = () => {
           title="Analytics"
           subtitle="Understand your strengths and weaknesses"
         />
+
         {progress && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-            <TopicAnalytics topicStats={progress.topicStats} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 items-stretch">
+            {/* Difficulty */}
 
             <DifficultyAnalytics difficultyStats={progress.difficultyStats} />
-          </div>
-        )}
-      </div>
-      {/* Insight Cards */}
-      <div className="mt-12">
-        <SectionHeader
-          title="Performance Insights"
-          subtitle="Key takeaways from your preparation"
-        />
-        {progress && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <InsightCard
-              title="Strongest Topic"
-              value={progress.strongestTopic}
-            />
 
-            <InsightCard title="Weakest Topic" value={progress.weakestTopic} />
+            {/* Performance */}
 
-            <InsightCard title="Readiness" value={progress.readiness} />
+            <div
+              className="
+  bg-white
+  dark:bg-slate-900
+  border
+  border-slate-200
+  dark:border-slate-800
+  rounded-3xl
+  p-8
+  shadow-sm
+  h-full
+  flex
+  flex-col
+  "
+            >
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Performance Insights
+              </h3>
+
+              <p className="text-slate-500 dark:text-slate-400 mt-2">
+                Key takeaways from your preparation
+              </p>
+
+              <div className="flex-1 flex flex-col justify-between mt-8 gap-5">
+                <InsightCard
+                  title="Strongest Topic"
+                  value={progress.strongestTopic || "-"}
+                />
+
+                <InsightCard
+                  title="Weakest Topic"
+                  value={progress.weakestTopic || "-"}
+                />
+
+                <InsightCard
+                  title="Readiness"
+                  value={progress.readiness || "-"}
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -1,6 +1,4 @@
-const DifficultyAnalytics = ({
-  difficultyStats,
-}) => {
+const DifficultyAnalytics = ({ difficultyStats }) => {
   const difficultyColors = {
     Easy: "bg-green-500",
     Medium: "bg-yellow-500",
@@ -16,108 +14,59 @@ const DifficultyAnalytics = ({
       border-slate-200
       dark:border-slate-800
       rounded-3xl
-      p-6
+      p-8
       shadow-sm
+      h-full
       "
     >
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
           Difficulty Progress
         </h2>
 
-        <p className="text-slate-500 dark:text-slate-400">
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
           Progress across Easy, Medium and Hard problems
         </p>
       </div>
 
-      <div className="space-y-6">
-        {Object.entries(
-          difficultyStats || {},
-        ).map(
-          ([difficulty, stats]) => {
-            const percentage =
-              stats.total > 0
-                ? Math.round(
-                    (stats.solved /
-                      stats.total) *
-                      100,
-                  )
-                : 0;
+      <div className="space-y-10">
+        {Object.entries(difficultyStats || {}).map(([difficulty, stats]) => {
+          const percentage =
+            stats.total > 0
+              ? Math.round((stats.solved / stats.total) * 100)
+              : 0;
 
-            return (
-              <div
-                key={difficulty}
-              >
-                <div className="flex justify-between mb-2">
+          return (
+            <div key={difficulty}>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-3xl font-medium text-slate-800 dark:text-slate-200">
+                  {difficulty}
+                </span>
 
-                  <span
-                    className="
-                    font-medium
-                    text-slate-700
-                    dark:text-slate-300
-                    "
-                  >
-                    {difficulty}
-                  </span>
-
-                  <span
-                    className="
-                    text-sm
-                    text-slate-500
-                    dark:text-slate-400
-                    "
-                  >
-                    {stats.solved}/
-                    {stats.total}
-                  </span>
-
-                </div>
-
-                <div
-                  className="
-                  w-full
-                  h-3
-                  bg-slate-100
-                  dark:bg-slate-800
-                  rounded-full
-                  overflow-hidden
-                  "
-                >
-                  <div
-                    className={`
-                    h-full
-                    rounded-full
-                    transition-all
-                    duration-500
-                    ${
-                      difficultyColors[
-                        difficulty
-                      ] ||
-                      "bg-blue-500"
-                    }
-                    `}
-                    style={{
-                      width: `${percentage}%`,
-                    }}
-                  />
-                </div>
-
-                <div className="mt-2 text-right">
-                  <span
-                    className="
-                    text-xs
-                    font-medium
-                    text-slate-500
-                    dark:text-slate-400
-                    "
-                  >
-                    {percentage}% Complete
-                  </span>
-                </div>
+                <span className="text-lg text-slate-500 dark:text-slate-400">
+                  {stats.solved}/{stats.total}
+                </span>
               </div>
-            );
-          },
-        )}
+
+              <div className="h-4 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    difficultyColors[difficulty] || "bg-blue-500"
+                  }`}
+                  style={{
+                    width: `${percentage}%`,
+                  }}
+                />
+              </div>
+
+              <div className="mt-3 text-right">
+                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  {percentage}% Complete
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

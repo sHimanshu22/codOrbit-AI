@@ -1,7 +1,4 @@
-const InsightCard = ({
-  title,
-  value,
-}) => {
+const InsightCard = ({ title, value }) => {
   return (
     <div
       className="
@@ -11,30 +8,16 @@ const InsightCard = ({
       border-slate-200
       dark:border-slate-800
       rounded-2xl
-      p-6
+      px-7
+      py-6
       shadow-sm
       "
     >
-      <h3
-        className="
-        text-sm
-        font-medium
-        text-slate-500
-        dark:text-slate-400
-        "
-      >
+      <h3 className="text-base text-slate-500 dark:text-slate-400">
         {title}
       </h3>
 
-      <p
-        className="
-        text-2xl
-        font-bold
-        mt-3
-        text-slate-900
-        dark:text-white
-        "
-      >
+      <p className="mt-4 text-4xl font-bold text-slate-900 dark:text-white">
         {value}
       </p>
     </div>
