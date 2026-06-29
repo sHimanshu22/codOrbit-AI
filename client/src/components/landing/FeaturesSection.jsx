@@ -1,8 +1,4 @@
-import {
-  BarChart3,
-  Brain,
-  Code2,
-} from "lucide-react";
+import { BarChart3, Brain, Code2, FileText, GitBranch, Trophy } from "lucide-react";
 
 const features = [
   {
@@ -22,8 +18,27 @@ const features = [
   {
     icon: Brain,
     title: "AI Career Coach",
+    description: "Receive personalized recommendations and learning guidance.",
+  },
+  {
+    icon: Trophy,
+    title: "Contest Tracking",
     description:
-      "Receive personalized recommendations and learning guidance.",
+      "Stay updated with upcoming contests and analyze your competitive programming performance.",
+  },
+
+  {
+    icon: GitBranch,
+    title: "Platform Sync",
+    description:
+      "Connect GitHub, LeetCode, Codeforces, CodeChef, HackerRank and GeeksforGeeks in one place.",
+  },
+
+  {
+    icon: FileText,
+    title: "Resume Analysis",
+    description:
+      "Upload your resume and receive AI-powered feedback with ATS scoring and improvement suggestions.",
   },
 ];
 
@@ -38,7 +53,7 @@ const FeaturesSection = () => {
       py-24
       "
     >
-      <div className="text-center mb-14">
+      <div className="text-center mb-5">
         <p
           className="
           text-blue-600
@@ -52,7 +67,7 @@ const FeaturesSection = () => {
           className="
           text-4xl
           font-bold
-          mt-3
+          mt-1
           text-slate-900
           dark:text-white
           "
@@ -62,15 +77,15 @@ const FeaturesSection = () => {
 
         <p
           className="
-          mt-4
+          mt-2
           text-slate-500
           dark:text-slate-400
           max-w-2xl
           mx-auto
           "
         >
-          A single platform for coding progress,
-          analytics and AI-powered improvement.
+          A single platform for coding progress, analytics and AI-powered
+          improvement.
         </p>
       </div>
 

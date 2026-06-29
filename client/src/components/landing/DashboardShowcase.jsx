@@ -10,11 +10,11 @@ import dashboardLight from "../../assets/dashboard-light.png";
 import dashboardDark from "../../assets/dashboard-dark.png";
 
 const features = [
-  "Developer Score",
-  "DSA Progress Tracking",
-  "Contest Analytics",
-  "GitHub Insights",
-  "AI Recommendations",
+  "Unified dashboard across multiple coding platforms",
+  "AI-powered Developer Score and personalized insights",
+  "Track DSA sheets and placement preparation",
+  "Contest history, ratings and performance analytics",
+  "Resume Analysis with ATS scoring",
 ];
 
 const DashboardShowcase = () => {
@@ -32,9 +32,7 @@ const DashboardShowcase = () => {
         {/* Left */}
 
         <div>
-          <p className="text-blue-600 font-medium">
-            Product Overview
-          </p>
+          <p className="text-blue-600 font-medium">Product Overview</p>
 
           <h2
             className="
@@ -53,28 +51,23 @@ const DashboardShowcase = () => {
 
           <p
             className="
-            mt-6
-            text-lg
-            text-slate-500
-            dark:text-slate-400
-            "
+  mt-6
+  text-lg
+  leading-8
+  text-slate-500
+  dark:text-slate-400
+  "
           >
-            Stop switching between GitHub,
-            LeetCode, Codeforces and spreadsheets.
-            CodOrbit brings everything together into
-            one unified dashboard.
+            Stop switching between GitHub, LeetCode, Codeforces, CodeChef and
+            spreadsheets. CodOrbit brings all your coding activity into one
+            intelligent dashboard so you can track progress, prepare for
+            placements and improve consistently.
           </p>
 
           <div className="mt-10 space-y-5">
             {features.map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3"
-              >
-                <CheckCircle2
-                  size={20}
-                  className="text-green-500"
-                />
+              <div key={item} className="flex items-center gap-3">
+                <CheckCircle2 size={20} className="text-green-500" />
 
                 <span
                   className="
@@ -84,7 +77,11 @@ const DashboardShowcase = () => {
                 >
                   {item}
                 </span>
+
+                
               </div>
+
+              
             ))}
           </div>
         </div>

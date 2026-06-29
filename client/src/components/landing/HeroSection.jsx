@@ -9,8 +9,8 @@ const HeroSection = () => {
       max-w-7xl
       mx-auto
       px-6
-      py-16
-      lg:py-20
+      py-8
+      lg:py-10
       "
     >
       <div className="grid lg:grid-cols-2 gap-16 items-center">

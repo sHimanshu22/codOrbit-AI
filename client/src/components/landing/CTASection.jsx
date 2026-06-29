@@ -24,7 +24,7 @@ const CTASection = () => {
           font-bold
           "
         >
-          Start Your Developer Journey Today
+          Build Better. Track Smarter. Get Placement Ready.
         </h2>
 
         <p
@@ -36,9 +36,9 @@ const CTASection = () => {
           text-lg
           "
         >
-          Track coding progress, improve consistency,
-          analyze performance and grow with AI-powered
-          guidance.
+          Connect your coding platforms, monitor DSA progress, analyze your
+          resume with AI, track contests and measure your growth—all from one
+          dashboard.
         </p>
 
         <Link
@@ -61,8 +61,43 @@ const CTASection = () => {
           transition-all
           "
         >
-          Get Started Free
+          Start Tracking Now
         </Link>
+
+        <div
+          className="
+  mt-8
+
+  flex
+  flex-wrap
+  justify-center
+  gap-3
+  "
+        >
+          {[
+            "Developer Analytics",
+            "DSA Tracker",
+            "Contest Center",
+            "Resume Analysis",
+          ].map((item) => (
+            <span
+              key={item}
+              className="
+      px-4
+      py-2
+
+      rounded-full
+
+      bg-white/15
+
+      text-sm
+      font-medium
+      "
+            >
+              {item}
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );
