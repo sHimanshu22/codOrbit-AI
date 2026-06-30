@@ -481,10 +481,42 @@ const Profile = () => {
       shadow-sm
       "
             >
+              
+
+               <div className="flex items-start justify-between gap-4">
               <SectionHeader
                 title="Personal Information"
                 subtitle="Basic profile details"
               />
+
+              <button
+                type="submit"
+                className="
+      shrink-0
+
+      inline-flex
+      items-center
+      gap-2
+
+      bg-blue-600
+      hover:bg-blue-700
+
+      text-white
+
+      px-6
+      py-2.5
+
+      rounded-xl
+
+      font-medium
+
+      transition-all
+      shadow-sm
+    "
+              >
+                Save Changes
+              </button>
+            </div>
 
               <div className="grid md:grid-cols-2 gap-5 mt-6">
                 <div className="relative md:col-span-2">

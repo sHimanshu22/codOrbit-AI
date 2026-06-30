@@ -11,7 +11,9 @@ import {
 } from "lucide-react";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
+import LogoutModal from "./ui/LogoutModal.jsx";
 import lightLogo from "../assets/logo-light.png";
 import darkLogo from "../assets/logo-dark.png";
 import { useContext } from "react";
@@ -21,6 +23,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const { setUser } = useContext(AuthContext);
 
@@ -226,7 +229,7 @@ const Sidebar = () => {
 
       <div className="mt-auto pt-6 border-t border-slate-200 dark:border-slate-800">
         <button
-          onClick={logout}
+          onClick={() => setShowLogoutModal(true)}
           className="
           w-full
           flex
@@ -250,6 +253,17 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onCancel={() => setShowLogoutModal(false)}
+        onConfirm={() => {
+          logout();
+
+          navigate("/");
+
+          setShowLogoutModal(false);
+        }}
+      />
     </aside>
   );
 };

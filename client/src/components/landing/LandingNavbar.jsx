@@ -37,59 +37,54 @@ const LandingNavbar = () => {
       >
         {/* Logo */}
 
-        <div className="flex items-center gap-3">
-          {/* Light Mode Logo */}
-
+        <Link to="/" className="flex items-center gap-3">
           <img
             src={logoLight}
             alt="CodOrbit"
             className="
-    h-10
-    w-10
-    object-contain
-    dark:hidden
-    "
+            h-10
+            w-10
+            object-contain
+            dark:hidden
+            "
           />
-
-          {/* Dark Mode Logo */}
 
           <img
             src={logoDark}
             alt="CodOrbit"
             className="
-    h-10
-    w-10
-    object-contain
-    hidden
-    dark:block
-    "
+            h-10
+            w-10
+            object-contain
+            hidden
+            dark:block
+            "
           />
 
           <h1
             className="
-  text-3xl
-  lg:text-4xl
+            text-3xl
+            lg:text-4xl
 
-  font-extrabold
+            font-extrabold
 
-  flex
-  items-center
+            tracking-tight
 
-  text-slate-900
-  dark:text-white
-
-  tracking-tight
-  "
+            text-slate-900
+            dark:text-white
+            "
           >
             CodOrbit
           </h1>
-        </div>
+        </Link>
+
         {/* Navigation */}
 
         <nav
           className="
           hidden
           md:flex
+
           items-center
           gap-8
 
@@ -147,34 +142,32 @@ const LandingNavbar = () => {
             dark:hover:bg-slate-800
 
             transition-all
-            duration-200
             "
           >
             Login
           </Link>
 
           <Link
-            to="/register"
+            to="/login"
             className="
-            bg-blue-600
-            hover:bg-blue-700
-
-            text-white
-
             px-5
             py-2.5
 
             rounded-xl
 
-            font-medium
+            bg-blue-600
+            hover:bg-blue-700
+
+            text-white
+
+            font-semibold
 
             transition-all
-            duration-200
 
             hover:shadow-lg
             "
           >
-            Get Started Free
+            Get Started
           </Link>
         </div>
       </div>

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -19,11 +18,13 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    password: {
+    username: {
       type: String,
-      required: [true, "Password is required"],
-      minlength: 6,
-      select: false,
+      required: true,
+      unique: true,
+      trim: true,
+      minlength: 3,
+      maxlength: 20,
     },
 
     college: {
@@ -41,6 +42,11 @@ const userSchema = new mongoose.Schema(
     },
 
     profileImage: {
+      type: String,
+      default: "",
+    },
+
+    googleId: {
       type: String,
       default: "",
     },
@@ -83,46 +89,17 @@ const userSchema = new mongoose.Schema(
 
     isVerified: {
       type: Boolean,
-      default: false,
+      default: true,
     },
+
     activeSheets: {
       type: [String],
       default: ["Striver A2Z"],
     },
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      minlength: 3,
-      maxlength: 20,
-    },
-
-    resetOtp: String,
-
-    resetOtpExpires: Date,
   },
   {
     timestamps: true,
   },
 );
-
-userSchema.index({
-  email: 1,
-});
-
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) {
-    return;
-  }
-
-  const salt = await bcrypt.genSalt(10);
-
-  this.password = await bcrypt.hash(this.password, salt);
-});
-
-userSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
 module.exports = mongoose.model("User", userSchema);

@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Analytics from "./pages/Analytics";
@@ -11,20 +10,34 @@ import SheetManagement from "./pages/SheetManagement";
 import Contests from "./pages/Contests";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+
 import Landing from "./pages/Landing";
 import PublicProfile from "./pages/PublicProfile";
 
-import ForgotPassword from "./pages/ForgotPassword";
 import ResumeAnalysis from "./pages/ResumeAnalysis";
 import SavedQuestionsPage from "./pages/SavedQuestionsPage";
+import PublicRoute from "./components/PublicRoute";
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public */}
+
         <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+
+        <Route path="/u/:username" element={<PublicProfile />} />
+
+        {/* Protected */}
 
         <Route
           path="/dashboard"
@@ -79,6 +92,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/contests"
           element={
@@ -87,8 +101,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        <Route path="/u/:username" element={<PublicProfile />} />
 
         <Route
           path="/resume-analysis"
@@ -103,7 +115,7 @@ function App() {
           path="/saved-questions"
           element={
             <ProtectedRoute>
-              <SavedQuestionsPage  />
+              <SavedQuestionsPage />
             </ProtectedRoute>
           }
         />

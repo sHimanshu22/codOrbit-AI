@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -15,19 +16,16 @@ import {
 import lightLogo from "../../assets/logo-light.png";
 import darkLogo from "../../assets/logo-dark.png";
 
-import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import LogoutModal from "../ui/LogoutModal";
 
 const LoggedInNavbar = () => {
   const location = useLocation();
-  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const { logout } = useContext(AuthContext);
 
-    navigate("/");
-  };
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const navItems = [
     {
@@ -72,198 +70,212 @@ const LoggedInNavbar = () => {
     },
   ];
 
+  const confirmLogout = () => {
+    logout();
+    navigate("/");
+    setShowLogoutModal(false);
+  };
+
   return (
-    <header
-      className="
-      sticky
-      top-0
-      z-50
-
-      bg-white/90
-      dark:bg-slate-950/90
-
-      backdrop-blur-xl
-
-      border-b
-      border-slate-200
-      dark:border-slate-800
-      "
-    >
-      <div
+    <>
+      <header
         className="
-        max-w-7xl
-        mx-auto
+        sticky
+        top-0
+        z-50
 
-        h-20
+        bg-white/90
+        dark:bg-slate-950/90
 
-        px-6
+        backdrop-blur-xl
 
-        flex
-        items-center
-        justify-between
+        border-b
+        border-slate-200
+        dark:border-slate-800
         "
       >
-        {/* Logo */}
-
-        <Link
-          to="/"
+        <div
           className="
+          max-w-7xl
+          mx-auto
+
+          h-20
+
+          px-6
+
           flex
           items-center
-          gap-3
-
-          shrink-0
-
-          group
+          justify-between
           "
         >
-          <img
-            src={lightLogo}
-            alt="CodOrbit"
+          {/* Logo */}
+
+          <Link
+            to="/"
             className="
-            w-11
-            h-11
+            flex
+            items-center
+            gap-3
 
-            dark:hidden
+            shrink-0
 
-            transition-transform
-            duration-200
-
-            group-hover:scale-105
+            group
             "
-          />
+          >
+            <img
+              src={lightLogo}
+              alt="CodOrbit"
+              className="
+              w-11
+              h-11
 
-          <img
-            src={darkLogo}
-            alt="CodOrbit"
+              dark:hidden
+
+              transition-transform
+              duration-200
+
+              group-hover:scale-105
+              "
+            />
+
+            <img
+              src={darkLogo}
+              alt="CodOrbit"
+              className="
+              hidden
+              dark:block
+
+              w-11
+              h-11
+
+              transition-transform
+              duration-200
+
+              group-hover:scale-105
+              "
+            />
+
+            <div>
+              <h1
+                className="
+                text-2xl
+                font-bold
+
+                text-slate-900
+                dark:text-white
+                "
+              >
+                CodOrbit
+              </h1>
+
+              <p
+                className="
+                text-xs
+
+                text-slate-500
+                dark:text-slate-400
+                "
+              >
+                Developer Growth Platform
+              </p>
+            </div>
+          </Link>
+
+          {/* Navigation */}
+
+          <nav
             className="
             hidden
-            dark:block
+            xl:flex
 
-            w-11
-            h-11
-
-            transition-transform
-            duration-200
-
-            group-hover:scale-105
+            items-center
             "
-          />
+          >
+            {navItems.map((item) => {
+              const Icon = item.icon;
 
-          <div>
-            <h1
-              className="
-              text-2xl
-              font-bold
+              const active = location.pathname === item.path;
 
-              text-slate-900
-              dark:text-white
-              "
-            >
-              CodOrbit
-            </h1>
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  title={item.name}
+                  className={`
+                  w-11
+                  h-11
 
-            <p
-              className="
-              text-xs
+                  flex
+                  items-center
+                  justify-center
 
-              text-slate-500
-              dark:text-slate-400
-              "
-            >
-              Developer Growth Platform
-            </p>
-          </div>
-        </Link>
+                  rounded-xl
 
-        {/* Navigation */}
+                  transition-all
 
-        <nav
-          className="
-          hidden
-          xl:flex
+                  ${
+                    active
+                      ? `
+                      bg-blue-600
+                      text-white
+                      shadow-sm
+                    `
+                      : `
+                      text-slate-600
+                      dark:text-slate-300
 
-          items-center
-          "
-        >
-          {navItems.map((item) => {
-            const Icon = item.icon;
+                      hover:bg-slate-100
+                      dark:hover:bg-slate-800
+                    `
+                  }
+                  `}
+                >
+                  <Icon size={20} />
+                </Link>
+              );
+            })}
+          </nav>
 
-            const active = location.pathname === item.path;
+          {/* Logout */}
 
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                title={item.name}
-                className={`
-    w-11
-    h-11
+          <button
+            onClick={() => setShowLogoutModal(true)}
+            className="
+            inline-flex
+            items-center
+            gap-2
 
-    flex
-    items-center
-    justify-center
+            px-4
+            py-2.5
 
-    rounded-xl
+            rounded-xl
 
-    transition-all
+            bg-red-50
+            dark:bg-red-900/20
 
-    ${
-      active
-        ? `
-        bg-blue-600
-        text-white
-        shadow-sm
-        `
-        : `
-        text-slate-600
-        dark:text-slate-300
+            text-red-600
+            dark:text-red-400
 
-        hover:bg-slate-100
-        dark:hover:bg-slate-800
-        `
-    }
-  `}
-              >
-                <Icon size={20} />
-              </Link>
-            );
-          })}
-        </nav>
+            hover:bg-red-100
+            dark:hover:bg-red-900/30
 
-        {/* Logout */}
+            font-medium
 
-        <button
-          onClick={handleLogout}
-          className="
-          inline-flex
-          items-center
-          gap-2
+            transition-all
+            "
+          >
+            <LogOut size={18} />
+            Logout
+          </button>
+        </div>
+      </header>
 
-          px-4
-          py-2.5
-
-          rounded-xl
-
-          bg-red-50
-          dark:bg-red-900/20
-
-          text-red-600
-          dark:text-red-400
-
-          hover:bg-red-100
-          dark:hover:bg-red-900/30
-
-          font-medium
-
-          transition-all
-          "
-        >
-          <LogOut size={18} />
-          Logout
-        </button>
-      </div>
-    </header>
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onCancel={() => setShowLogoutModal(false)}
+        onConfirm={confirmLogout}
+      />
+    </>
   );
 };
 

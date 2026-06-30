@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-
 import api from "../services/api";
 
 export const AuthContext = createContext();
@@ -9,8 +8,15 @@ export const AuthProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
 
+  const login = async (token) => {
+    localStorage.setItem("token", token);
+
+    await loadUser();
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
+
     setUser(null);
   };
 
@@ -46,7 +52,8 @@ export const AuthProvider = ({ children }) => {
         setUser,
         loading,
         loadUser,
-        logout
+        login,
+        logout,
       }}
     >
       {children}

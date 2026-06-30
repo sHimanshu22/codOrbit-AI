@@ -1,6 +1,5 @@
-import { Brain } from "lucide-react";
+import { Brain, Zap, Flame, Target } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Zap, Flame, Target } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -70,17 +69,19 @@ const HeroSection = () => {
 
             mt-8
             max-w-xl
+            leading-8
             "
           >
-            CodOrbit AI helps you track coding progress, master DSA, monitor
-            contests, and get AI-powered insights to achieve your dream job.
+            Track your coding progress, monitor DSA sheets, analyze coding
+            profiles, receive AI-powered insights, and prepare for placements —
+            all with a single Google sign in.
           </p>
 
-          {/* CTA Buttons */}
+          {/* CTA */}
 
           <div className="flex flex-wrap gap-4 mt-10">
             <Link
-              to="/register"
+              to="/login"
               className="
               bg-blue-600
               hover:bg-blue-700
@@ -92,13 +93,14 @@ const HeroSection = () => {
               py-3
 
               rounded-xl
-              font-medium
+
+              font-semibold
 
               transition-all
               duration-300
               "
             >
-              Get Started Free
+              Continue with Google
             </Link>
 
             <a
@@ -112,6 +114,7 @@ const HeroSection = () => {
               py-3
 
               rounded-xl
+
               font-medium
 
               text-slate-700
@@ -127,37 +130,49 @@ const HeroSection = () => {
             </a>
           </div>
 
+          {/* Small Trust Text */}
+
+          <p
+            className="
+            mt-4
+
+            text-sm
+
+            text-slate-500
+            dark:text-slate-400
+            "
+          >
+            No password • No credit card • Free forever
+          </p>
+
           {/* Trust Points */}
 
           <div
             className="
-   flex
-  items-center
-  gap-8
+            flex
+            items-center
+            gap-8
 
-  mt-6
+            mt-8
 
-  text-sm
+            text-sm
 
-  text-slate-500
-  dark:text-slate-400
-  "
+            text-slate-500
+            dark:text-slate-400
+            "
           >
             <div className="flex items-center gap-2">
               <Zap size={16} className="text-blue-500" />
-
               <span>Sync Coding Profiles</span>
             </div>
 
             <div className="flex items-center gap-2">
               <Flame size={16} className="text-orange-500" />
-
               <span>Maintain Coding Streaks</span>
             </div>
 
             <div className="flex items-center gap-2">
               <Target size={16} className="text-green-500" />
-
               <span>Placement-Focused Learning</span>
             </div>
           </div>
@@ -187,8 +202,11 @@ const HeroSection = () => {
           <div
             className="
             bg-blue-600
+
             rounded-2xl
+
             p-6
+
             text-white
             "
           >
@@ -231,30 +249,15 @@ const HeroSection = () => {
                 dark:border-slate-700
 
                 rounded-2xl
+
                 p-4
                 "
               >
-                <p
-                  className="
-                  text-sm
-
-                  text-slate-500
-                  dark:text-slate-400
-                  "
-                >
+                <p className="text-sm text-slate-500 dark:text-slate-400">
                   {item.label}
                 </p>
 
-                <h4
-                  className="
-                  text-2xl
-                  font-bold
-                  mt-2
-
-                  text-slate-900
-                  dark:text-white
-                  "
-                >
+                <h4 className="text-2xl font-bold mt-2 text-slate-900 dark:text-white">
                   {item.value}
                 </h4>
               </div>
@@ -297,47 +300,22 @@ const HeroSection = () => {
               >
                 <Brain
                   size={20}
-                  className="
-                  text-green-700
-                  dark:text-green-400
-                  "
+                  className="text-green-700 dark:text-green-400"
                 />
               </div>
 
               <div>
-                <p
-                  className="
-                  font-semibold
-
-                  text-green-700
-                  dark:text-green-400
-                  "
-                >
+                <p className="font-semibold text-green-700 dark:text-green-400">
                   AI Coach
                 </p>
 
-                <p
-                  className="
-                  text-xs
-
-                  text-slate-500
-                  dark:text-slate-400
-                  "
-                >
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Personalized Recommendation
                 </p>
               </div>
             </div>
 
-            <p
-              className="
-              text-sm
-              mt-4
-
-              text-slate-600
-              dark:text-slate-300
-              "
-            >
+            <p className="text-sm mt-4 text-slate-600 dark:text-slate-300">
               Focus on Dynamic Programming and Graphs to improve placement
               readiness.
             </p>
