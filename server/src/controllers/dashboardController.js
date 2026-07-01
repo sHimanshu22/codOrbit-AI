@@ -1,10 +1,16 @@
 const PlatformProfile = require("../models/PlatformProfile");
+const {
+  calculateDeveloperScore,
+} = require("../services/developerScoreService");
 
 const getOverview = async (req, res) => {
   try {
     const profile = await PlatformProfile.findOne({
       userId: req.user._id,
     });
+
+    const developerScore = await calculateDeveloperScore(profile, req.user._id);
+  
 
     if (!profile) {
       return res.status(404).json({
@@ -47,6 +53,7 @@ const getOverview = async (req, res) => {
     res.status(200).json({
       success: true,
       overview,
+      developerScore
     });
   } catch (error) {
     res.status(500).json({

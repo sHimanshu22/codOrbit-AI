@@ -1,5 +1,9 @@
 const PlatformProfile = require("../models/PlatformProfile");
 
+const {
+  calculateDeveloperScore,
+} = require("../services/developerScoreService");
+
 const getAnalytics = async (req, res) => {
   try {
     const profile = await PlatformProfile.findOne({
@@ -25,39 +29,17 @@ const getAnalytics = async (req, res) => {
       });
     }
     // =========================
-    // Score Calculations
+    // Developer Score
     // =========================
 
-    const githubScore = Math.min(
-      (profile.github?.publicRepos || 0) * 3 +
-        (profile.github?.totalStars || 0) * 2,
-      100,
-    );
-
-    const dsaScore = Math.min((profile.leetcode?.totalSolved || 0) / 2, 100);
-
-    const bestCPRating = Math.max(
-      profile.codeforces?.currentRating || 0,
-      profile.codechef?.currentRating || 0,
-    );
-
-    const competitiveScore = Math.min(bestCPRating / 20, 100);
-
-    const overallScore = Math.round(
-      (githubScore + dsaScore + competitiveScore) / 3,
-    );
+    const scores = await calculateDeveloperScore(profile, req.user._id);
 
     // =========================
     // Analytics Object
     // =========================
 
     const analytics = {
-      scores: {
-        githubScore,
-        dsaScore,
-        competitiveScore,
-        overallScore,
-      },
+      scores,
 
       github: {
         languages: profile.github?.languagesUsed || [],

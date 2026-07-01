@@ -74,8 +74,6 @@ const Dashboard = () => {
       setHeatmap(heatmapData);
       setOverview(data.overview);
 
-      const scoreData = await getDeveloperScore();
-
       try {
         const aiData = await getAIInsights();
 
@@ -84,11 +82,7 @@ const Dashboard = () => {
         setAIInsights("AI insights are currently unavailable.");
       }
 
-      setDeveloperScore({
-        score: scoreData.developerScore,
-
-        level: scoreData.level,
-      });
+      setDeveloperScore(data.developerScore);
     } catch (error) {
       console.error(error);
       setError("Unable to load dashboard data");
@@ -274,8 +268,9 @@ const Dashboard = () => {
           {developerScore && (
             <div className="mb-10">
               <DeveloperScoreCard
-                score={developerScore.score}
-                level={developerScore.level}
+                score={developerScore.overallScore}
+                level={developerScore.grade}
+                description={developerScore.description}
               />
             </div>
           )}
@@ -334,13 +329,6 @@ const Dashboard = () => {
                 value={overview?.codechefRating}
                 icon={<Trophy size={20} />}
                 description="Current Rating"
-              />
-
-              <OverviewCard
-                title="Connected"
-                value={overview?.platformsConnected}
-                icon={<Link2 size={20} />}
-                description="Linked platforms"
               />
             </div>
           </div>

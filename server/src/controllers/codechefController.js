@@ -1,9 +1,6 @@
 const User = require("../models/User");
 const PlatformProfile = require("../models/PlatformProfile");
-
-const {
-  fetchCodeChefProfile,
-} = require("../services/codechefService");
+const { rebuildPlatformData } = require("../services/platformSyncService");
 
 const syncCodeChefProfile = async (req, res) => {
   try {
@@ -69,81 +66,9 @@ const getCodeChefAnalytics = async (
   }
 };
 
-const syncCodeChefData = async (
-  userId
-) => {
-  const user =
-    await User.findById(userId);
-
-  if (
-    !user.codechefUsername
-  ) {
-    throw new Error(
-      "CodeChef username not found"
-    );
-  }
-
-  let profile =
-    await PlatformProfile.findOne({
-      userId,
-    });
-
-  if (!profile) {
-    profile =
-      new PlatformProfile({
-        userId,
-      });
-  }
-
-  try {
-    const codechefData =
-      await fetchCodeChefProfile(
-        user.codechefUsername
-      );
-
-    profile.codechef = {
-      username:
-        codechefData.username,
-
-      currentRating:
-        codechefData.currentRating,
-
-      highestRating:
-        codechefData.highestRating,
-
-      stars:
-        codechefData.stars,
-
-      globalRank:
-        codechefData.globalRank,
-
-      countryRank:
-        codechefData.countryRank,
-
-      syncStatus: "success",
-
-      lastError: null,
-
-      syncedAt: new Date(),
-    };
-
-    await profile.save();
-
-    return profile.codechef;
-  } catch (error) {
-    profile.codechef = {
-      syncStatus: "failed",
-
-      syncedAt: new Date(),
-
-      lastError:
-        error.message,
-    };
-
-    await profile.save();
-
-    throw error;
-  }
+const syncCodeChefData = async (userId) => {
+  const profile = await rebuildPlatformData(userId);
+  return profile.codechef;
 };
 
 module.exports = {

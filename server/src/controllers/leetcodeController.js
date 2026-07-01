@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const PlatformProfile = require("../models/PlatformProfile");
-
-const { fetchLeetCodeStats } = require("../services/leetcodeService");
+const { rebuildPlatformData } = require("../services/platformSyncService");
 
 // Sync LeetCode Data
 const syncLeetCodeProfile = async (req, res) => {
@@ -57,92 +56,8 @@ const getLeetCodeAnalytics = async (req, res) => {
 };
 
 const syncLeetCodeData = async (userId) => {
-  const user = await User.findById(userId);
-
-  if (!user.leetcodeUsername) {
-    throw new Error("LeetCode username not found");
-  }
-
-  let profile = await PlatformProfile.findOne({
-    userId,
-  });
-
-  if (!profile) {
-    profile = new PlatformProfile({
-      userId,
-    });
-  }
-
-  try {
-    const data =
-      await fetchLeetCodeStats(
-        user.leetcodeUsername
-      );
-
-    const stats =
-      data.matchedUser.submitStats
-        .acSubmissionNum;
-
-    const totalSolved =
-      stats.find(
-        (item) =>
-          item.difficulty === "All"
-      )?.count || 0;
-
-    const easySolved =
-      stats.find(
-        (item) =>
-          item.difficulty === "Easy"
-      )?.count || 0;
-
-    const mediumSolved =
-      stats.find(
-        (item) =>
-          item.difficulty === "Medium"
-      )?.count || 0;
-
-    const hardSolved =
-      stats.find(
-        (item) =>
-          item.difficulty === "Hard"
-      )?.count || 0;
-
-    profile.leetcode = {
-      username:
-        user.leetcodeUsername,
-
-      totalSolved,
-
-      easySolved,
-
-      mediumSolved,
-
-      hardSolved,
-
-      syncStatus: "success",
-
-      syncedAt: new Date(),
-    };
-
-    await profile.save();
-
-    return profile.leetcode;
-
-  } catch (error) {
-
-    profile.leetcode = {
-      username:
-        user.leetcodeUsername,
-
-      syncStatus: "failed",
-
-      syncedAt: new Date(),
-    };
-
-    await profile.save();
-
-    throw error;
-  }
+  const profile = await rebuildPlatformData(userId);
+  return profile.leetcode;
 };
 
 module.exports = {

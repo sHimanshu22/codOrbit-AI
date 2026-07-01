@@ -10,6 +10,8 @@ import { Share2, Copy, Check } from "lucide-react";
 import { Bookmark, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { syncAllPlatforms } from "../services/platformService";
+
 import { User, GraduationCap, Trophy, BookOpen, AtSign } from "lucide-react";
 import PageLoader from "../components/ui/PageLoader";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -131,9 +133,18 @@ const Profile = () => {
     const toastId = toast.loading("Updating profile...");
 
     try {
+      // Save profile first
       await updateProfile(formData);
 
-      toast.success("Profile Updated Successfully", { id: toastId });
+      // Sync all connected platforms
+      await syncAllPlatforms();
+
+      // Refresh profile so UI stays in sync
+      await fetchProfile();
+
+      toast.success("Profile updated successfully!", {
+        id: toastId,
+      });
     } catch (error) {
       console.error(error);
 
@@ -481,17 +492,15 @@ const Profile = () => {
       shadow-sm
       "
             >
-              
+              <div className="flex items-start justify-between gap-4">
+                <SectionHeader
+                  title="Personal Information"
+                  subtitle="Basic profile details"
+                />
 
-               <div className="flex items-start justify-between gap-4">
-              <SectionHeader
-                title="Personal Information"
-                subtitle="Basic profile details"
-              />
-
-              <button
-                type="submit"
-                className="
+                <button
+                  type="submit"
+                  className="
       shrink-0
 
       inline-flex
@@ -513,10 +522,10 @@ const Profile = () => {
       transition-all
       shadow-sm
     "
-              >
-                Save Changes
-              </button>
-            </div>
+                >
+                  Save Changes
+                </button>
+              </div>
 
               <div className="grid md:grid-cols-2 gap-5 mt-6">
                 <div className="relative md:col-span-2">

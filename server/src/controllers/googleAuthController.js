@@ -2,13 +2,18 @@ const { OAuth2Client } = require("google-auth-library");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const PlatformProfile = require("../models/PlatformProfile");
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+  return jwt.sign(
+    { id: userId },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    }
+  );
 };
 
 const googleLogin = async (req, res) => {
@@ -23,7 +28,6 @@ const googleLogin = async (req, res) => {
     }
 
     // Verify Google Token
-
     const ticket = await client.verifyIdToken({
       idToken: credential,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -31,31 +35,36 @@ const googleLogin = async (req, res) => {
 
     const payload = ticket.getPayload();
 
-    const { sub, email, name, picture } = payload;
+    const {
+      sub,
+      email,
+      name,
+      picture,
+    } = payload;
 
     // Check Existing User
+    let user = await User.findOne({ email });
 
-    let user = await User.findOne({
-      email,
-    });
-
-    // Create User if doesn't exist
+    // ===============================
+    // New User
+    // ===============================
 
     if (!user) {
       let username =
         name
           .split(" ")[0]
           .toLowerCase()
-          .replace(/[^a-z0-9]/g, "") + Math.floor(100 + Math.random() * 900);
+          .replace(/[^a-z0-9]/g, "") +
+        Math.floor(100 + Math.random() * 900);
 
       // Ensure username is unique
-
       while (await User.findOne({ username })) {
         username =
           name
             .split(" ")[0]
             .toLowerCase()
-            .replace(/[^a-z0-9]/g, "") + Math.floor(100 + Math.random() * 900);
+            .replace(/[^a-z0-9]/g, "") +
+          Math.floor(100 + Math.random() * 900);
       }
 
       user = await User.create({
@@ -64,29 +73,47 @@ const googleLogin = async (req, res) => {
         username,
 
         googleId: sub,
-
         profileImage: picture,
 
         authProvider: "google",
-
         isVerified: true,
       });
-    } else {
-      // Existing user
 
+      // Create Platform Profile
+      await PlatformProfile.create({
+        userId: user._id,
+      });
+    }
+
+    // ===============================
+    // Existing User
+    // ===============================
+
+    else {
       if (!user.googleId) {
         user.googleId = sub;
       }
 
-      user.profileImage = user.profileImage || picture;
-
-      if (!user.authProvider) {
-        user.authProvider = "google";
+      if (!user.profileImage) {
+        user.profileImage = picture;
       }
 
+      user.authProvider = "google";
       user.isVerified = true;
 
       await user.save();
+
+      // Self-healing:
+      // Create PlatformProfile if missing
+      let platformProfile = await PlatformProfile.findOne({
+        userId: user._id,
+      });
+
+      if (!platformProfile) {
+        await PlatformProfile.create({
+          userId: user._id,
+        });
+      }
     }
 
     res.status(200).json({
@@ -96,13 +123,9 @@ const googleLogin = async (req, res) => {
 
       user: {
         id: user._id,
-
         username: user.username,
-
         name: user.name,
-
         email: user.email,
-
         profileImage: user.profileImage,
       },
     });

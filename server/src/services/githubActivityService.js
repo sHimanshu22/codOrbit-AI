@@ -11,6 +11,9 @@ const syncGitHubActivity = async (userId) => {
     return;
   }
 
+  // Remove old activity when syncing a different GitHub account
+  await GitHubActivity.deleteMany({ userId });
+
   const events = await fetchGitHubEvents(user.githubUsername);
 
   const activityMap = new Map();
@@ -32,17 +35,11 @@ const syncGitHubActivity = async (userId) => {
 
   for (const [date, count] of activityMap) {
     await GitHubActivity.findOneAndUpdate(
-      {
-        userId,
-        date,
-      },
-
+      { userId, date },
       {
         totalActivities: count,
-
         commits: count,
       },
-
       {
         upsert: true,
         new: true,

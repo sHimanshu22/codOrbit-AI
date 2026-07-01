@@ -96,8 +96,7 @@ const getInsights = async (req, res) => {
     });
 
     const sevenDaysAgo = new Date();
-
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
 
     let codingWeek = 0;
     let githubWeek = 0;
@@ -105,54 +104,98 @@ const getInsights = async (req, res) => {
     const codingDays = {};
     const githubDays = {};
 
+    const activeDays = new Set();
+
+    // =========================
+    // Coding (Last 7 Days)
+    // =========================
+
     codingDocs.forEach((doc) => {
       const date = new Date(doc.date);
 
       if (date >= sevenDaysAgo) {
         codingWeek += doc.totalActivities;
+
+        if (doc.totalActivities > 0) {
+          activeDays.add(doc.date);
+
+          const day = date.toLocaleDateString("en-US", {
+            weekday: "long",
+          });
+
+          codingDays[day] = (codingDays[day] || 0) + doc.totalActivities;
+        }
       }
-
-      const day = date.toLocaleDateString("en-US", {
-        weekday: "long",
-      });
-
-      codingDays[day] = (codingDays[day] || 0) + doc.totalActivities;
     });
+
+    // =========================
+    // GitHub (Last 7 Days)
+    // =========================
 
     githubDocs.forEach((doc) => {
       const date = new Date(doc.date);
 
       if (date >= sevenDaysAgo) {
         githubWeek += doc.totalActivities;
+
+        if (doc.totalActivities > 0) {
+          activeDays.add(doc.date);
+
+          const day = date.toLocaleDateString("en-US", {
+            weekday: "long",
+          });
+
+          githubDays[day] = (githubDays[day] || 0) + doc.totalActivities;
+        }
       }
-
-      const day = date.toLocaleDateString("en-US", {
-        weekday: "long",
-      });
-
-      githubDays[day] = (githubDays[day] || 0) + doc.totalActivities;
     });
 
-    const mostActiveCodingDay = Object.keys(codingDays).reduce(
-      (a, b) => (codingDays[a] > codingDays[b] ? a : b),
-      "N/A",
-    );
+    // =========================
+    // Best Days
+    // =========================
 
-    const mostActiveGithubDay = Object.keys(githubDays).reduce(
-      (a, b) => (githubDays[a] > githubDays[b] ? a : b),
-      "N/A",
-    );
+    const mostActiveCodingDay =
+      Object.keys(codingDays).length > 0
+        ? Object.keys(codingDays).reduce((a, b) =>
+            codingDays[a] > codingDays[b] ? a : b,
+          )
+        : "No Activity";
 
-    const consistency =
-      codingWeek + githubWeek > 10 ? "Improving" : "Needs Attention";
+    const mostActiveGithubDay =
+      Object.keys(githubDays).length > 0
+        ? Object.keys(githubDays).reduce((a, b) =>
+            githubDays[a] > githubDays[b] ? a : b,
+          )
+        : "No Activity";
+
+    // =========================
+    // Consistency
+    // =========================
+
+    const activeDayCount = activeDays.size;
+
+    let consistency = "Inactive";
+
+    if (activeDayCount === 7) {
+      consistency = "Excellent";
+    } else if (activeDayCount >= 5) {
+      consistency = "Very Good";
+    } else if (activeDayCount >= 3) {
+      consistency = "Good";
+    } else if (activeDayCount >= 1) {
+      consistency = "Needs Improvement";
+    }
 
     res.status(200).json({
       success: true,
 
       insights: {
         codingWeek,
-
         githubWeek,
+
+        totalWeekActivity: codingWeek + githubWeek,
+
+        activeDays: activeDayCount,
 
         mostActiveCodingDay,
 
@@ -164,110 +207,129 @@ const getInsights = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-
       message: error.message,
     });
   }
 };
 
-const getActivityCoach =
-  async (req, res) => {
+const getActivityCoach = async (req, res) => {
+  try {
+    const fortyFiveDaysAgo = new Date();
+    fortyFiveDaysAgo.setDate(fortyFiveDaysAgo.getDate() - 45);
 
-    try {
+    const coding = await CodingActivity.find({
+      userId: req.user._id,
+      date: {
+        $gte: fortyFiveDaysAgo.toISOString().split("T")[0],
+      },
+    });
 
-      const coding =
-        await CodingActivity.find({
-          userId:
-            req.user._id,
-        });
+    const github = await GitHubActivity.find({
+      userId: req.user._id,
+      date: {
+        $gte: fortyFiveDaysAgo.toISOString().split("T")[0],
+      },
+    });
 
-      const github =
-        await GitHubActivity.find({
-          userId:
-            req.user._id,
-        });
+    // =========================
+    // Totals
+    // =========================
 
-      const codingTotal =
-        coding.reduce(
-          (sum, day) =>
-            sum +
-            day.totalActivities,
-          0
-        );
+    const coding45Days = coding.reduce(
+      (sum, day) => sum + day.totalActivities,
+      0,
+    );
 
-      const githubTotal =
-        github.reduce(
-          (sum, day) =>
-            sum +
-            day.totalActivities,
-          0
-        );
+    const github45Days = github.reduce(
+      (sum, day) => sum + day.totalActivities,
+      0,
+    );
 
-      let trend =
-        "Balanced";
+    // =========================
+    // Active Days
+    // =========================
 
-      let recommendation =
-        "";
+    const activeDays = new Set();
 
-      if (
-        codingTotal >
-        githubTotal * 2
-      ) {
-
-        trend =
-          "Coding Focused";
-
-        recommendation =
-          "Your DSA practice is strong. Increase GitHub commits and project work.";
+    coding.forEach((day) => {
+      if (day.totalActivities > 0) {
+        activeDays.add(day.date);
       }
+    });
 
-      else if (
-        githubTotal >
-        codingTotal * 2
-      ) {
-
-        trend =
-          "Development Focused";
-
-        recommendation =
-          "Maintain coding practice alongside project development.";
+    github.forEach((day) => {
+      if (day.totalActivities > 0) {
+        activeDays.add(day.date);
       }
+    });
 
-      else {
+    // =========================
+    // Productivity Score (0-100)
+    // =========================
 
-        trend =
-          "Balanced";
+    const activityScore = Math.min(
+      Math.round(((coding45Days + github45Days) / 200) * 100),
+      100,
+    );
 
-        recommendation =
-          "Great balance between coding and development. Maintain consistency.";
-      }
+    // =========================
+    // Focus
+    // =========================
 
-      res.status(200).json({
-        success: true,
+    let focus = "Balanced";
 
-        coach: {
-
-          codingTotal,
-
-          githubTotal,
-
-          trend,
-
-          recommendation,
-        },
-      });
-
-    } catch (error) {
-
-      res.status(500).json({
-        success: false,
-
-        message:
-          error.message,
-      });
-
+    if (coding45Days > github45Days * 1.5) {
+      focus = "Coding Focused";
+    } else if (github45Days > coding45Days * 1.5) {
+      focus = "Development Focused";
     }
-  };
+
+    // =========================
+    // Strength & Improvement
+    // =========================
+
+    let strength = "Balanced";
+
+    let needsAttention = "Maintain Consistency";
+
+    if (coding45Days > github45Days) {
+      strength = "Problem Solving";
+      needsAttention = "Development";
+    } else if (github45Days > coding45Days) {
+      strength = "Development";
+      needsAttention = "Problem Solving";
+    }
+
+    if (activeDays.size < 15) {
+      needsAttention = "Consistency";
+    }
+
+
+    res.status(200).json({
+      success: true,
+
+      coach: {
+        coding45Days,
+        github45Days,
+
+        activityScore,
+
+        activeDays: activeDays.size,
+
+        focus,
+
+        strength,
+
+        needsAttention,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   getStreaks,

@@ -1,14 +1,4 @@
-const { syncGitHubData } = require("./githubController");
-
-const { syncLeetCodeData } = require("./leetcodeController");
-
-const { syncCodeforcesData } = require("./codeforcesController");
-
-const { syncUserActivity } = require("../services/activityService");
-
-const { syncGitHubActivity } = require("../services/githubActivityService");
-
-const { syncCodeChefData } = require("./codechefController");
+const { rebuildPlatformData } = require("../services/platformSyncService");
 
 const syncAllPlatforms = async (req, res) => {
   try {
@@ -17,38 +7,19 @@ const syncAllPlatforms = async (req, res) => {
     const results = {};
 
     try {
-      results.github = await syncGitHubData(userId);
-    } catch (err) {
-      results.github = err.message;
-    }
+      const rebuiltProfile = await rebuildPlatformData(userId);
 
-    try {
-      results.leetcode = await syncLeetCodeData(userId);
+      results.profile = rebuiltProfile;
+      results.github = rebuiltProfile.github;
+      results.leetcode = rebuiltProfile.leetcode;
+      results.codeforces = rebuiltProfile.codeforces;
+      results.codechef = rebuiltProfile.codechef;
+      results.activity = {
+        rebuilt: true,
+        snapshotUpdated: true,
+      };
     } catch (err) {
-      results.leetcode = err.message;
-    }
-
-    try {
-      results.codeforces = await syncCodeforcesData(userId);
-    } catch (err) {
-      results.codeforces = err.message;
-    }
-
-    try {
-      results.codechef = await syncCodeChefData(userId);
-    } catch (err) {
-      results.codechef = err.message;
-    }
-
-    try {
-      results.activity = await syncUserActivity(userId);
-    } catch (err) {
-      results.activity = err.message;
-    }
-    try {
-      results.githubActivity = await syncGitHubActivity(userId);
-    } catch (err) {
-      results.githubActivity = err.message;
+      results.error = err.message;
     }
 
     res.status(200).json({

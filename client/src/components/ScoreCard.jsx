@@ -16,15 +16,15 @@ const ScoreCard = ({
 
   const getConfig = () => {
     switch (title) {
-      case "GitHub Score":
+      case "Development Score":
         return {
           icon: GitBranchIcon,
           color:
-            "text-slate-700 dark:text-slate-300",
+            "text-green-600 dark:text-green-300",
           bg:
-            "bg-slate-100 dark:bg-slate-800",
+            "bg-green-100 dark:bg-green-800",
           progress:
-            "bg-slate-700",
+            "bg-green-600",
         };
 
       case "DSA Score":
@@ -49,15 +49,15 @@ const ScoreCard = ({
             "bg-amber-500",
         };
 
-      case "Overall Score":
+      case "Consistency Score":
         return {
           icon: BarChart3,
           color:
-            "text-green-600 dark:text-green-400",
+            "text-red-600 dark:text-red-400",
           bg:
-            "bg-green-100 dark:bg-green-900/20",
+            "bg-red-100 dark:bg-red-900/20",
           progress:
-            "bg-green-500",
+            "bg-red-500",
         };
 
       default:

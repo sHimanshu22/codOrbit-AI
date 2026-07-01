@@ -315,8 +315,8 @@ const Analytics = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
               <ScoreCard
-                title="GitHub Score"
-                score={analytics.scores.githubScore}
+                title="Development Score"
+                score={analytics.scores.developmentScore}
               />
 
               <ScoreCard title="DSA Score" score={analytics.scores.dsaScore} />
@@ -327,8 +327,8 @@ const Analytics = () => {
               />
 
               <ScoreCard
-                title="Overall Score"
-                score={analytics.scores.overallScore}
+                title="Consistency Score"
+                score={analytics.scores.consistencyScore}
               />
             </div>
           </div>

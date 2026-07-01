@@ -1,11 +1,6 @@
 const User = require("../models/User");
 const PlatformProfile = require("../models/PlatformProfile");
-
-const {
-  fetchCodeforcesProfile,
-  fetchContestHistory,
-  fetchUpcomingContests,
-} = require("../services/codeforcesService");
+const { rebuildPlatformData } = require("../services/platformSyncService");
 
 /**
  * Sync Codeforces Profile API
@@ -68,123 +63,10 @@ const getCodeforcesAnalytics =
 /**
  * Core Sync Logic
  */
-const syncCodeforcesData =
-  async (userId) => {
-    const user =
-      await User.findById(userId);
-
-    if (!user) {
-      throw new Error(
-        "User not found"
-      );
-    }
-
-    if (
-      !user.codeforcesUsername
-    ) {
-      throw new Error(
-        "Codeforces username not found"
-      );
-    }
-
-    let profile =
-      await PlatformProfile.findOne({
-        userId,
-      });
-
-    if (!profile) {
-      profile =
-        new PlatformProfile({
-          userId,
-        });
-    }
-
-    try {
-      console.log(
-        "Syncing Codeforces:",
-        user.codeforcesUsername
-      );
-
-      const cfData =
-        await fetchCodeforcesProfile(
-          user.codeforcesUsername
-        );
-
-      const contests =
-        await fetchContestHistory(
-          user.codeforcesUsername
-        );
-
-      profile.codeforces = {
-        handle:
-          cfData.handle,
-
-        currentRating:
-          cfData.rating || 0,
-
-        maxRating:
-          cfData.maxRating || 0,
-
-        rank:
-          cfData.rank ||
-          "Unrated",
-
-        maxRank:
-          cfData.maxRank ||
-          "Unrated",
-
-        contestCount:
-          contests.length,
-
-        syncStatus:
-          "success",
-
-        lastError: null,
-
-        syncedAt:
-          new Date(),
-      };
-
-      await profile.save();
-
-      return profile.codeforces;
-    } catch (error) {
-      console.error(
-        "Codeforces Sync Failed:",
-        error.message
-      );
-
-      profile.codeforces = {
-        handle:
-          user.codeforcesUsername,
-
-        currentRating: 0,
-
-        maxRating: 0,
-
-        rank: "Unrated",
-
-        maxRank: "Unrated",
-
-        contestCount: 0,
-
-        syncStatus:
-          "failed",
-
-        lastError:
-          error.message,
-
-        syncedAt:
-          new Date(),
-      };
-
-      await profile.save();
-
-      throw new Error(
-        error.message
-      );
-    }
-  };
+const syncCodeforcesData = async (userId) => {
+  const profile = await rebuildPlatformData(userId);
+  return profile.codeforces;
+};
 
   
 
