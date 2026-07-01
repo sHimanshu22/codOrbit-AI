@@ -1,18 +1,18 @@
+import { createPortal } from "react-dom";
 import { LogOut } from "lucide-react";
 
 const LogoutModal = ({ isOpen, onCancel, onConfirm }) => {
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       className="
       fixed
       inset-0
-      z-[100]
+      z-[9999]
 
       bg-black/50
-
-      backdrop-blur-sm
+      backdrop-blur-md
 
       flex
       items-center
@@ -21,8 +21,18 @@ const LogoutModal = ({ isOpen, onCancel, onConfirm }) => {
       p-4
       "
     >
+      {/* Backdrop */}
       <div
+        className="absolute inset-0"
+        onClick={onCancel}
+      />
+
+      {/* Modal */}
+      <div
+        onClick={(e) => e.stopPropagation()}
         className="
+        relative
+
         w-full
         max-w-md
 
@@ -37,32 +47,44 @@ const LogoutModal = ({ isOpen, onCancel, onConfirm }) => {
 
         shadow-2xl
 
-        p-8
+        px-8
+        py-7
         "
       >
+        {/* Icon */}
+
         <div
           className="
-          w-16
-          h-16
+          w-14
+          h-14
 
           mx-auto
 
           rounded-2xl
 
-          bg-red-100
-          dark:bg-red-900/20
+          bg-gradient-to-br
+          from-red-100
+          to-red-50
+
+          dark:from-red-900/40
+          dark:to-red-900/10
 
           flex
           items-center
           justify-center
           "
         >
-          <LogOut size={30} className="text-red-500" />
+          <LogOut
+            size={26}
+            className="text-red-500"
+          />
         </div>
+
+        {/* Title */}
 
         <h2
           className="
-          mt-6
+          mt-5
 
           text-2xl
           font-bold
@@ -76,6 +98,8 @@ const LogoutModal = ({ isOpen, onCancel, onConfirm }) => {
           Logout?
         </h2>
 
+        {/* Description */}
+
         <p
           className="
           mt-3
@@ -88,36 +112,39 @@ const LogoutModal = ({ isOpen, onCancel, onConfirm }) => {
           dark:text-slate-400
           "
         >
-          Are you sure you want to logout from CodOrbit?
+          Are you sure you want to logout from
+          CodOrbit?
         </p>
 
-        <div className="mt-8 flex gap-4">
+        {/* Buttons */}
+
+        <div className="mt-6 flex gap-4">
           <button
             onClick={onCancel}
             className="
-  flex-1
+            flex-1
 
-  py-3
+            py-3
 
-  rounded-xl
+            rounded-xl
 
-  border
-  border-slate-300
-  dark:border-slate-700
+            border
+            border-slate-300
+            dark:border-slate-700
 
-  bg-white
-  dark:bg-slate-900
+            bg-white
+            dark:bg-slate-900
 
-  text-slate-700
-  dark:text-slate-200
+            text-slate-700
+            dark:text-slate-200
 
-  hover:bg-slate-100
-  dark:hover:bg-slate-800
+            hover:bg-slate-100
+            dark:hover:bg-slate-800
 
-  font-medium
+            font-medium
 
-  transition-all
-  "
+            transition-all
+            "
           >
             Cancel
           </button>
@@ -131,12 +158,15 @@ const LogoutModal = ({ isOpen, onCancel, onConfirm }) => {
 
             rounded-xl
 
-            bg-red-500
-            hover:bg-red-600
+            bg-red-600
+            hover:bg-red-700
 
             text-white
 
             font-medium
+
+            shadow-lg
+            shadow-red-500/20
 
             transition-all
             "
@@ -145,7 +175,8 @@ const LogoutModal = ({ isOpen, onCancel, onConfirm }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

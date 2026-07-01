@@ -50,6 +50,8 @@ const DashboardLayout = ({ children }) => {
         </main>
       </div>
     </div>
+    
+
   );
 };
 
