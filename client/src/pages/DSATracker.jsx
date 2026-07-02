@@ -180,6 +180,40 @@ const DSATracker = () => {
     }
   };
 
+  const getYoutubeEmbedUrl = (url) => {
+    try {
+      const parsed = new URL(url);
+
+      // Already an embed URL
+      if (parsed.pathname.startsWith("/embed/")) {
+        return url;
+      }
+
+      // youtube.com/watch?v=
+      if (
+        parsed.hostname.includes("youtube.com") ||
+        parsed.hostname.includes("www.youtube.com")
+      ) {
+        const id = parsed.searchParams.get("v");
+
+        if (id) {
+          return `https://www.youtube.com/embed/${id}`;
+        }
+      }
+
+      // youtu.be/
+      if (parsed.hostname.includes("youtu.be")) {
+        const id = parsed.pathname.substring(1);
+
+        return `https://www.youtube.com/embed/${id}`;
+      }
+
+      return url;
+    } catch {
+      return "";
+    }
+  };
+
   if (loading) {
     return (
       <DashboardLayout>
@@ -427,17 +461,13 @@ const DSATracker = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <iframe
-              src={videoUrl.replace("watch?v=", "embed/").split("&")[0]}
+              src={getYoutubeEmbedUrl(videoUrl)}
               title="Solution Video"
-              className="
-        w-full
-        aspect-video
-
-        rounded-xl
-        "
+              className="w-full aspect-video rounded-xl"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             />
-
             <button
               onClick={() => setVideoUrl(null)}
               className="

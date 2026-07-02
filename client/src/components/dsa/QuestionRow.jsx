@@ -15,6 +15,7 @@ import hackerrank from "../../assets/platforms/gfg.svg";
 import hackerearth from "../../assets/platforms/hackerearth.svg";
 import spoj from "../../assets/platforms/spoj.svg";
 import interviewbit from "../../assets/platforms/interviewbit.png";
+import naukri from "../../assets/platforms/naukri.png";
 const QuestionRow = ({
   question,
   onToggle,
@@ -56,6 +57,9 @@ const QuestionRow = ({
 
       case "interviewbit":
         return interviewbit;
+      
+      case "naukri":
+        return naukri;
 
       default:
         return null;
@@ -208,8 +212,8 @@ const QuestionRow = ({
               src={getPlatformLogo(question.platform)}
               alt={question.platform}
               className="
-              w-5
-              h-5
+              w-6
+              h-6
               object-contain
               "
             />
@@ -251,8 +255,8 @@ const QuestionRow = ({
               src={youtubeLogo}
               alt="Solution"
               className="
-        w-5
-        h-5
+        w-
+        h-6
         object-contain
         "
             />

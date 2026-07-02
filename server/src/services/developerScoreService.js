@@ -158,15 +158,6 @@ if (overallScore >= 95) {
   description = "Just getting started";
 }
 
-  console.log({
-    developmentScore,
-    dsaScore,
-    competitiveScore,
-    consistencyScore,
-    overallScore,
-    grade,
-  });
-
   return {
     developmentScore,
     dsaScore,
