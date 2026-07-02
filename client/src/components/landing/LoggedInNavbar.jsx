@@ -18,6 +18,7 @@ import darkLogo from "../../assets/logo-dark.png";
 
 import { AuthContext } from "../../context/AuthContext";
 import LogoutModal from "../ui/LogoutModal";
+import ThemeToggle from "../ui/ThemeToggle";
 
 const LoggedInNavbar = () => {
   const location = useLocation();
@@ -236,37 +237,41 @@ const LoggedInNavbar = () => {
             })}
           </nav>
 
-          {/* Logout */}
+          {/* Actions */}
 
-          <button
-            onClick={() => setShowLogoutModal(true)}
-            className="
-            inline-flex
-            items-center
-            gap-2
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
 
-            px-4
-            py-2.5
+            <button
+              onClick={() => setShowLogoutModal(true)}
+              className="
+              inline-flex
+              items-center
+              gap-2
 
-            rounded-xl
+              px-4
+              py-2.5
 
-            bg-red-50
-            dark:bg-red-900/20
+              rounded-xl
 
-            text-red-600
-            dark:text-red-400
+              bg-red-50
+              dark:bg-red-900/20
 
-            hover:bg-red-100
-            dark:hover:bg-red-900/30
+              text-red-600
+              dark:text-red-400
 
-            font-medium
+              hover:bg-red-100
+              dark:hover:bg-red-900/30
 
-            transition-all
-            "
-          >
-            <LogOut size={18} />
-            Logout
-          </button>
+              font-medium
+
+              transition-all
+              "
+            >
+              <LogOut size={18} />
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
