@@ -1,0 +1,71 @@
+[33md3df89e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m refactor: temp : simplify googleLogin function by removing token verification and user handling logic
+[33mf660d30[m refactor: Temperory Chnage :  remove request interceptor for token handling in API service
+[33mbb3d1c9[m fix: DEPLOYMENT IS ONE THE WAY : update API base URL to use environment variable and improve CORS configuration
+[33mcff16ad[m feat: add ThemeToggle component to LoggedInNavbar and update logout button layout
+[33md7fafb7[m Refactor loading states to use skeleton components across various pages
+[33m6165854[m Refactor code structure for improved readability and maintainability
+[33m693208b[m Refactor platform data synchronization and developer score calculation
+[33m2e61529[m[33m ([m[1;32magents/skeleton-loaders-in-react-tailwind[m[33m)[m feat: enhance LogoutModal with portal rendering, improved styles, and accessibility features
+[33m86ce8b7[m feat: implement Google authentication and refactor login flow
+[33m71bdaa2[m feat: adjust font sizes in DifficultyAnalytics and InsightCard for improved readability
+[33m26a67fc[m feat: IMPORTANT : refactor analytics components for improved layout and responsiveness; remove TopicAnalytics component and integrate analytics logic into DSAController
+[33m59f74ef[m feat: update landing sections with improved messaging, feature descriptions, and layout adjustments for better user engagement
+[33m381368d[m feat: enhance QuestionRow with additional platform icons and update seeders for Blind 75 questions
+[33m3d3c1d0[m feat: adjust grid layout in SheetSelector and update margin in DSATracker for improved responsiveness
+[33mc39445e[m feat: add NeetCode 150 sheet and corresponding seeder; update module count in Striver SDE Sheet
+[33m948e064[m feat: update ModuleAccordion and DSATracker for improved module name formatting; add new seeders for Love Babbar and Striver SDE sheets
+[33mb50eea5[m feat: enhance LandingFooter and LoggedInNavbar with improved layout and new Resume link
+[33ma95e7e3[m feat: update PlatformCard connections to use connectedPlatforms for accurate status display
+[33m7e5f914[m feat: add BookOpen icon and enhance description display in DSATracker component
+[33m4981847[m feat: update Navbar and Sidebar components for improved layout and clarity; enhance DSA sheet descriptions
+[33m0433474[m feat: implement DSA sheets management with new data structure and seeding functionality
+[33ma13f4e8[m feat: update headings and descriptions in Resume Analysis for clarity
+[33mb584eee[m feat: add date-fns for time formatting and display bookmarked time in Saved Questions
+[33mb966c67[m feat: add Saved Questions page and integrate bookmarking functionality
+[33m134269e[m feat: remove ProgressBar component and update ResumeScoreCards to display scores with full scale
+[33ma9ead52[m feat: refactor save button layout and improve error handling in profile component
+[33m9864145[m feat: enhance resume analysis with loading notifications and error handling
+[33m032b575[m feat: integrate react-hot-toast for improved user notifications and feedback
+[33mb5d09bb[m feat: remove console.log statements for cleaner code and improved performance
+[33m7fb01f3[m "feat: implement resume analysis module with AI insights, rule-based scoring, ATS evaluation, JD matching, and improved UI"
+[33m6a540e9[m feat: enhance user profile retrieval with active sheet count and seeded sheets filtering
+[33m3ed8369[m feat: update getActiveSheetsOverview to skip unseeded sheets and improve response structure
+[33m6f3d515[m feat: integrate CodeChef analytics and profile support across components
+[33mb8c9458[m feat: enhance analytics and contests handling with platform connection checks and default analytics data
+[33m6a6d379[m "feat : fixed New User Staes on pages to Show Add Platforms to See Data"
+[33md6f2706[m feat: add OTP-based password reset system with email verification
+[33mfcab517[m add logo to login , register cards
+[33mcee21c2[m  "fix: update auth flow to use AuthContext instead of localStorage"
+[33me6a5a2a[m "feat: add profile sharing, platform analytics cards, and CodeChef integration"
+[33m4ab525b[m "feat: integrate CodeChef profile sync and analytics"
+[33m4dd3c30[m feat: add in-app YouTube solution video player
+[33m9585a18[m feat(profile): add public profiles, usernames and profile image uploads
+[33m2ca86b4[m feat(profile): add Profile Phot Upload , editable username with uniqueness and format validation
+[33md76e954[m feat(public-profile): launch shareable developer profiles with username routes, platform cards, stats and branded public page
+[33ma77b4fc[m  "feat: add notes functionality, roadmap view, bookmarks and sheet management improvements"
+[33m0a2dc19[m feat(dsa-tracker): add roadmap-based DSA tracker with module/section hierarchy
+[33m891a562[m feat(ui): complete landing page and dark mode support across authentication pages
+[33m51832b3[m "feat(ui): redesign dashboard and core modules with dark mode support"
+[33m63308aa[m feat(theme): add dark mode support for Settigns
+[33m1477748[m feat(theme): add dark mode support for Sheetmanagement Page
+[33mcb112fd[m feat(theme): add dark mode support for DSA Overview
+[33m641cc92[m feat(theme): add dark mode support for contests
+[33m362614b[m add dark mode support for dsa tracker
+[33m6fc771c[m feat(theme): add dark mode support for analytics
+[33m9392f67[m "feat(theme): add dark mode support for dashboard"
+[33mae14b92[m "feat(ui): modernize layouts, cards, navigation, auth pages and analytics"
+[33m993444e[m git commit -m "feat(dsa): add bookmarks, saved questions, and enhanced progress tracking"
+[33m6dc2729[m git commit -m "feat(ai): add Gemini integration, AI insights engine, and dashboard recommendations"
+[33ma565187[m git commit -m "feat(activity): migrate coding activity to LeetCode submission calendar"
+[33m67b4281[m feat: implement AI coaching and contest intelligence modules
+[33me8910bd[m feat: implement Contest Center module
+[33m57a748c[m Merge branch 'main' of https://github.com/sHimanshu22/codOrbit-AI
+[33mab9b07c[m modified gitignore file
+[33mabc3dd5[m Delete server/.env
+[33me4b599c[m complete DSA tracking system with active sheets, analytics, and overview dashboard
+[33m97b8425[m implement multi-sheet DSA tracker with URL synchronization"
+[33m1561f1d[m add developer growth scoring engine and analytics scorecards
+[33m91fb994[m add platform comparison analytics chart
+[33mfdb250d[m add analytics dashboard with GitHub language and LeetCode difficulty charts"
+[33me4fbfc7[m feat: add core components and pages for user authentication and dashboard functionality
+[33m3119a56[m git commit -m "add auth system, profile management, GitHub/LeetCode/Codeforces sync and dashboard overview"
