@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
-import PageLoader from "../components/ui/PageLoader";
-
 import DashboardLayout from "../layouts/DashboardLayout";
+import DSAOverviewPageSkeleton from "../components/skeletons/DSAOverviewPageSkeleton";
 
 import { getOverview } from "../services/dsaService";
 
@@ -33,7 +32,7 @@ const DSAOverview = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <PageLoader />
+        <DSAOverviewPageSkeleton />
       </DashboardLayout>
     );
   }

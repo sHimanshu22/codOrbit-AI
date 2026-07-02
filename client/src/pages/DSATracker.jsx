@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
 
-import PageLoader from "../components/ui/PageLoader";
-
 import DashboardLayout from "../layouts/DashboardLayout";
+import StatCardSkeleton from "../components/skeletons/StatCardSkeleton";
+import DifficultyAnalyticsSkeleton from "../components/skeletons/DifficultyAnalyticsSkeleton";
+import ModuleAccordionSkeleton from "../components/skeletons/ModuleAccordionSkeleton";
 
 import ModuleAccordion from "../components/dsa/ModuleAccordion";
 
@@ -217,7 +218,34 @@ const DSATracker = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <PageLoader />
+        <div className="space-y-8">
+          <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="space-y-3 flex-1">
+                <div className="h-4 w-28 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800" />
+                <div className="h-8 w-56 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800" />
+              </div>
+              <div className="h-12 w-full max-w-xs animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800" />
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <StatCardSkeleton key={index} />
+            ))}
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+            <ModuleAccordionSkeleton count={6} />
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+                <div className="h-4 w-32 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800" />
+                <div className="mt-4 h-24 w-full animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800" />
+              </div>
+              <DifficultyAnalyticsSkeleton />
+            </div>
+          </div>
+        </div>
       </DashboardLayout>
     );
   }

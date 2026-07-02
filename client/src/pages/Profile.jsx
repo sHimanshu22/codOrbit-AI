@@ -13,8 +13,8 @@ import { Link } from "react-router-dom";
 import { syncAllPlatforms } from "../services/platformService";
 
 import { User, GraduationCap, Trophy, BookOpen, AtSign } from "lucide-react";
-import PageLoader from "../components/ui/PageLoader";
 import DashboardLayout from "../layouts/DashboardLayout";
+import ProfilePageSkeleton from "../components/skeletons/ProfilePageSkeleton";
 import {
   getProfile,
   updateProfile,
@@ -246,7 +246,7 @@ const Profile = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <PageLoader />
+        <ProfilePageSkeleton />
       </DashboardLayout>
     );
   }

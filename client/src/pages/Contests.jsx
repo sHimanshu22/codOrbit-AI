@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 
 import DashboardLayout from "../layouts/DashboardLayout";
 
-import PageLoader from "../components/ui/PageLoader";
-
 import ContestCard from "../components/ContestCard";
+import ContestPageSkeleton from "../components/skeletons/ContestPageSkeleton";
 
 import {
   getUpcomingContests,
@@ -79,7 +78,7 @@ const Contests = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <PageLoader />
+        <ContestPageSkeleton />
       </DashboardLayout>
     );
   }

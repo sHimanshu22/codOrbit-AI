@@ -14,7 +14,8 @@ import codechefLogo from "../assets/platforms/codechef.svg";
 
 import ProfileStatCard from "../components/public/ProfileStatCard";
 import PlatformCard from "../components/public/PlatformCard";
-import PageLoader from "../components/ui/PageLoader";
+import ProfileCardSkeleton from "../components/skeletons/ProfileCardSkeleton";
+import StatCardSkeleton from "../components/skeletons/StatCardSkeleton";
 
 import { useTheme } from "../context/ThemeContext.jsx";
 
@@ -66,7 +67,18 @@ const PublicProfile = () => {
   const { theme } = useTheme();
 
   if (loading) {
-    return <PageLoader />;
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6 md:p-10">
+        <div className="mx-auto max-w-6xl space-y-8">
+          <ProfileCardSkeleton />
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <StatCardSkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!user) {

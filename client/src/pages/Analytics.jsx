@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 
 import DashboardLayout from "../layouts/DashboardLayout";
 
-import PageLoader from "../components/ui/PageLoader";
-
 import { getAnalytics } from "../services/analyticsService";
+import AnalyticsPageSkeleton from "../components/skeletons/AnalyticsPageSkeleton";
 
 import GitHubLanguageChart from "../components/GitHubLanguageChart";
 
@@ -39,10 +38,7 @@ const Analytics = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <PageLoader
-          title="Loading Analytics"
-          subtitle="Preparing your developer insights..."
-        />
+        <AnalyticsPageSkeleton />
       </DashboardLayout>
     );
   }

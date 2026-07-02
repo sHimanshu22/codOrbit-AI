@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 
 import { GitBranch, Star, Code2, Trophy, Link2 } from "lucide-react";
 
-import PageLoader from "../components/ui/PageLoader";
-
 import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardPageSkeleton from "../components/skeletons/DashboardPageSkeleton";
 
 import OverviewCard from "../components/OverviewCard";
 
@@ -98,7 +97,9 @@ const Dashboard = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <PageLoader />
+        <div className="space-y-8">
+          <DashboardPageSkeleton />
+        </div>
       </DashboardLayout>
     );
   }

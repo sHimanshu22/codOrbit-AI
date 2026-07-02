@@ -10,6 +10,7 @@ import {
 
 import { ThemeContext } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
+import LoginPageSkeleton from "../components/skeletons/LoginPageSkeleton";
 
 import { googleLogin } from "../services/googleAuthService";
 
@@ -20,9 +21,13 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { theme } = useContext(ThemeContext);
-  const { login } = useContext(AuthContext);
+  const { login, loading: authLoading } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
+
+  if (authLoading) {
+    return <LoginPageSkeleton />;
+  }
 
   const handleGoogleLogin = async (credentialResponse) => {
     const toastId = toast.loading("Signing you in...");

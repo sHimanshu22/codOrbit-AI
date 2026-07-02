@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import DashboardLayout from "../layouts/DashboardLayout";
-import PageLoader from "../components/ui/PageLoader";
 import SectionHeader from "../components/ui/SectionHeader";
+import TableSkeleton from "../components/skeletons/TableSkeleton";
 import SavedQuestions from "../components/SavedQuestions";
 
 import { getBookmarks } from "../services/dsaService";
@@ -31,7 +31,14 @@ const SavedQuestionsPage = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <PageLoader />
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <div className="h-4 w-32 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800" />
+            <div className="h-8 w-64 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800" />
+            <div className="h-4 w-80 animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800" />
+          </div>
+          <TableSkeleton rows={6} columns={4} />
+        </div>
       </DashboardLayout>
     );
   }
