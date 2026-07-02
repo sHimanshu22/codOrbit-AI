@@ -13,7 +13,7 @@ import codechef from "../../assets/platforms/codechef.svg";
 import codeforces from "../../assets/platforms/codeforces.svg";
 import hackerrank from "../../assets/platforms/gfg.svg";
 import hackerearth from "../../assets/platforms/hackerearth.svg";
-import spoj from "../../assets/platforms/spoj.svg";
+import spoj from "../../assets/platforms/Spoj.svg";
 import interviewbit from "../../assets/platforms/interviewbit.png";
 import naukri from "../../assets/platforms/naukri.png";
 const QuestionRow = ({
